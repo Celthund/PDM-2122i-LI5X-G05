@@ -1,7 +1,6 @@
 package pt.isel.pdm.chess4android.games
 
-import java.util.*
+abstract class Piece {
 
-interface Piece {
-    fun getPossibleMoves(position: Position) : Array<Position>;
+    abstract fun getPossibleMoves(position: Position, board: Game) : Array<Position>
 }
