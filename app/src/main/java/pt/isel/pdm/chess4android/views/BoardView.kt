@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.widget.GridLayout
 import pt.isel.pdm.chess4android.R
@@ -22,63 +23,27 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         style = Paint.Style.STROKE
         strokeWidth = 10F
     }
-    private var boardTile : Array<Array<Tile>>
+    private var boardTile: Array<Array<Tile>>
+    // Future coordinates array to know which positions are currently being shown (if any)
+    //for now its a matrix with a X and Y
+    private var lastPossibleMoves : Array<Array<Int>>
+    private var lastSelectedTile : Tile
+
+    private var movementOfPiece : HashMap<Int, Array<Array<Int>>>
 
     init {
         rowCount = side
         columnCount = side
-        val board = arrayOf(
-            arrayOf(
-                R.drawable.ic_white_rook,
-                R.drawable.ic_white_knight,
-                R.drawable.ic_white_bishop,
-                R.drawable.ic_white_queen,
-                R.drawable.ic_white_king,
-                R.drawable.ic_white_bishop,
-                R.drawable.ic_white_knight,
-                R.drawable.ic_white_rook
-            ),
-            arrayOf(
-                R.drawable.ic_white_pawn,
-                R.drawable.ic_white_pawn,
-                R.drawable.ic_white_pawn,
-                R.drawable.ic_white_pawn,
-                R.drawable.ic_white_pawn,
-                R.drawable.ic_white_pawn,
-                R.drawable.ic_white_pawn,
-                R.drawable.ic_white_pawn
-            ),
+        val boardModel = TestForView.boardModel
+        boardTile = initBoard(boardModel)
+        lastPossibleMoves = arrayOf()
+        lastSelectedTile = Tile(ctx,Type.WHITE, 0, -1)
+        movementOfPiece = HashMap()
 
-            arrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-
-            arrayOf(
-                R.drawable.ic_black_pawn,
-                R.drawable.ic_black_pawn,
-                R.drawable.ic_black_pawn,
-                R.drawable.ic_black_pawn,
-                R.drawable.ic_black_pawn,
-                R.drawable.ic_black_pawn,
-                R.drawable.ic_black_pawn,
-                R.drawable.ic_black_pawn
-            ),
-            arrayOf(
-                R.drawable.ic_black_rook,
-                R.drawable.ic_black_knight,
-                R.drawable.ic_black_bishop,
-                R.drawable.ic_black_queen,
-                R.drawable.ic_black_king,
-                R.drawable.ic_black_bishop,
-                R.drawable.ic_black_knight,
-                R.drawable.ic_black_rook
-            )
-        )
-        boardTile = initBoard(board)
+        movementOfPiece = MovementView.getMovementForEachPiece()
     }
 
-    private fun initBoard(board: Array<Array<Int>>) : Array<Array<Tile>> {
+    private fun initBoard(board: Array<Array<Int>>): Array<Array<Tile>> {
 
         var tileArray = arrayOf<Array<Tile>>()
 
@@ -91,8 +56,13 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
                     side,
                     board[row][column]
                 )
-                columnsArray[column].setOnClickListener {movePiece(column,row,column,row + 1, boardTile) }
-               addView(columnsArray[column])
+                val currTile = columnsArray[column]
+
+                currTile.setOnClickListener {
+                    showValid(arrayOf(row, column), board[row][column])
+                }
+
+                addView(currTile)
             }
             tileArray += columnsArray
         }
@@ -105,18 +75,71 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         currentRow: Int,
         moveCol: Int,
         moveRow: Int,
-        boardTile: Array<Array<Tile>>
     ) {
-        Thread.sleep(2000)
+        resetPossiblePositions()
         val currTile = boardTile[currentRow][currentCol]
         val moveTile = boardTile[moveRow][moveCol]
 
+        if(currTile.piece == 0) {
+            return
+        }
         moveTile.piece = currTile.piece
         currTile.piece = 0
 
-        updateViewLayout(moveTile, moveTile.layoutParams)
-        updateViewLayout(currTile, currTile.layoutParams)
+        moveTile.update()
+        currTile.update()
+        return
 
+    }
+
+    fun showValid (currentPosition : Array<Int>, piece : Int ) {
+        val currTile = boardTile[currentPosition[0]][currentPosition[1]]
+
+        if(currTile.piece == 0 || isSameTile(currTile)) {
+            return
+        }
+        resetPossiblePositions()
+
+        if (movementOfPiece.containsKey(piece)) {
+            for(coordinate in movementOfPiece[piece]?.indices!!) {
+                var array : Array<Int> = arrayOf()
+                array  += currentPosition[0] + movementOfPiece[piece]!![coordinate][0]
+                array += currentPosition[1] + movementOfPiece[piece]!![coordinate][1]
+                lastPossibleMoves += array
+            }
+
+            lastSelectedTile = currTile
+            for (coordinate in lastPossibleMoves.indices) {
+                val moveRow = lastPossibleMoves[coordinate][0]
+                val moveCol = lastPossibleMoves[coordinate][1]
+                val possibleMovesTile = boardTile[moveRow][moveCol]
+                possibleMovesTile.piece = 1
+                possibleMovesTile.setOnClickListener{
+                    movePiece(currentPosition[1], currentPosition[0], moveCol, moveRow )
+                }
+                possibleMovesTile.update()
+            }
+        }
+    }
+
+    private fun resetPossiblePositions() {
+        lastSelectedTile = Tile(ctx, Type.WHITE, 0, -1)
+        for (coordinate in lastPossibleMoves.indices) {
+            val currTile =
+                boardTile[lastPossibleMoves[coordinate][0]][lastPossibleMoves[coordinate][1]]
+            currTile.piece = 0
+            currTile.setOnClickListener{}
+            currTile.update()
+        }
+        lastPossibleMoves = arrayOf()
+    }
+
+    private fun isSameTile(currTile : Tile) : Boolean {
+        if (lastSelectedTile == currTile) {
+            resetPossiblePositions()
+            return true
+        }
+        return false
     }
 
     override fun dispatchDraw(canvas: Canvas) {
@@ -126,4 +149,5 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         canvas.drawLine(0f, 0f, 0f, height.toFloat(), brush)
         canvas.drawLine(width.toFloat(), 0f, width.toFloat(), height.toFloat(), brush)
     }
+
 }

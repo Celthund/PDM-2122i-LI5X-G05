@@ -2,9 +2,13 @@ package pt.isel.pdm.chess4android.views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Color.RED
 import android.graphics.Paint
 import android.graphics.drawable.VectorDrawable
+import android.view.MotionEvent
 import android.view.View
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import pt.isel.pdm.chess4android.R
@@ -24,9 +28,8 @@ class Tile(
     private val ctx: Context,
     private val type: Type,
     private val tilesPerSide: Int,
-    public var piece : Int
+    var piece : Int
 ) : View(ctx) {
-
 
     enum class Type { WHITE, BLACK }
 
@@ -137,6 +140,14 @@ class Tile(
                 drawPiece?.setBounds(padding, padding , width-padding, height-padding)
                 drawPiece?.draw(canvas)
             }
+
+            1 -> {
+                val drawPossibleMoves = VectorDrawableCompat
+                    .create(ctx.resources, R.drawable.ic_launcher_foreground, null)
+                drawPossibleMoves?.setBounds(padding, padding , width-padding, height-padding)
+                drawPossibleMoves?.draw(canvas)
+            }
+
             else -> {
                 val drawPiece = VectorDrawableCompat
                 .create(ctx.resources, R.drawable.ic_white_pawn, null)
@@ -146,4 +157,9 @@ class Tile(
 
         }
     }
+
+    fun update () {
+        this.invalidate()
+    }
+
 }
