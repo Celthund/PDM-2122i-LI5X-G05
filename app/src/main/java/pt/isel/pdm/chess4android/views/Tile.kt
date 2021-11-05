@@ -53,101 +53,34 @@ class Tile(
     override fun onDraw(canvas: Canvas) {
         val padding = 8
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), brush)
+        if (piece in setOf(
+                R.drawable.ic_white_pawn,
+                R.drawable.ic_white_bishop,
+                R.drawable.ic_white_king,
+                R.drawable.ic_white_knight,
+                R.drawable.ic_white_queen,
+                R.drawable.ic_white_rook,
+
+                R.drawable.ic_black_pawn,
+                R.drawable.ic_black_bishop,
+                R.drawable.ic_black_king,
+                R.drawable.ic_black_knight,
+                R.drawable.ic_black_queen,
+                R.drawable.ic_black_rook,
+            )) {
+            val drawPiece = VectorDrawableCompat
+                .create(ctx.resources, piece, null)
+            drawPiece?.setBounds(padding, padding , width-padding, height-padding)
+            drawPiece?.draw(canvas)
+        }
 
         when(piece) {
-
-
-            R.drawable.ic_black_rook -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_black_rook, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_black_knight -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_black_knight, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_black_bishop -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_black_bishop, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_black_queen -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_black_queen, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_black_king -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_black_king, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_black_pawn -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_black_pawn, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_white_rook -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_white_rook, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_white_knight -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_white_knight, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_white_bishop -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_white_bishop, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_white_queen -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_white_queen, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_white_king -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_white_king, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
-            R.drawable.ic_white_pawn -> {
-                val drawPiece = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_white_pawn, null)
-                drawPiece?.setBounds(padding, padding , width-padding, height-padding)
-                drawPiece?.draw(canvas)
-            }
-
             1 -> {
                 val drawPossibleMoves = VectorDrawableCompat
                     .create(ctx.resources, R.drawable.ic_launcher_foreground, null)
                 drawPossibleMoves?.setBounds(padding, padding , width-padding, height-padding)
                 drawPossibleMoves?.draw(canvas)
             }
-
             else -> {
                 val drawPiece = VectorDrawableCompat
                 .create(ctx.resources, R.drawable.ic_white_pawn, null)
