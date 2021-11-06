@@ -5,7 +5,7 @@ import pt.isel.pdm.chess4android.games.Position
 
 class MovementView {
     companion object {
-        fun getMovementForEachPiece() : HashMap<Int, Array<Position>> {
+        fun getInitialMovementForEachPiece() : HashMap<Int, Array<Position>> {
             val pieceToMovement : HashMap<Int, Array<Position>> = HashMap()
 
             pieceToMovement[R.drawable.ic_white_rook] = arrayOf(Position(0,1))

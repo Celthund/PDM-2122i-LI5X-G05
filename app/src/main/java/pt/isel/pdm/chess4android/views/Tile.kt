@@ -51,7 +51,6 @@ class Tile(
         setMeasuredDimension(side / tilesPerSide, side / tilesPerSide)
     }
 
-
     override fun onDraw(canvas: Canvas) {
         val padding = 8
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), brush)
@@ -80,14 +79,15 @@ class Tile(
         }
 
         if (inPreview) {
-            val possibleMoves =
+            val spacePiece =
                 if (drawPiece == null && piece == null) {
-                    VectorDrawableCompat
-                        .create(ctx.resources, R.drawable.ic_empty_squares_possible_move, null)
+                    R.drawable.ic_empty_squares_possible_move
                 } else {
-                    VectorDrawableCompat
-                        .create(ctx.resources, R.drawable.ic_can_attack_piece, null)
+                    R.drawable.ic_can_attack_piece
                 }
+
+            val possibleMoves = VectorDrawableCompat
+                .create(ctx.resources, spacePiece, null)
             possibleMoves?.setBounds(padding, padding, width - padding, height - padding)
             possibleMoves?.draw(canvas)
         }
