@@ -28,8 +28,10 @@ class Tile(
     private val ctx: Context,
     private val type: Type,
     private val tilesPerSide: Int,
-    var piece : Int
+    var piece: Int?
 ) : View(ctx) {
+    var inPreview: Boolean = false
+
 
     enum class Type { WHITE, BLACK }
 
@@ -53,6 +55,8 @@ class Tile(
     override fun onDraw(canvas: Canvas) {
         val padding = 8
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), brush)
+        var drawPiece: VectorDrawableCompat? = null
+
         if (piece in setOf(
                 R.drawable.ic_white_pawn,
                 R.drawable.ic_white_bishop,
@@ -67,31 +71,29 @@ class Tile(
                 R.drawable.ic_black_knight,
                 R.drawable.ic_black_queen,
                 R.drawable.ic_black_rook,
-            )) {
-            val drawPiece = VectorDrawableCompat
-                .create(ctx.resources, piece, null)
-            drawPiece?.setBounds(padding, padding , width-padding, height-padding)
+            )
+        ) {
+            drawPiece = VectorDrawableCompat
+                .create(ctx.resources, piece!!, null)
+            drawPiece?.setBounds(padding, padding, width - padding, height - padding)
             drawPiece?.draw(canvas)
         }
 
-        when(piece) {
-            1 -> {
-                val drawPossibleMoves = VectorDrawableCompat
-                    .create(ctx.resources, R.drawable.ic_launcher_foreground, null)
-                drawPossibleMoves?.setBounds(padding, padding , width-padding, height-padding)
-                drawPossibleMoves?.draw(canvas)
-            }
-            else -> {
-                val drawPiece = VectorDrawableCompat
-                .create(ctx.resources, R.drawable.ic_white_pawn, null)
-                drawPiece?.setBounds(padding, padding , 0, 0)
-                drawPiece?.draw(canvas)
-            }
-
+        if (inPreview) {
+            val possibleMoves =
+                if (drawPiece == null && piece == null) {
+                    VectorDrawableCompat
+                        .create(ctx.resources, R.drawable.ic_empty_squares_possible_move, null)
+                } else {
+                    VectorDrawableCompat
+                        .create(ctx.resources, R.drawable.ic_can_attack_piece, null)
+                }
+            possibleMoves?.setBounds(padding, padding, width - padding, height - padding)
+            possibleMoves?.draw(canvas)
         }
     }
 
-    fun update () {
+    fun update() {
         this.invalidate()
     }
 

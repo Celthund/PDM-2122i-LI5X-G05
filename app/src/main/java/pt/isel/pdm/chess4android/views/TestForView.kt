@@ -4,7 +4,7 @@ import pt.isel.pdm.chess4android.R
 
 open class TestForView {
     companion object {
-        val boardModel = arrayOf(
+        val boardModel : Array<Array<Int?>> = arrayOf(
             arrayOf(
                 R.drawable.ic_white_rook,
                 R.drawable.ic_white_knight,
@@ -26,10 +26,10 @@ open class TestForView {
                 R.drawable.ic_white_pawn
             ),
 
-            arrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0, 0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0, 0, 0, 0, 0),
+            arrayOfNulls(8),
+            arrayOfNulls(8),
+            arrayOfNulls(8),
+            arrayOfNulls(8),
 
             arrayOf(
                 R.drawable.ic_black_pawn,
