@@ -1,10 +1,10 @@
 package pt.isel.pdm.chess4android.games
 
 abstract class Game(val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
-    private var _currentPlayer: Player = Player.Bottom
-    val currentPlayer: Player get() = _currentPlayer
-    private val board: Array<Array<Piece?>> = arrayOf(arrayOf());
-    private var moveHistory: MutableList<Movement> = mutableListOf<Movement>()
+    internal var _currentPlayer: Player = Player.Bottom
+
+    internal val board: Array<Array<Piece?>> = Array(MAX_WIDTH) { Array(MAX_HEIGHT) { null } };
+    internal var moveHistory: MutableList<Movement> = mutableListOf()
 
 
     fun getPiece(position: Position): Piece? {
@@ -15,9 +15,17 @@ abstract class Game(val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
         return board[position.x][position.y]
     }
 
-    fun getPossibleMoves(position: Position): Array<Position> {
-        val piece: Piece = getPiece(position) ?: return arrayOf()
+    fun getPossibleMoves(position: Position): ArrayList<Position> {
+        val piece: Piece = getPiece(position) ?: return arrayListOf()
         return piece.getPossibleMoves(position, this)
+    }
+
+    fun getLastMovement(): Movement? {
+        return if (moveHistory.isNotEmpty()) {
+            moveHistory.last()
+        } else {
+            null;
+        }
     }
 
 }
