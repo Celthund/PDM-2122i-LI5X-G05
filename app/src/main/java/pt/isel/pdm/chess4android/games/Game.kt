@@ -1,7 +1,9 @@
 package pt.isel.pdm.chess4android.games
 
+import pt.isel.pdm.chess4android.games.chess.Piece
+
 abstract class Game(val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
-    internal var _currentPlayer: Player = Player.Bottom
+    internal var _currentPlayer: Player = Player.Top
 
     internal val board: Array<Array<Piece?>> = Array(MAX_WIDTH) { Array(MAX_HEIGHT) { null } };
     internal var moveHistory: MutableList<Movement> = mutableListOf()

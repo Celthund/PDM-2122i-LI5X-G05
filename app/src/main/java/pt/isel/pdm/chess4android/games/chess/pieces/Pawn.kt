@@ -2,6 +2,7 @@ package pt.isel.pdm.chess4android.games.chess.pieces
 
 import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.games.*
+import pt.isel.pdm.chess4android.games.chess.Piece
 import kotlin.math.abs
 
 class Pawn(player: Player) : Piece(player) {
@@ -84,6 +85,7 @@ class Pawn(player: Player) : Piece(player) {
 
             val captureRight = Position(position.x + 1, position.y - 1) // Right Up needs capture
 
+            /*
             if (lastMovement == null) {
                 val pieceAtLeft: Piece? = board.getPiece(captureLeft);
                 if (pieceAtLeft != null && pieceAtLeft.player != player){
@@ -108,6 +110,7 @@ class Pawn(player: Player) : Piece(player) {
                     positions.add(captureRight)
                 }
             }
+            */
 
         }
 

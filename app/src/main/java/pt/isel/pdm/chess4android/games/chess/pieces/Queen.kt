@@ -2,7 +2,7 @@ package pt.isel.pdm.chess4android.games.chess.pieces
 
 import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.games.Game
-import pt.isel.pdm.chess4android.games.Piece
+import pt.isel.pdm.chess4android.games.chess.Piece
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 

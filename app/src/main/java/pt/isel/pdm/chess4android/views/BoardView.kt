@@ -7,7 +7,8 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.widget.GridLayout
 import pt.isel.pdm.chess4android.R
-import pt.isel.pdm.chess4android.games.Piece
+import pt.isel.pdm.chess4android.games.Player
+import pt.isel.pdm.chess4android.games.chess.Piece
 import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.chess.Chess
 import pt.isel.pdm.chess4android.views.Tile.Type
@@ -23,8 +24,6 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         style = Paint.Style.STROKE
         strokeWidth = 10F
     }
-
-    private val pieceModelToView: HashMap<Piece, Int> = HashMap()
 
     // Stores the possible places the piece can move
     private val possibleTilesToMove: HashMap<Tile, Position> = HashMap()
@@ -59,7 +58,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
                     boardModel.getPiece(position)?.viewId
                 )
                 val currTile = columnsArray[column]
-                if(currTile.piece == R.drawable.ic_white_pawn) {
+                if(currTile.piece == R.drawable.ic_white_pawn || currTile.piece == R.drawable.ic_black_pawn ) {
                     val possibleMovements = boardModel.getPossibleMoves(position)
                     currTile.setOnClickListener {
                         showValid(position, possibleMovements)
@@ -79,7 +78,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     private fun showValid(currPos: Position, possibleMovements: ArrayList<Position>) {
         val currTile = boardTile[currPos.y][currPos.x]
 
-        if (currTile.piece == R.drawable.ic_empty_squares_possible_move || isSameTile(currTile)) {
+        if (currTile.piece == R.drawable.ic_empty_squares_possible_move || isSameTile(currTile) || !isCurrPlayerPiece(currPos)) {
             return
         }
         storePieceMovements[currTile] = possibleMovements
@@ -106,6 +105,10 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
 
         }
+    }
+
+    private fun isCurrPlayerPiece(position : Position) : Boolean {
+        return boardModel._currentPlayer == boardModel.getPiece(position)?.player
     }
 
     // Move the piece to the the clicked position
