@@ -1,9 +1,12 @@
 package pt.isel.pdm.chess4android.games.chess.pieces
 
+import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.games.*
 import kotlin.math.abs
 
 class Pawn(player: Player) : Piece(player) {
+    override val viewId: Int
+        get() = if (player.name == Player.Top.name) R.drawable.ic_white_pawn else R.drawable.ic_black_pawn
 
 
     private val originalRow: Int by lazy {
@@ -35,6 +38,7 @@ class Pawn(player: Player) : Piece(player) {
 
             val captureRight = Position(position.x + 1, position.y + 1) // Right Down needs capture
 
+            /*
             if (lastMovement == null) {
                 val pieceAtLeft: Piece? = board.getPiece(captureLeft);
                 if (pieceAtLeft != null && pieceAtLeft.player != player){
@@ -59,6 +63,7 @@ class Pawn(player: Player) : Piece(player) {
                     positions.add(captureRight)
                 }
             }
+            */
 
 
         } else if (player == Player.Bottom) {

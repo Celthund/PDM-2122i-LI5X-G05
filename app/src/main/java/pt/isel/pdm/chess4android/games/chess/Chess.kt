@@ -2,6 +2,7 @@ package pt.isel.pdm.chess4android.games.chess
 
 import pt.isel.pdm.chess4android.games.Game
 import pt.isel.pdm.chess4android.games.Player
+import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.chess.pieces.*
 
 
@@ -30,6 +31,11 @@ class Chess(MAX_HEIGHT: Int, MAX_WIDTH: Int) : Game(MAX_HEIGHT, MAX_WIDTH) {
         board[5][MAX_HEIGHT - 1]= Bishop(Player.Bottom)
         board[6][MAX_HEIGHT - 1]= Knight(Player.Bottom)
         board[7][MAX_HEIGHT - 1]= Rook(Player.Bottom)
+    }
+
+    fun updateBoard (oldPosition : Position, newPosition : Position) {
+        board[newPosition.x][newPosition.y] = board[oldPosition.x][oldPosition.y]
+        board[oldPosition.x][oldPosition.y] = null
     }
 
 

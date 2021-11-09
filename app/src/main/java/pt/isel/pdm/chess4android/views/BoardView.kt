@@ -7,7 +7,9 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.widget.GridLayout
 import pt.isel.pdm.chess4android.R
+import pt.isel.pdm.chess4android.games.Piece
 import pt.isel.pdm.chess4android.games.Position
+import pt.isel.pdm.chess4android.games.chess.Chess
 import pt.isel.pdm.chess4android.views.Tile.Type
 
 /**
@@ -15,7 +17,6 @@ import pt.isel.pdm.chess4android.views.Tile.Type
  */
 @SuppressLint("ClickableViewAccessibility")
 class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx, attrs) {
-
     private val side = 8
     private val brush = Paint().apply {
         ctx.resources.getColor(R.color.chess_board_black, null)
@@ -23,16 +24,20 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         strokeWidth = 10F
     }
 
+    private val pieceModelToView: HashMap<Piece, Int> = HashMap()
 
     // Stores the possible places the piece can move
     private val possibleTilesToMove: HashMap<Tile, Position> = HashMap()
+
     // Stores the pieces movement so it can reset if the "attack" was reset
-    private val storePieceMovements: HashMap<Tile, Array<Position>> = HashMap()
+    private val storePieceMovements: HashMap<Tile, ArrayList<Position>> = HashMap()
+
     // Last selected Tile so it can reset the possible moves if it was clicked again
     private var lastSelectedTile: Tile = Tile(ctx, Type.WHITE, 0, null)
-    // The states of the View Board at the present
-    private val boardTile: Array<Array<Tile>> = initBoard(TestForView.boardModel)
 
+    // The states of the View Board at the present
+    private val boardModel = Chess(8, 8)
+    private val boardTile: Array<Array<Tile>> = initBoard()
 
     init {
         rowCount = side
@@ -40,28 +45,28 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     // It will draw the board and put all thee beginning valid movement of each piece
-    private fun initBoard(board: Array<Array<Int?>>): Array<Array<Tile>> {
+    private fun initBoard(): Array<Array<Tile>> {
         var tileArray = arrayOf<Array<Tile>>()
-        val initialMovementOfPiece = MovementView.getInitialMovementForEachPiece()
 
-        for (row in board.indices) {
+        for (row in 0 until side) {
             var columnsArray = arrayOf<Tile>()
-            for (column in board[row].indices) {
+            for (column in 0 until side) {
+                val position = Position(column, row)
                 columnsArray += Tile(
                     ctx,
                     if ((row + column) % 2 == 0) Type.WHITE else Type.BLACK,
                     side,
-                    board[row][column]
+                    boardModel.getPiece(position)?.viewId
                 )
                 val currTile = columnsArray[column]
-
-                val possibleMoves = initialMovementOfPiece[board[row][column]]
-                if (possibleMoves != null) {
+                if(currTile.piece == R.drawable.ic_white_pawn) {
+                    val possibleMovements = boardModel.getPossibleMoves(position)
                     currTile.setOnClickListener {
-                        showValid(Position(column, row), possibleMoves)
+                        showValid(position, possibleMovements)
                     }
-                    storePieceMovements[currTile] = possibleMoves
+                    storePieceMovements[currTile] = possibleMovements
                 }
+
 
                 addView(currTile)
             }
@@ -71,7 +76,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     // Shows the valid position of a piece that was clicked
-    private fun showValid(currPos: Position, possibleMovements: Array<Position>) {
+    private fun showValid(currPos: Position, possibleMovements: ArrayList<Position>) {
         val currTile = boardTile[currPos.y][currPos.x]
 
         if (currTile.piece == R.drawable.ic_empty_squares_possible_move || isSameTile(currTile)) {
@@ -84,18 +89,18 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
         for (coordinate in possibleMovements.indices) {
             // Checks the possible move the piece has by adding the piece movement to the current position
-            val possibleMoveCol = currPos.x + possibleMovements[coordinate].x
-            val possibleMoveRow = currPos.y + possibleMovements[coordinate].y
+            val possibleMoveCol = possibleMovements[coordinate].x
+            val possibleMoveRow = possibleMovements[coordinate].y
 
-            val newPossiblePos = Position(possibleMoveCol, possibleMoveRow)
+            val newPosition = Position(possibleMoveCol, possibleMoveRow)
             val currPossibleTile = boardTile[possibleMoveRow][possibleMoveCol]
 
-            possibleTilesToMove[currPossibleTile] = newPossiblePos
+            possibleTilesToMove[currPossibleTile] = newPosition
 
             currPossibleTile.inPreview = true
 
             currPossibleTile.setOnClickListener {
-                movePiece(currPos.x, currPos.y, possibleMoveCol, possibleMoveRow)
+                movePiece(currPos, newPosition)
             }
             currPossibleTile.update()
 
@@ -105,24 +110,28 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
     // Move the piece to the the clicked position
     private fun movePiece(
-        currentCol: Int,
-        currentRow: Int,
-        moveCol: Int,
-        moveRow: Int,
+        currPosition: Position,
+        newPosition: Position
     ) {
         resetPossiblePositions()
-        val currTile = boardTile[currentRow][currentCol]
-        val moveTile = boardTile[moveRow][moveCol]
+        val currTile = boardTile[currPosition.y][currPosition.x]
+        val moveTile = boardTile[newPosition.y][newPosition.x]
 
         if (currTile.piece == R.drawable.ic_empty_squares_possible_move) {
             return
         }
+
         moveTile.piece = currTile.piece
         currTile.piece = R.drawable.ic_empty_squares_possible_move
 
+        boardModel.updateBoard(currPosition, newPosition)
+
+        moveTile.setOnClickListener {
+            showValid(newPosition, boardModel.getPossibleMoves(newPosition))
+        }
+
         moveTile.update()
         currTile.update()
-        return
     }
 
     // Reset to the board to the state before the a piece was clicked
