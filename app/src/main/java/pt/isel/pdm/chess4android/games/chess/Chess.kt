@@ -33,13 +33,5 @@ class Chess(MAX_HEIGHT: Int, MAX_WIDTH: Int) : Game(MAX_HEIGHT, MAX_WIDTH) {
         board[7][MAX_HEIGHT - 1] = Rook(Player.Bottom)
     }
 
-    fun updateBoard(oldPosition: Position, newPosition: Position) {
-        board[newPosition.x][newPosition.y] = board[oldPosition.x][oldPosition.y]
-        board[oldPosition.x][oldPosition.y] = null
-
-        _currentPlayer = if (_currentPlayer == Player.Top) Player.Bottom else Player.Top
-    }
-
-
 }
 

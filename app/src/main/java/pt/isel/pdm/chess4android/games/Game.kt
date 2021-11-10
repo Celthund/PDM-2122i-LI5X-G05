@@ -30,4 +30,17 @@ abstract class Game(val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
         }
     }
 
+    fun movePieceAtPosition(oldPosition: Position, newPosition: Position) {
+        if (board[oldPosition.x][oldPosition.y] != null) throw Error("No piece in that position.")
+        moveHistory.add(Movement(
+            oldPosition,
+            newPosition,
+            board[oldPosition.x][oldPosition.y],
+            board[newPosition.x][newPosition.y]
+        ))
+        board[newPosition.x][newPosition.y] = board[oldPosition.x][oldPosition.y]
+        board[oldPosition.x][oldPosition.y] = null
+
+        _currentPlayer = if (_currentPlayer == Player.Top) Player.Bottom else Player.Top
+    }
 }
