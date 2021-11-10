@@ -61,8 +61,6 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
                         showValid(position, boardModel.getPossibleMoves(position))
                     }
                 }
-
-
                 addView(currTile)
             }
             tileArray += columnsArray
@@ -121,7 +119,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         }
 
         moveTile.piece = currTile.piece
-        currTile.piece = R.drawable.ic_empty_squares_possible_move
+        currTile.piece = null
 
         boardModel.movePieceAtPosition(currPosition, newPosition)
 
