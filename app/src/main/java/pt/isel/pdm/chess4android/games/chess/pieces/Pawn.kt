@@ -11,7 +11,7 @@ class Pawn(player: Player) : Piece(player) {
 
 
     private val originalRow: Int by lazy {
-        when(player) {
+        when (player) {
             Player.Top -> 1
             Player.Bottom -> 6
         }
@@ -19,102 +19,77 @@ class Pawn(player: Player) : Piece(player) {
 
 
     override fun getPossibleMoves(position: Position, board: Game): ArrayList<Position> {
+        if (player == Player.Top) {
+            return calculateUpOrDown(position, board, 1, 2)
+        }
+        if (player == Player.Bottom) {
+            return calculateUpOrDown(position, board, -1, -2)
+        }
+        return arrayListOf()
+    }
+
+    private fun calculateUpOrDown(position:Position, board: Game, oneMove: Int, twoMoves: Int): ArrayList<Position> {
+        // TODO missing validation of possible check to the King if move is made.
+
         val positions: ArrayList<Position> = arrayListOf()
 
-        if (player == Player.Top) {
-
-            val pos1 = Position(position.x, position.y + 1) // Down 1
-            if (board.getPiece(pos1) == null){
-                positions.add(pos1)
-            }
-
-            val pos2 = Position(position.x, position.y + 2) // Down 2
-            if (position.y == originalRow && board.getPiece(pos1) == null && board.getPiece(pos2) == null){
-                positions.add(pos2)
-            }
-
-            val lastMovement: Movement? = board.getLastMovement()
-
-            val captureLeft = Position(position.x - 1, position.y + 1) // Left Down needs capture
-
-            val captureRight = Position(position.x + 1, position.y + 1) // Right Down needs capture
-
-            /*
-            if (lastMovement == null) {
-                val pieceAtLeft: Piece? = board.getPiece(captureLeft);
-                if (pieceAtLeft != null && pieceAtLeft.player != player){
-                    positions.add(captureLeft)
-                }
-
-                val pieceAtRight: Piece? = board.getPiece(captureRight);
-                if (pieceAtRight != null && pieceAtRight.player != player){
-                    positions.add(captureRight)
-                }
-            } else if ( // Check En Passant by checking that the last piece that move was a Pawn and it move more than 2 spaces (first move)
-                lastMovement.pieceAtOrigin is Pawn &&
-                abs(lastMovement.origin.y - lastMovement.destination.y) == 2 //
-            ) {
-                val pieceAtLeft: Piece? = board.getPiece(Position(captureLeft.x, captureLeft.y - 1));
-                if (pieceAtLeft is Pawn && pieceAtLeft.player != player){
-                    positions.add(captureLeft)
-                }
-
-                val pieceAtRight: Piece? = board.getPiece(Position(captureRight.x, captureRight.y - 1));
-                if (pieceAtRight is Pawn && pieceAtRight.player != player){
-                    positions.add(captureRight)
-                }
-            }
-            */
-
-
-        } else if (player == Player.Bottom) {
-
-            val pos1 = Position(position.x, position.y - 1) // Up 1
-            if (board.getPiece(pos1) == null){
-                positions.add(pos1)
-            }
-
-            val pos2 = Position(position.x, position.y - 2) // Up 2
-            if (position.y == originalRow && board.getPiece(pos1) == null && board.getPiece(pos2) == null){
-                positions.add(pos2)
-            }
-
-            val lastMovement: Movement? = board.getLastMovement()
-
-            val captureLeft = Position(position.x - 1, position.y - 1) // Left Up needs capture
-
-            val captureRight = Position(position.x + 1, position.y - 1) // Right Up needs capture
-
-            /*
-            if (lastMovement == null) {
-                val pieceAtLeft: Piece? = board.getPiece(captureLeft);
-                if (pieceAtLeft != null && pieceAtLeft.player != player){
-                    positions.add(captureLeft)
-                }
-
-                val pieceAtRight: Piece? = board.getPiece(captureRight);
-                if (pieceAtRight != null && pieceAtRight.player != player){
-                    positions.add(captureRight)
-                }
-            } else if ( // Check En Passant by checking that the last piece that move was a Pawn and it move more than 2 spaces (first move)
-                lastMovement.pieceAtOrigin is Pawn &&
-                abs(lastMovement.origin.y - lastMovement.destination.y) == 2 //
-            ) {
-                val pieceAtLeft: Piece? = board.getPiece(Position(captureLeft.x, captureLeft.y + 1));
-                if (pieceAtLeft is Pawn && pieceAtLeft.player != player){
-                    positions.add(captureLeft)
-                }
-
-                val pieceAtRight: Piece? = board.getPiece(Position(captureRight.x, captureRight.y + 1));
-                if (pieceAtRight is Pawn && pieceAtRight.player != player){
-                    positions.add(captureRight)
-                }
-            }
-            */
-
+        val pos1 = Position(position.x, position.y + oneMove) // Down 1
+        if (board.getPiece(pos1) == null) {
+            positions.add(pos1)
         }
 
-        // TODO missing validation of possible check to the King if move is made.
+        val pos2 = Position(position.x, position.y + twoMoves) // Down 2
+        if (position.y == originalRow && board.getPiece(pos1) == null && board.getPiece(pos2) == null) {
+            positions.add(pos2)
+        }
+
+        val lastMovement: Movement? = board.getLastMovement()
+
+        var captureLeft: Position? = null
+        if (position.x > 0) {
+            captureLeft = Position(position.x - 1, position.y + oneMove) // Left Down needs capture
+        }
+        var captureRight: Position? = null
+        if (position.x < board.MAX_WIDTH - 1) {
+            captureRight =
+                Position(position.x + 1, position.y + oneMove) // Right Down needs capture
+        }
+
+
+        if (lastMovement == null) {
+            if (captureLeft != null) {
+                val pieceAtLeft: Piece? = board.getPiece(captureLeft);
+                if (pieceAtLeft != null && pieceAtLeft.player != player) {
+                    positions.add(captureLeft)
+                }
+            }
+            if (captureRight != null) {
+                val pieceAtRight: Piece? = board.getPiece(captureRight);
+                if (pieceAtRight != null && pieceAtRight.player != player) {
+                    positions.add(captureRight)
+                }
+            }
+        } else if ( // Check En Passant by checking that the last piece that move was a Pawn and it move more than 2 spaces (first move)
+            lastMovement.pieceAtOrigin is Pawn &&
+            abs(lastMovement.origin.y - lastMovement.destination.y) == 2 //
+        ) {
+            if (captureLeft != null) {
+                val pieceAtLeft: Piece? =
+                    board.getPiece(Position(captureLeft.x, captureLeft.y - (oneMove)));
+                if (pieceAtLeft is Pawn && pieceAtLeft.player != player && captureLeft.x == lastMovement.destination.x) {
+                    positions.add(captureLeft)
+                }
+            }
+
+            if (captureRight != null) {
+                val pieceAtRight: Piece? =
+                    board.getPiece(Position(captureRight.x, captureRight.y - 1));
+                if (pieceAtRight is Pawn && pieceAtRight.player != player && captureRight.x == lastMovement.destination.x) {
+                    positions.add(captureRight)
+                }
+            }
+        }
+
         return positions;
     }
 }
