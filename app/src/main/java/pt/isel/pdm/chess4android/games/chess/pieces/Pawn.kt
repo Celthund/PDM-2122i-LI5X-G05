@@ -45,35 +45,28 @@ class Pawn(player: Player) : Piece(player) {
 
         val lastMovement: Movement? = board.getLastMovement()
 
-        var captureLeft: Position? = null
-        if (position.x > 0) {
-            captureLeft = Position(position.x - 1, position.y + oneMove) // Left Down needs capture
-        }
-        var captureRight: Position? = null
-        if (position.x < board.MAX_WIDTH - 1) {
-            captureRight =
-                Position(position.x + 1, position.y + oneMove) // Right Down needs capture
-        }
+        val captureLeft = Position(position.x - 1, position.y + oneMove)
 
+        val captureRight= Position(position.x + 1, position.y + oneMove) // Right Down needs capture
 
-        if (lastMovement == null) {
-            if (captureLeft != null) {
-                val pieceAtLeft: Piece? = board.getPiece(captureLeft);
-                if (pieceAtLeft != null && pieceAtLeft.player != player) {
-                    positions.add(captureLeft)
-                }
+        if (board.isPositionValid(captureLeft)) {
+            val pieceAtLeft: Piece? = board.getPiece(captureLeft);
+            if (pieceAtLeft != null && pieceAtLeft.player != player) {
+                positions.add(captureLeft)
             }
-            if (captureRight != null) {
-                val pieceAtRight: Piece? = board.getPiece(captureRight);
-                if (pieceAtRight != null && pieceAtRight.player != player) {
-                    positions.add(captureRight)
-                }
+        }
+        if (board.isPositionValid(captureRight)) {
+            val pieceAtRight: Piece? = board.getPiece(captureRight);
+            if (pieceAtRight != null && pieceAtRight.player != player) {
+                positions.add(captureRight)
             }
-        } else if ( // Check En Passant by checking that the last piece that move was a Pawn and it move more than 2 spaces (first move)
+        }
+        // Check En Passant by checking that the last piece that move was a Pawn and it move more than 2 spaces (first move)
+        if (lastMovement != null &&
             lastMovement.pieceAtOrigin is Pawn &&
             abs(lastMovement.origin.y - lastMovement.destination.y) == 2 //
         ) {
-            if (captureLeft != null) {
+            if (board.isPositionValid(captureLeft )) {
                 val pieceAtLeft: Piece? =
                     board.getPiece(Position(captureLeft.x, captureLeft.y - (oneMove)));
                 if (pieceAtLeft is Pawn && pieceAtLeft.player != player && captureLeft.x == lastMovement.destination.x) {
@@ -81,7 +74,7 @@ class Pawn(player: Player) : Piece(player) {
                 }
             }
 
-            if (captureRight != null) {
+            if (board.isPositionValid(captureRight)) {
                 val pieceAtRight: Piece? =
                     board.getPiece(Position(captureRight.x, captureRight.y - 1));
                 if (pieceAtRight is Pawn && pieceAtRight.player != player && captureRight.x == lastMovement.destination.x) {
