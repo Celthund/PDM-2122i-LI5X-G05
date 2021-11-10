@@ -102,7 +102,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     private fun isCurrPlayerPiece(position : Position) : Boolean {
-        return boardModel._currentPlayer == boardModel.getPiece(position)?.player
+        return boardModel.currentPlayer == boardModel.getPiece(position)?.player
     }
 
     // Move the piece to the the clicked position
