@@ -31,7 +31,7 @@ abstract class Game(val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
     }
 
     fun movePieceAtPosition(oldPosition: Position, newPosition: Position) {
-        if (board[oldPosition.x][oldPosition.y] != null) throw Error("No piece in that position.")
+        if (board[oldPosition.x][oldPosition.y] == null) throw Error("No piece in that position.")
         moveHistory.add(Movement(
             oldPosition,
             newPosition,
