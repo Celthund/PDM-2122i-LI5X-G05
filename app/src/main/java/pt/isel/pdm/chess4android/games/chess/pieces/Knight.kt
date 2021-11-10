@@ -26,7 +26,7 @@ class Knight(player: Player) : Piece(player) {
         val positions: ArrayList<Position> = arrayListOf()
         var piece: Piece? = null
         for (pos in allMoves){
-            if (pos.x >= 0 && pos.x < board.MAX_WIDTH && pos.y >= 0 && pos.y < board.MAX_HEIGHT){
+            if (board.isPositionValid(pos)){
                 piece = board.getPiece(pos)
                 if (piece == null || piece.player != player){
                     positions.add(pos)

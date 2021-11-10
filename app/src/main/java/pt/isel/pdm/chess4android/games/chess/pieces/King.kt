@@ -13,7 +13,7 @@ class King(player: Player) : Piece(player) {
     override fun getPossibleMoves(position: Position, board: Game): ArrayList<Position> {
         val positions: ArrayList<Position> = arrayListOf();
 
-        val positionsToValidate: Array<Position> = arrayOf(
+        val allMoves: Array<Position> = arrayOf(
             Position(position.x - 1, position.y - 1), // Up Left
             Position(position.x, position.y - 1), // Up
             Position(position.x + 1, position.y - 1), // Up Right
@@ -23,10 +23,12 @@ class King(player: Player) : Piece(player) {
             Position(position.x - 1, position.y + 1), // Down Left
             Position(position.x - 1, position.y) // Left
         )
-        for (pos in positionsToValidate) {
-            val piece : Piece? = board.getPiece(pos)
-            if (piece == null || piece.player != player) {
-                positions.add(pos);
+        for (pos in allMoves) {
+            if (board.isPositionValid(pos)){
+                val piece : Piece? = board.getPiece(pos)
+                if (piece == null || piece.player != player) {
+                    positions.add(pos);
+                }
             }
         }
         // TODO missing validation of possible check to the King if move is made.
