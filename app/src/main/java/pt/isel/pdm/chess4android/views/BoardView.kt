@@ -7,8 +7,6 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.widget.GridLayout
 import pt.isel.pdm.chess4android.R
-import pt.isel.pdm.chess4android.games.Player
-import pt.isel.pdm.chess4android.games.chess.Piece
 import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.chess.Chess
 import pt.isel.pdm.chess4android.views.Tile.Type
@@ -59,11 +57,9 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
                 )
                 val currTile = columnsArray[column]
                 if(currTile.piece == R.drawable.ic_white_pawn || currTile.piece == R.drawable.ic_black_pawn ) {
-                    val possibleMovements = boardModel.getPossibleMoves(position)
                     currTile.setOnClickListener {
-                        showValid(position, possibleMovements)
+                        showValid(position, boardModel.getPossibleMoves(position))
                     }
-                    storePieceMovements[currTile] = possibleMovements
                 }
 
 
@@ -127,7 +123,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         moveTile.piece = currTile.piece
         currTile.piece = R.drawable.ic_empty_squares_possible_move
 
-        boardModel.updateBoard(currPosition, newPosition)
+        boardModel.movePieceAtPosition(currPosition, newPosition)
 
         moveTile.setOnClickListener {
             showValid(newPosition, boardModel.getPossibleMoves(newPosition))
