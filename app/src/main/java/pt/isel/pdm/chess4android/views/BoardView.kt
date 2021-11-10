@@ -56,7 +56,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
                     boardModel.getPiece(position)?.viewId
                 )
                 val currTile = columnsArray[column]
-                if(currTile.piece == R.drawable.ic_white_pawn || currTile.piece == R.drawable.ic_black_pawn ) {
+                if (currTile.piece != null) {
                     currTile.setOnClickListener {
                         showValid(position, boardModel.getPossibleMoves(position))
                     }
