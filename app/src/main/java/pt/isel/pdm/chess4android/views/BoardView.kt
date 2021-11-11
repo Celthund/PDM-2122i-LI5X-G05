@@ -68,23 +68,15 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         val currTile = boardTile[currPos.y][currPos.x]
 
 
-        if (currTile.piece == R.drawable.ic_empty_squares_possible_move || !isCurrPlayerPiece(currPos)) {
+        if (currTile.piece == R.drawable.ic_empty_squares_possible_move || !isCurrPlayerPiece(currPos) || clickedOnSamePiece(currTile, possibleMovements)) {
             return
         }
 
-        if(lastSelectedTile == currTile) {
-            resetPossiblePositions(possibleMovements)
-            return
-        }
-
-        if(lastSelectedTile != null) {
+        if (lastSelectedTile != null) {
             resetPossiblePositions(lastClickedPosition)
         }
 
         lastClickedPosition = possibleMovements
-
-
-
         lastSelectedTile = currTile
 
         for (coordinate in possibleMovements.indices) {
@@ -105,6 +97,14 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
 
         }
+    }
+
+    private fun clickedOnSamePiece(tile: Tile, possibleMovements: ArrayList<Position>): Boolean {
+        if (lastSelectedTile == tile) {
+            resetPossiblePositions(possibleMovements)
+            return true
+        }
+        return false
     }
 
     private fun isCurrPlayerPiece(position: Position): Boolean {
