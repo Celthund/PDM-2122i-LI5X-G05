@@ -11,6 +11,13 @@ class Bishop(player: Player) : Piece(player) {
         get() = if (player.name == Player.Top.name) R.drawable.ic_white_bishop else R.drawable.ic_black_bishop
 
     override fun getPossibleMoves(position: Position, board: Game): ArrayList<Position> {
-        TODO("Not yet implemented")
+        val positions: ArrayList<Position> = arrayListOf()
+
+        // Get diagonals
+        positions.addAll(getPositionsToTopLeft(position, board))
+        positions.addAll(getPositionsToTopRight(position, board))
+        positions.addAll(getPositionsToBottomLeft(position, board))
+        positions.addAll(getPositionsToBottomRight(position, board))
+        return positions
     }
 }
