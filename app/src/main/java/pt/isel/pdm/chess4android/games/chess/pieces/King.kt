@@ -11,6 +11,7 @@ class King(player: Player) : Piece(player) {
         get() = if (player.name == Player.Top.name) R.drawable.ic_white_king else R.drawable.ic_black_king
 
     override fun getPossibleMoves(position: Position, board: Game): ArrayList<Position> {
+        // TODO missing validation of possible check to the King if move is made.
         val positions: ArrayList<Position> = arrayListOf();
 
         val allMoves: Array<Position> = arrayOf(
@@ -31,7 +32,6 @@ class King(player: Player) : Piece(player) {
                 }
             }
         }
-        // TODO missing validation of possible check to the King if move is made.
         return positions
     }
 }
