@@ -52,9 +52,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
                 )
                 val currTile = columnsArray[column]
                 if (currTile.piece != null) {
-                    currTile.setOnClickListener {
-                        showValid(position, boardModel.getPossibleMoves(position))
-                    }
+                    setTileClickListener(currTile, position)
                 }
                 addView(currTile)
             }
@@ -64,9 +62,8 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     // Shows the valid position of a piece that was clicked
-    private fun showValid(currPos: Position, possibleMovements: ArrayList<Position>) {
+    private fun showValidMoves(currPos: Position, possibleMovements: ArrayList<Position>) {
         val currTile = boardTile[currPos.y][currPos.x]
-
 
         if (currTile.piece == R.drawable.ic_empty_squares_possible_move || !isCurrPlayerPiece(currPos) || clickedOnSamePiece(currTile, possibleMovements)) {
             return
@@ -99,18 +96,6 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         }
     }
 
-    private fun clickedOnSamePiece(tile: Tile, possibleMovements: ArrayList<Position>): Boolean {
-        if (lastSelectedTile == tile) {
-            resetPossiblePositions(possibleMovements)
-            return true
-        }
-        return false
-    }
-
-    private fun isCurrPlayerPiece(position: Position): Boolean {
-        return boardModel.currentPlayer == boardModel.getPiece(position)?.player
-    }
-
     private fun resetPossiblePositions(possibleMovements: ArrayList<Position>) {
         for (possibleMovement in possibleMovements) {
             lastSelectedTile = null
@@ -121,9 +106,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
             if (currTile.piece == null) {
                 currTile.setOnClickListener {}
             } else {
-                currTile.setOnClickListener {
-                    showValid(possibleMovement, boardModel.getPossibleMoves(possibleMovement))
-                }
+                setTileClickListener(currTile, possibleMovement)
             }
             currTile.update()
         }
@@ -138,23 +121,34 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         val currTile = boardTile[currPosition.y][currPosition.x]
         val moveTile = boardTile[newPosition.y][newPosition.x]
 
-        if (currTile.piece == R.drawable.ic_empty_squares_possible_move) {
-            return
-        }
-
         moveTile.piece = currTile.piece
         currTile.piece = null
 
         boardModel.movePieceAtPosition(currPosition, newPosition)
 
-        moveTile.setOnClickListener {
-            showValid(newPosition, boardModel.getPossibleMoves(newPosition))
-        }
+        setTileClickListener(moveTile, newPosition)
 
         moveTile.update()
         currTile.update()
     }
 
+    private fun setTileClickListener(tile: Tile, position: Position) {
+        tile.setOnClickListener {
+            showValidMoves(position, boardModel.getPossibleMoves(position))
+        }
+    }
+
+    private fun isCurrPlayerPiece(position: Position): Boolean {
+        return boardModel.currentPlayer == boardModel.getPiece(position)?.player
+    }
+
+    private fun clickedOnSamePiece(tile: Tile, possibleMovements: ArrayList<Position>): Boolean {
+        if (lastSelectedTile == tile) {
+            resetPossiblePositions(possibleMovements)
+            return true
+        }
+        return false
+    }
 
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
