@@ -1,16 +1,19 @@
 package pt.isel.pdm.chess4android.games
 
 import pt.isel.pdm.chess4android.games.chess.Piece
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
     private var _currentPlayer: Player
     val currentPlayer get() = _currentPlayer
-
     init {
         _currentPlayer = firstPlayer
     }
 
     protected val board: Array<Array<Piece?>> = Array(MAX_WIDTH) { Array(MAX_HEIGHT) { null } };
+    val playersPieces: HashMap<Player, HashSet<Piece>> = HashMap()
+
     private var moveHistory: MutableList<Movement> = mutableListOf()
 
     fun getPiece(position: Position): Piece? {
@@ -50,5 +53,16 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
 
     fun isPositionValid(positionToCheck: Position): Boolean {
         return positionToCheck.x in 0 until MAX_WIDTH && positionToCheck.y in 0 until MAX_HEIGHT
+    }
+
+    protected fun addPieceToBoard(piece: Piece){
+        if (board[piece.position.x][piece.position.y] != null) Error("Position already has a piece.")
+        board[piece.position.x][piece.position.y] = piece
+        if (!playersPieces.containsKey(piece.player)){
+            playersPieces[piece.player] = HashSet()
+        }
+        if (!playersPieces[piece.player]?.contains(piece)!!){
+            playersPieces[piece.player]?.add(piece)
+        }
     }
 }
