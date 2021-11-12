@@ -7,8 +7,8 @@ import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 
 class Bishop(player: Player) : Piece(player) {
-    override fun getPossibleMoves(position: Position, board: Game): ArrayList<Position> {
-        val positions: ArrayList<Position> = arrayListOf()
+    override fun getPossibleMoves(position: Position, board: Game): HashSet<Position> {
+        val positions: HashSet<Position> = HashSet()
 
         // Get diagonals
         positions.addAll(getPositionsToTopLeft(position, board))

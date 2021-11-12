@@ -15,20 +15,20 @@ class Pawn(player: Player) : Piece(player) {
     }
 
 
-    override fun getPossibleMoves(position: Position, board: Game): ArrayList<Position> {
+    override fun getPossibleMoves(position: Position, board: Game): HashSet<Position> {
         if (player == Player.Top) {
             return calculateUpOrDown(position, board, 1, 2)
         }
         if (player == Player.Bottom) {
             return calculateUpOrDown(position, board, -1, -2)
         }
-        return arrayListOf()
+        return HashSet()
     }
 
-    private fun calculateUpOrDown(position:Position, board: Game, oneMove: Int, twoMoves: Int): ArrayList<Position> {
+    private fun calculateUpOrDown(position:Position, board: Game, oneMove: Int, twoMoves: Int): HashSet<Position> {
         // TODO missing validation of possible check to the King if move is made.
 
-        val positions: ArrayList<Position> = arrayListOf()
+        val positions: HashSet<Position> = HashSet()
 
         val pos1 = Position(position.x, position.y + oneMove) // Down 1
         if (board.getPiece(pos1) == null) {

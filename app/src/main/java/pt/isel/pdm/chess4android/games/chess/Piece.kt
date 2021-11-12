@@ -5,10 +5,10 @@ import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 
 abstract class Piece(val player: Player) {
-    abstract fun getPossibleMoves(position: Position, board: Game): ArrayList<Position>
+    abstract fun getPossibleMoves(position: Position, board: Game): HashSet<Position>
 
-    protected fun getPositionsToRight(position: Position, board: Game): ArrayList<Position> {
-        val positions: ArrayList<Position> = arrayListOf()
+    protected fun getPositionsToRight(position: Position, board: Game): HashSet<Position> {
+        val positions: HashSet<Position> = HashSet()
         var pos: Position
         var piece: Piece?
         for (i in position.x + 1 until board.MAX_WIDTH) {
@@ -28,8 +28,8 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToLeft(position: Position, board: Game): ArrayList<Position> {
-        val positions: ArrayList<Position> = arrayListOf()
+    protected fun getPositionsToLeft(position: Position, board: Game): HashSet<Position> {
+        val positions: HashSet<Position> = HashSet()
         var pos: Position
         var piece: Piece?
         for (i in position.x - 1 downTo 0) {
@@ -49,8 +49,8 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToBottom(position: Position, board: Game): ArrayList<Position> {
-        val positions: ArrayList<Position> = arrayListOf()
+    protected fun getPositionsToBottom(position: Position, board: Game): HashSet<Position> {
+        val positions: HashSet<Position> = HashSet()
         var pos: Position
         var piece: Piece?
         for (i in position.y + 1 until board.MAX_HEIGHT) {
@@ -70,8 +70,8 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToTop(position: Position, board: Game): ArrayList<Position> {
-        val positions: ArrayList<Position> = arrayListOf()
+    protected fun getPositionsToTop(position: Position, board: Game): HashSet<Position> {
+        val positions: HashSet<Position> = HashSet()
         var pos: Position
         var piece: Piece?
         for (i in position.y - 1 downTo 0) {
@@ -91,8 +91,8 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToTopLeft(position: Position, board: Game): ArrayList<Position> {
-        val positions: ArrayList<Position> = arrayListOf()
+    protected fun getPositionsToTopLeft(position: Position, board: Game): HashSet<Position> {
+        val positions: HashSet<Position> = HashSet()
         var pos = Position(position.x - 1, position.y - 1)
         var piece: Piece?
         // Top right
@@ -111,8 +111,8 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToBottomRight(position: Position, board: Game): ArrayList<Position> {
-        val positions: ArrayList<Position> = arrayListOf()
+    protected fun getPositionsToBottomRight(position: Position, board: Game): HashSet<Position> {
+        val positions: HashSet<Position> = HashSet()
         var pos = Position(position.x + 1, position.y + 1)
         var piece: Piece?
         // Top right
@@ -131,8 +131,8 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToTopRight(position: Position, board: Game): ArrayList<Position> {
-        val positions: ArrayList<Position> = arrayListOf()
+    protected fun getPositionsToTopRight(position: Position, board: Game): HashSet<Position> {
+        val positions: HashSet<Position> = HashSet()
         var pos = Position(position.x + 1, position.y - 1)
         var piece: Piece?
         // Top right
@@ -151,8 +151,8 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToBottomLeft(position: Position, board: Game): ArrayList<Position> {
-        val positions: ArrayList<Position> = arrayListOf()
+    protected fun getPositionsToBottomLeft(position: Position, board: Game): HashSet<Position> {
+        val positions: HashSet<Position> = HashSet()
         var pos = Position(position.x - 1, position.y + 1)
         var piece: Piece?
         // Top right

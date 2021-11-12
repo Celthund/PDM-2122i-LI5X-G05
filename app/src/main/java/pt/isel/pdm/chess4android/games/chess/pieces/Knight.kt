@@ -7,7 +7,7 @@ import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 
 class Knight(player: Player) : Piece(player) {
-    override fun getPossibleMoves(position: Position, board: Game): ArrayList<Position> {
+    override fun getPossibleMoves(position: Position, board: Game): HashSet<Position> {
         val allMoves : Array<Position> = arrayOf(
             Position(position.x - 2, position.y - 1),
             Position(position.x - 1, position.y - 2),
@@ -20,7 +20,7 @@ class Knight(player: Player) : Piece(player) {
         )
 
         // TODO missing validation of possible check to the King if move is made.
-        val positions: ArrayList<Position> = arrayListOf()
+        val positions: HashSet<Position> = HashSet()
         var piece: Piece? = null
         for (pos in allMoves){
             if (board.isPositionValid(pos)){

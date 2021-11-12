@@ -21,8 +21,8 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
         return board[position.x][position.y]
     }
 
-    fun getPossibleMoves(position: Position): ArrayList<Position> {
-        val piece: Piece = getPiece(position) ?: return arrayListOf()
+    fun getPossibleMoves(position: Position): HashSet<Position> {
+        val piece: Piece = getPiece(position) ?: return HashSet()
         return piece.getPossibleMoves(position, this)
     }
 
