@@ -25,13 +25,13 @@ class Chess(firstPlayer:Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) : Game(firstPla
         addPieceToBoard(Rook(Player.Top, Position(7, 0)))
 
         addPieceToBoard(Rook(Player.Bottom, Position(0, MAX_HEIGHT - 1)))
-        addPieceToBoard(Knight(Player.Bottom, Position(0, MAX_HEIGHT - 1)))
-        addPieceToBoard(Bishop(Player.Bottom, Position(0, MAX_HEIGHT - 1)))
-        addPieceToBoard(Queen(Player.Bottom, Position(0, MAX_HEIGHT - 1)))
-        addPieceToBoard(King(Player.Bottom, Position(0, MAX_HEIGHT - 1)))
-        addPieceToBoard(Bishop(Player.Bottom, Position(0, MAX_HEIGHT - 1)))
-        addPieceToBoard(Knight(Player.Bottom, Position(0, MAX_HEIGHT - 1)))
-        addPieceToBoard(Rook(Player.Bottom, Position(0, MAX_HEIGHT - 1)))
+        addPieceToBoard(Knight(Player.Bottom, Position(1, MAX_HEIGHT - 1)))
+        addPieceToBoard(Bishop(Player.Bottom, Position(2, MAX_HEIGHT - 1)))
+        addPieceToBoard(Queen(Player.Bottom, Position(3, MAX_HEIGHT - 1)))
+        addPieceToBoard(King(Player.Bottom, Position(4, MAX_HEIGHT - 1)))
+        addPieceToBoard(Bishop(Player.Bottom, Position(5, MAX_HEIGHT - 1)))
+        addPieceToBoard(Knight(Player.Bottom, Position(6, MAX_HEIGHT - 1)))
+        addPieceToBoard(Rook(Player.Bottom, Position(7, MAX_HEIGHT - 1)))
     }
 
 }
