@@ -6,9 +6,6 @@ import pt.isel.pdm.chess4android.games.chess.Piece
 import kotlin.math.abs
 
 class Pawn(player: Player) : Piece(player) {
-    override val viewId: Int
-        get() = if (player.name == Player.Top.name) R.drawable.ic_white_pawn else R.drawable.ic_black_pawn
-
 
     private val originalRow: Int by lazy {
         when (player) {

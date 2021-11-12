@@ -93,8 +93,4 @@ class Tile(
         }
     }
 
-    fun update() {
-        this.invalidate()
-    }
-
 }
