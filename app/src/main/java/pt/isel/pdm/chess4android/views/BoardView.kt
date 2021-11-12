@@ -33,7 +33,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     private var lastClickedPosition: ArrayList<Position> = ArrayList()
 
     // The states of the View Board at the present
-    private val boardModel = Chess(8, 8)
+    private val boardModel = Chess(Player.Bottom, 8, 8)
     private val boardTile: Array<Array<Tile>> = initBoard()
 
     init {

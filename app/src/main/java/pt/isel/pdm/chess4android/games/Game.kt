@@ -2,13 +2,16 @@ package pt.isel.pdm.chess4android.games
 
 import pt.isel.pdm.chess4android.games.chess.Piece
 
-abstract class Game(val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
-    private var _currentPlayer: Player = Player.Top
+abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
+    private var _currentPlayer: Player
     val currentPlayer get() = _currentPlayer
+
+    init {
+        _currentPlayer = firstPlayer
+    }
 
     protected val board: Array<Array<Piece?>> = Array(MAX_WIDTH) { Array(MAX_HEIGHT) { null } };
     private var moveHistory: MutableList<Movement> = mutableListOf()
-
 
     fun getPiece(position: Position): Piece? {
         if (position.x >= MAX_WIDTH || position.x < 0)
