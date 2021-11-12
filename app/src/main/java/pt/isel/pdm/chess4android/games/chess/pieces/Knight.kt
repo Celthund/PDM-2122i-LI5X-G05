@@ -1,13 +1,12 @@
 package pt.isel.pdm.chess4android.games.chess.pieces
 
-import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.games.Game
 import pt.isel.pdm.chess4android.games.chess.Piece
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 
-class Knight(player: Player) : Piece(player) {
-    override fun getPossibleMoves(position: Position, board: Game): HashSet<Position> {
+class Knight(player: Player, position: Position) : Piece(player, position) {
+    override fun getPossibleMoves(board: Game): HashSet<Position> {
         val allMoves : Array<Position> = arrayOf(
             Position(position.x - 2, position.y - 1),
             Position(position.x - 1, position.y - 2),

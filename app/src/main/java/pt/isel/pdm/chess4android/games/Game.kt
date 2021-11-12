@@ -23,7 +23,7 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
 
     fun getPossibleMoves(position: Position): HashSet<Position> {
         val piece: Piece = getPiece(position) ?: return HashSet()
-        return piece.getPossibleMoves(position, this)
+        return piece.getPossibleMoves(this)
     }
 
     fun getLastMovement(): Movement? {
@@ -42,6 +42,7 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
             )
         )
         board[newPosition.x][newPosition.y] = board[oldPosition.x][oldPosition.y]
+        board[oldPosition.x][oldPosition.y]?.position = newPosition
         board[oldPosition.x][oldPosition.y] = null
 
         _currentPlayer = if (_currentPlayer == Player.Top) Player.Bottom else Player.Top

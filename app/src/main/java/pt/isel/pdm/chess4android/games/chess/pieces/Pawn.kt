@@ -1,11 +1,10 @@
 package pt.isel.pdm.chess4android.games.chess.pieces
 
-import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.games.*
 import pt.isel.pdm.chess4android.games.chess.Piece
 import kotlin.math.abs
 
-class Pawn(player: Player) : Piece(player) {
+class Pawn(player: Player, position: Position) : Piece(player, position) {
 
     private val originalRow: Int by lazy {
         when (player) {
@@ -15,7 +14,7 @@ class Pawn(player: Player) : Piece(player) {
     }
 
 
-    override fun getPossibleMoves(position: Position, board: Game): HashSet<Position> {
+    override fun getPossibleMoves(board: Game): HashSet<Position> {
         if (player == Player.Top) {
             return calculateUpOrDown(position, board, 1, 2)
         }

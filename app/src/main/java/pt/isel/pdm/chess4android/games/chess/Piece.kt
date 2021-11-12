@@ -4,10 +4,11 @@ import pt.isel.pdm.chess4android.games.Game
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 
-abstract class Piece(val player: Player) {
-    abstract fun getPossibleMoves(position: Position, board: Game): HashSet<Position>
+abstract class Piece(val player: Player, var position: Position) {
 
-    protected fun getPositionsToRight(position: Position, board: Game): HashSet<Position> {
+    abstract fun getPossibleMoves(board: Game): HashSet<Position>
+
+    protected fun getPositionsToRight(board: Game): HashSet<Position> {
         val positions: HashSet<Position> = HashSet()
         var pos: Position
         var piece: Piece?
@@ -28,7 +29,7 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToLeft(position: Position, board: Game): HashSet<Position> {
+    protected fun getPositionsToLeft(board: Game): HashSet<Position> {
         val positions: HashSet<Position> = HashSet()
         var pos: Position
         var piece: Piece?
@@ -49,7 +50,7 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToBottom(position: Position, board: Game): HashSet<Position> {
+    protected fun getPositionsToBottom(board: Game): HashSet<Position> {
         val positions: HashSet<Position> = HashSet()
         var pos: Position
         var piece: Piece?
@@ -70,7 +71,7 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToTop(position: Position, board: Game): HashSet<Position> {
+    protected fun getPositionsToTop(board: Game): HashSet<Position> {
         val positions: HashSet<Position> = HashSet()
         var pos: Position
         var piece: Piece?
@@ -91,7 +92,7 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToTopLeft(position: Position, board: Game): HashSet<Position> {
+    protected fun getPositionsToTopLeft(board: Game): HashSet<Position> {
         val positions: HashSet<Position> = HashSet()
         var pos = Position(position.x - 1, position.y - 1)
         var piece: Piece?
@@ -111,7 +112,7 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToBottomRight(position: Position, board: Game): HashSet<Position> {
+    protected fun getPositionsToBottomRight(board: Game): HashSet<Position> {
         val positions: HashSet<Position> = HashSet()
         var pos = Position(position.x + 1, position.y + 1)
         var piece: Piece?
@@ -131,7 +132,7 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToTopRight(position: Position, board: Game): HashSet<Position> {
+    protected fun getPositionsToTopRight(board: Game): HashSet<Position> {
         val positions: HashSet<Position> = HashSet()
         var pos = Position(position.x + 1, position.y - 1)
         var piece: Piece?
@@ -151,7 +152,7 @@ abstract class Piece(val player: Player) {
         return positions
     }
 
-    protected fun getPositionsToBottomLeft(position: Position, board: Game): HashSet<Position> {
+    protected fun getPositionsToBottomLeft(board: Game): HashSet<Position> {
         val positions: HashSet<Position> = HashSet()
         var pos = Position(position.x - 1, position.y + 1)
         var piece: Piece?

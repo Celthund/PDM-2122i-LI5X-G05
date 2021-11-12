@@ -5,8 +5,8 @@ import pt.isel.pdm.chess4android.games.chess.Piece
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 
-class King(player: Player) : Piece(player) {
-    override fun getPossibleMoves(position: Position, board: Game): HashSet<Position> {
+class King(player: Player, position: Position) : Piece(player, position) {
+    override fun getPossibleMoves(board: Game): HashSet<Position> {
         // TODO missing validation of possible check to the King if move is made.
         val positions: HashSet<Position> = HashSet();
 
