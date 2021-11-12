@@ -24,16 +24,12 @@ abstract class Game(val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
     }
 
     fun getLastMovement(): Movement? {
-        return if (moveHistory.isNotEmpty()) {
-            moveHistory.last()
-        } else {
-            null;
-        }
+        return if (moveHistory.isNotEmpty()) { moveHistory.last() } else { null }
     }
 
     fun movePieceAtPosition(oldPosition: Position, newPosition: Position) {
-        if (board[oldPosition.x][oldPosition.y] == null)
-            throw Error("No piece in that position.")
+        if (board[oldPosition.x][oldPosition.y] == null) throw Error("No piece in that position.")
+        if (newPosition !in getPossibleMoves(oldPosition)) throw Error("Not a valid move.")
         moveHistory.add(
             Movement(
                 oldPosition,
