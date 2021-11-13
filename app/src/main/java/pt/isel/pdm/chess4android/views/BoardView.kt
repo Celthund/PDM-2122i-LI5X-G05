@@ -10,10 +10,8 @@ import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.chess.Chess
-import pt.isel.pdm.chess4android.games.chess.Piece
 import pt.isel.pdm.chess4android.games.chess.pieces.*
 import pt.isel.pdm.chess4android.views.Tile.Type
-import kotlin.reflect.KClass
 
 /**
  * Custom view that implements a chess board.

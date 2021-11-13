@@ -1,6 +1,5 @@
 package pt.isel.pdm.chess4android.games
 
-import pt.isel.pdm.chess4android.games.chess.Piece
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
@@ -11,10 +10,13 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
         _currentPlayer = firstPlayer
     }
 
-    protected val board: Array<Array<Piece?>> = Array(MAX_WIDTH) { Array(MAX_HEIGHT) { null } };
+    protected val board: Array<Array<Piece?>> = Array(MAX_WIDTH) { Array(MAX_HEIGHT) { null } }
     val playersPieces: HashMap<Player, HashSet<Piece>> = HashMap()
 
     private var moveHistory: MutableList<Movement> = mutableListOf()
+
+    abstract fun isGameOver(): Boolean
+    abstract fun whichPlayerWon(): Player?
 
     fun getPiece(position: Position): Piece? {
         if (position.x >= MAX_WIDTH || position.x < 0)
@@ -33,9 +35,11 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
         return if (moveHistory.isNotEmpty()) { moveHistory.last() } else { null }
     }
 
-    fun movePieceAtPosition(oldPosition: Position, newPosition: Position) {
+    open fun movePieceAtPosition(oldPosition: Position, newPosition: Position) {
         if (board[oldPosition.x][oldPosition.y] == null) throw Error("No piece in that position.")
         if (newPosition !in getPossibleMoves(oldPosition)) throw Error("Not a valid move.")
+        if (board[oldPosition.x][oldPosition.y]?.player != _currentPlayer) throw Error("Not the current player move.")
+
         moveHistory.add(
             Movement(
                 oldPosition,
@@ -44,18 +48,25 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
                 board[newPosition.x][newPosition.y]
             )
         )
-        board[newPosition.x][newPosition.y] = board[oldPosition.x][oldPosition.y]
+
         board[oldPosition.x][oldPosition.y]?.position = newPosition
+        board[oldPosition.x][oldPosition.y]?.resetPossibleMoves()
+        board[oldPosition.x][oldPosition.y]?.setFirstMoveMadeFlag()
+
+        board[newPosition.x][newPosition.y] = board[oldPosition.x][oldPosition.y]
         board[oldPosition.x][oldPosition.y] = null
 
         _currentPlayer = if (_currentPlayer == Player.Top) Player.Bottom else Player.Top
+        playersPieces[_currentPlayer]?.forEach {
+            it.resetPossibleMoves()
+        }
     }
 
     fun isPositionValid(positionToCheck: Position): Boolean {
         return positionToCheck.x in 0 until MAX_WIDTH && positionToCheck.y in 0 until MAX_HEIGHT
     }
 
-    protected fun addPieceToBoard(piece: Piece){
+    protected open fun addPieceToBoard(piece: Piece){
         if (board[piece.position.x][piece.position.y] != null) Error("Position already has a piece.")
         board[piece.position.x][piece.position.y] = piece
         if (!playersPieces.containsKey(piece.player)){
