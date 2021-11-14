@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chess4Android</string>
+    <string name="solve_menu">Resolver Puzzle</string>
+    <string name="about_menu">Sobre</string>
+    <string name="get_menu">Obter Puzzle do dia</string>
+    <string name="Credits">Lichess.org por disponibilizar puzzles diarios</string>
+    <string name="titleCredits">Créditos</string>
+    <string name="titleDevelopers">Programadores</string>
+    <string name="titleBuildVersion">Versão</string>
+</resources>
