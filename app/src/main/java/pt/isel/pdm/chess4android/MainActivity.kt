@@ -9,7 +9,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
+import pt.isel.pdm.chess4android.games.Player
+import pt.isel.pdm.chess4android.games.chess.Chess
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +22,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding.boardView.initBoard(Chess(Player.Top, 8,8))
+
+        binding.boardView.viewModel = viewModel
+        viewModel.boardModel.observe(this) {
+            binding.boardView.setBoard(it)
+        }
+
         setContentView(binding.root)
     }
 

@@ -4,10 +4,11 @@ import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.*
+import pt.isel.pdm.chess4android.games.Player
+import pt.isel.pdm.chess4android.games.chess.Chess
+import pt.isel.pdm.chess4android.views.BoardView
+import pt.isel.pdm.chess4android.views.Tile
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +28,8 @@ class MainActivityViewModel(
     private val state: SavedStateHandle
 ) : AndroidViewModel(application) {
 
+    private val _boardModel: MutableLiveData<Chess> = MutableLiveData()
+    val boardModel: LiveData<Chess> = _boardModel
     val lichessPuzzle: LiveData<PuzzleInfo> = state.getLiveData(MAIN_ACTIVITY_VIEW_STATE)
 
     fun GetLichessPuzzle() {
@@ -44,4 +47,9 @@ class MainActivityViewModel(
             }
         })
     }
+
+    fun setBoardModel(boardModel: Chess) {
+        this._boardModel.value = boardModel
+    }
+
 }
