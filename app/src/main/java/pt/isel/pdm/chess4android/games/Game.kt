@@ -1,7 +1,6 @@
 package pt.isel.pdm.chess4android.games
 
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
 abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
@@ -36,10 +35,10 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
         return if (moveHistory.isNotEmpty()) { moveHistory.last() } else { null }
     }
 
-    open fun movePieceAtPosition(oldPosition: Position, newPosition: Position) {
-        if (board[oldPosition.x][oldPosition.y] == null) throw Error("No piece in that position.")
-        if (newPosition !in getPossibleMoves(oldPosition)) throw Error("Not a valid move.")
-        if (board[oldPosition.x][oldPosition.y]?.player != _currentPlayer) throw Error("Not the current player move.")
+    open fun movePieceAtPosition(oldPosition: Position, newPosition: Position) : Boolean {
+        if (board[oldPosition.x][oldPosition.y] == null) return false
+        if (newPosition !in getPossibleMoves(oldPosition)) return false
+        if (board[oldPosition.x][oldPosition.y]?.player != _currentPlayer) return false
 
         moveHistory.add(
             Movement(
@@ -61,14 +60,15 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
         playersPieces[_currentPlayer]?.forEach {
             it.resetPossibleMoves()
         }
+        return true
     }
 
     fun isPositionValid(positionToCheck: Position): Boolean {
         return positionToCheck.x in 0 until MAX_WIDTH && positionToCheck.y in 0 until MAX_HEIGHT
     }
 
-    protected open fun addPieceToBoard(piece: Piece){
-        if (board[piece.position.x][piece.position.y] != null) Error("Position already has a piece.")
+    protected open fun addPieceToBoard(piece: Piece) : Boolean{
+        if (board[piece.position.x][piece.position.y] != null) return false
         board[piece.position.x][piece.position.y] = piece
         if (!playersPieces.containsKey(piece.player)){
             playersPieces[piece.player] = HashSet()
@@ -76,5 +76,6 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
         if (!playersPieces[piece.player]?.contains(piece)!!){
             playersPieces[piece.player]?.add(piece)
         }
+        return true
     }
 }

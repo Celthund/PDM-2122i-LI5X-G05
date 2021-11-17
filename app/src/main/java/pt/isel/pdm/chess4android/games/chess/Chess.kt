@@ -62,42 +62,46 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
         return null
     }
 
-    override fun movePieceAtPosition(oldPosition: Position, newPosition: Position) {
-        // TODO Missing promotion of pawn
+    override fun movePieceAtPosition(oldPosition: Position, newPosition: Position) : Boolean {
         val playerThatPlayed = _currentPlayer
-        super.movePieceAtPosition(oldPosition, newPosition)
-        playersKing[playerThatPlayed]?.resetPossibleMoves()
-        when (board[newPosition.x][newPosition.y]) {
-            // En passant
-            is Pawn -> {
-                if (abs(moveHistory.last().origin.y - moveHistory.last().destination.y) == 2 && oldPosition.x != newPosition.x) {
-                    board[newPosition.x][oldPosition.y] = null
+        val res = super.movePieceAtPosition(oldPosition, newPosition)
+        if (res) {
+            // TODO Missing promotion of pawn
+            playersKing[playerThatPlayed]?.resetPossibleMoves()
+            when (board[newPosition.x][newPosition.y]) {
+                // En passant
+                is Pawn -> {
+                    if (abs(moveHistory.last().origin.y - moveHistory.last().destination.y) == 2 && oldPosition.x != newPosition.x) {
+                        board[newPosition.x][oldPosition.y] = null
+                    }
                 }
-            }
-            // Castling
-            is King -> {
-                if (abs(oldPosition.x - newPosition.x) > 1) {
-                    if (newPosition.x == 2) {
-                        board[newPosition.x + 1][newPosition.y] =
-                            board[newPosition.x - 2][newPosition.y]
-                        board[newPosition.x - 2][newPosition.y] = null
-                    } else if (newPosition.x == 6) {
-                        board[newPosition.x - 1][newPosition.y] =
-                            board[newPosition.x + 1][newPosition.y]
-                        board[newPosition.x + 1][newPosition.y] = null
+                // Castling
+                is King -> {
+                    if (abs(oldPosition.x - newPosition.x) > 1) {
+                        if (newPosition.x == 2) {
+                            board[newPosition.x + 1][newPosition.y] =
+                                board[newPosition.x - 2][newPosition.y]
+                            board[newPosition.x - 2][newPosition.y] = null
+                        } else if (newPosition.x == 6) {
+                            board[newPosition.x - 1][newPosition.y] =
+                                board[newPosition.x + 1][newPosition.y]
+                            board[newPosition.x + 1][newPosition.y] = null
+                        }
                     }
                 }
             }
         }
+        return res
     }
 
-    override fun addPieceToBoard(piece: Piece){
+    override fun addPieceToBoard(piece: Piece): Boolean{
         if (piece is King) {
             if (board[piece.position.x][piece.position.y] != null) throw Error("Position already has a piece.")
             board[piece.position.x][piece.position.y] = piece
             playersKing[piece.player] = piece
+            return true
         } else {
-            super.addPieceToBoard(piece)
+            return super.addPieceToBoard(piece)
         }
     }
 
