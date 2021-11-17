@@ -28,10 +28,11 @@ abstract class Piece(val player: Player, var position: Position) {
 
 
     open fun getPossibleMoves(board: Game): HashSet<Position> {
-        if (possibleMoves == null){
-            possibleMoves = internalGetPossibleMoves(board)
-        }
-        return possibleMoves!!
+        return internalGetPossibleMoves(board)
+        //if (possibleMoves == null){
+        //    possibleMoves = internalGetPossibleMoves(board)
+        //}
+        //return possibleMoves!!
     }
 
     protected abstract fun internalGetPossibleMoves(board: Game): HashSet<Position>

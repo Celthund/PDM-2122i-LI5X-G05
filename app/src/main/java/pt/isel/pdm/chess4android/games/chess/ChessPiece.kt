@@ -12,6 +12,51 @@ import kotlin.math.abs
 
 abstract class ChessPiece(player: Player, position: Position) : Piece(player, position) {
 
+
+    override fun getPossibleMoves(board: Game): HashSet<Position> {
+        val king = (board as Chess).playersKing[player]!!
+        val moves = internalGetPossibleMoves(board)
+        if (this == king) return moves
+        // Validate if piece is in Check Proxy
+        val proxyHorizontal = checkProxyCheckToLeft(board) || checkProxyCheckToBottomRight(board)
+        val proxyVertical = checkProxyCheckToTop(board) || checkProxyCheckToBottom(board)
+        val proxyDiagonal = checkProxyCheckToBottomLeft(board) || checkProxyCheckToBottomRight(board) ||
+                checkProxyCheckToTopLeft(board) || checkProxyCheckToTopRight(board)
+
+        val filteredMoves = hashSetOf<Position>()
+        moves.forEach {
+            if (!proxyHorizontal && !proxyVertical && !proxyDiagonal)
+                filteredMoves.add(it)
+            else if (proxyHorizontal && it.y == position.y)
+                filteredMoves.add(it)
+            else if (proxyVertical && it.x == position.x)
+                filteredMoves.add(it)
+            else if (proxyDiagonal && abs(it.x - position.x) == abs(it.y - position.y))
+                filteredMoves.add(it)
+        }
+
+        // Validate if King for the current Player is in check
+        val pieceCheckingKing: Piece? = king.isKingInCheck(board)
+        if (pieceCheckingKing != null) {
+            val possibleMovesWhileChecked = hashSetOf<Position>()
+            // Can the current piece eat the piece that is checking
+            if (filteredMoves.contains(pieceCheckingKing.position))
+                possibleMovesWhileChecked.add(pieceCheckingKing.position)
+            // Can the current piece block horizontal movements
+            filteredMoves.forEach {
+                if (it.isPositionInBetween(pieceCheckingKing.position, king.position))
+                    possibleMovesWhileChecked.add(it)
+            }
+            return possibleMovesWhileChecked
+        }
+
+        return filteredMoves
+        //if (possibleMoves == null){
+        //    possibleMoves = internalGetPossibleMoves(board)
+        //}
+        //return possibleMoves!!
+    }
+
     protected fun getPositionsToRight(board: Game, addFirstPieceFound: Boolean): HashSet<Position> {
         val positions: HashSet<Position> = HashSet()
         val pos = Position(position.x, position.y)
@@ -23,8 +68,8 @@ abstract class ChessPiece(player: Player, position: Position) : Piece(player, po
                 if (piece == null) {
                     positions.add(Position(pos.x, pos.y))
                 } else if (piece is King && piece.player != player) {
-                positions.add(Position(pos.x, pos.y))
-            } else if (piece.player != player) {
+                    positions.add(Position(pos.x, pos.y))
+                } else if (piece.player != player) {
                     positions.add(Position(pos.x, pos.y))
                     break
                 } else if (piece.player == player) {
@@ -48,8 +93,8 @@ abstract class ChessPiece(player: Player, position: Position) : Piece(player, po
                 if (piece == null) {
                     positions.add(Position(pos.x, pos.y))
                 } else if (piece is King && piece.player != player) {
-                positions.add(Position(pos.x, pos.y))
-            } else if (piece.player != player) {
+                    positions.add(Position(pos.x, pos.y))
+                } else if (piece.player != player) {
                     positions.add(Position(pos.x, pos.y))
                     break
                 } else if (piece.player == player) {
@@ -76,8 +121,8 @@ abstract class ChessPiece(player: Player, position: Position) : Piece(player, po
                 if (piece == null) {
                     positions.add(Position(pos.x, pos.y))
                 } else if (piece is King && piece.player != player) {
-                positions.add(Position(pos.x, pos.y))
-            } else if (piece.player != player) {
+                    positions.add(Position(pos.x, pos.y))
+                } else if (piece.player != player) {
                     positions.add(Position(pos.x, pos.y))
                     break
                 } else if (piece.player == player) {
@@ -101,8 +146,8 @@ abstract class ChessPiece(player: Player, position: Position) : Piece(player, po
                 if (piece == null) {
                     positions.add(Position(pos.x, pos.y))
                 } else if (piece is King && piece.player != player) {
-                positions.add(Position(pos.x, pos.y))
-            } else if (piece.player != player) {
+                    positions.add(Position(pos.x, pos.y))
+                } else if (piece.player != player) {
                     positions.add(Position(pos.x, pos.y))
                     break
                 } else if (piece.player == player) {

@@ -5,13 +5,14 @@ import pt.isel.pdm.chess4android.games.Piece
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.chess.pieces.*
+import java.util.*
 import kotlin.math.abs
 
 
 class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
     Game(firstPlayer, MAX_HEIGHT, MAX_WIDTH) {
 
-    val playersKing: HashMap<Player, King> = HashMap()
+    val playersKing: EnumMap<Player, King> = EnumMap(Player::class.java)
 
     init {
         for (i in 0..7) {
@@ -62,11 +63,14 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
     }
 
     override fun movePieceAtPosition(oldPosition: Position, newPosition: Position) {
+        // TODO Missing promotion of pawn
+        val playerThatPlayed = _currentPlayer
         super.movePieceAtPosition(oldPosition, newPosition)
+        playersKing[playerThatPlayed]?.resetPossibleMoves()
         when (board[newPosition.x][newPosition.y]) {
             // En passant
             is Pawn -> {
-                if (oldPosition.x != newPosition.x) {
+                if (abs(moveHistory.last().origin.y - moveHistory.last().destination.y) == 2 && oldPosition.x != newPosition.x) {
                     board[newPosition.x][oldPosition.y] = null
                 }
             }
@@ -85,7 +89,6 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
                 }
             }
         }
-        playersKing[currentPlayer]?.resetPossibleMoves()
     }
 
     override fun addPieceToBoard(piece: Piece){

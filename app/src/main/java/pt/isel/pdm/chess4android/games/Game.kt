@@ -1,19 +1,20 @@
 package pt.isel.pdm.chess4android.games
 
+import java.util.*
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
 abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int) {
-    private var _currentPlayer: Player
+    protected var _currentPlayer: Player
     val currentPlayer get() = _currentPlayer
     init {
         _currentPlayer = firstPlayer
     }
 
     protected val board: Array<Array<Piece?>> = Array(MAX_WIDTH) { Array(MAX_HEIGHT) { null } }
-    val playersPieces: HashMap<Player, HashSet<Piece>> = HashMap()
+    val playersPieces: EnumMap<Player, HashSet<Piece>> = EnumMap(Player::class.java)
 
-    private var moveHistory: MutableList<Movement> = mutableListOf()
+    protected var moveHistory: MutableList<Movement> = mutableListOf()
 
     abstract fun isGameOver(): Boolean
     abstract fun whichPlayerWon(): Player?

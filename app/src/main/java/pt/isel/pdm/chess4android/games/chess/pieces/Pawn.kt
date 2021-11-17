@@ -22,22 +22,12 @@ class Pawn(player: Player, position: Position) : ChessPiece(player, position) {
     }
 
     private fun getMoves(board: Game, addFirstPieceFound: Boolean): HashSet<Position> {
-        val proxyCheckTopBottom: Boolean
-        val proxyCheckLeft: Boolean
-        val proxyCheckRight: Boolean
-        val proxyCheckHorizontal = checkProxyCheckToLeft(board) || checkProxyCheckToRight(board)
         return when (player) {
             Player.Top -> {
-                proxyCheckLeft = checkProxyCheckToBottomLeft(board) || proxyCheckHorizontal
-                proxyCheckRight = checkProxyCheckToBottomRight(board) || proxyCheckHorizontal
-                proxyCheckTopBottom = checkProxyCheckToBottom(board)
-                calculateUpOrDown(position, board, 1, 2, proxyCheckTopBottom, proxyCheckLeft, proxyCheckRight, addFirstPieceFound)
+                calculateUpOrDown(position, board, 1, 2, addFirstPieceFound)
             }
             Player.Bottom -> {
-                proxyCheckLeft = checkProxyCheckToTopLeft(board) || proxyCheckHorizontal
-                proxyCheckRight = checkProxyCheckToTopRight(board) || proxyCheckHorizontal
-                proxyCheckTopBottom = checkProxyCheckToTop(board)
-                calculateUpOrDown(position, board, -1, -2, proxyCheckTopBottom, proxyCheckLeft, proxyCheckRight, addFirstPieceFound)
+                calculateUpOrDown(position, board, -1, -2, addFirstPieceFound)
             }
         }
     }
@@ -47,14 +37,11 @@ class Pawn(player: Player, position: Position) : ChessPiece(player, position) {
         board: Game,
         oneMove: Int,
         twoMoves: Int,
-        proxyCheckTopBottom: Boolean,
-        proxyCheckLeft: Boolean,
-        proxyCheckRight: Boolean,
         addFirstPieceFound: Boolean
     ): HashSet<Position> {
 
         val positions: HashSet<Position> = HashSet()
-        if (!(proxyCheckLeft || proxyCheckRight)) {
+        if (!addFirstPieceFound) {
             val pos1 = Position(position.x, position.y + oneMove) // Down 1
             if (board.getPiece(pos1) == null) {
                 positions.add(pos1)
@@ -65,13 +52,12 @@ class Pawn(player: Player, position: Position) : ChessPiece(player, position) {
                 positions.add(pos2)
             }
         }
-
         val lastMovement: Movement? = board.getLastMovement()
 
         val captureLeft = Position(position.x - 1, position.y + oneMove)
 
 
-        if (!proxyCheckRight && board.isPositionValid(captureLeft)) {
+        if (board.isPositionValid(captureLeft)) {
             val pieceAtLeft: ChessPiece? = board.getPiece(captureLeft) as ChessPiece?
             if (addFirstPieceFound || pieceAtLeft != null && pieceAtLeft.player != player) {
                 positions.add(captureLeft)
@@ -82,7 +68,7 @@ class Pawn(player: Player, position: Position) : ChessPiece(player, position) {
             Position(position.x + 1, position.y + oneMove) // Right Down needs capture
 
 
-        if (!proxyCheckLeft && board.isPositionValid(captureRight)) {
+        if (board.isPositionValid(captureRight)) {
             val pieceAtRight: ChessPiece? = board.getPiece(captureRight) as ChessPiece?
             if (addFirstPieceFound || pieceAtRight != null && pieceAtRight.player != player) {
                 positions.add(captureRight)
@@ -101,7 +87,7 @@ class Pawn(player: Player, position: Position) : ChessPiece(player, position) {
                             captureLeft.y - (oneMove)
                         )
                     ) as ChessPiece?
-                if (!proxyCheckTopBottom && pieceAtLeft is Pawn && pieceAtLeft.player != player && captureLeft.x == lastMovement.destination.x) {
+                if (pieceAtLeft is Pawn && pieceAtLeft.player != player && captureLeft.x == lastMovement.destination.x) {
                     positions.add(captureLeft)
                 }
             }
@@ -109,7 +95,7 @@ class Pawn(player: Player, position: Position) : ChessPiece(player, position) {
             if (board.isPositionValid(captureRight)) {
                 val pieceAtRight: ChessPiece? =
                     board.getPiece(Position(captureRight.x, captureRight.y - 1)) as ChessPiece?
-                if (!proxyCheckTopBottom && pieceAtRight is Pawn && pieceAtRight.player != player && captureRight.x == lastMovement.destination.x) {
+                if (pieceAtRight is Pawn && pieceAtRight.player != player && captureRight.x == lastMovement.destination.x) {
                     positions.add(captureRight)
                 }
             }
