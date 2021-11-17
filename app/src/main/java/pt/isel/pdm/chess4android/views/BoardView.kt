@@ -35,8 +35,10 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     private var lastClickedPosition: HashSet<Position> = HashSet()
 
     // The states of the View Board at the present
-    private lateinit var boardModel : Chess
+    private lateinit var boardModel: Chess
     lateinit var boardTile: Array<Array<Tile>>
+
+    private lateinit var whitePlayer: Player
 
     init {
         rowCount = side
@@ -44,7 +46,8 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     // It will draw the board and put all thee beginning valid movement of each piece
-    fun initBoard(boardModel: Chess) {
+    fun initBoard(boardModel: Chess, whitePlayer: Player) {
+        this.whitePlayer = whitePlayer
         this.boardModel = boardModel
 
         mapViewToPiece()
@@ -98,14 +101,13 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         val piece = boardModel.getPiece(position)
 
         if (piece != null) {
-            return if (piece.player == Player.Top)
+            return if (piece.player == whitePlayer)
                 pieceViewMapper[piece::class]!![0]
             else
                 pieceViewMapper[piece::class]!![1]
         }
         return null
     }
-
 
     // Shows the valid position of a piece that was clicked
     private fun showValidMoves(currPos: Position, possibleMovements: HashSet<Position>) {

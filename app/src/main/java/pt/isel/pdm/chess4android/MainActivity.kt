@@ -22,13 +22,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.boardView.initBoard(Chess(Player.Top, 8,8))
-
+        val whitePlayer = Player.Bottom
+        binding.boardView.initBoard(Chess(whitePlayer, 8,8), whitePlayer)
         binding.boardView.viewModel = viewModel
         viewModel.boardModel.observe(this) {
             binding.boardView.setBoard(it)
         }
-
         setContentView(binding.root)
     }
 
