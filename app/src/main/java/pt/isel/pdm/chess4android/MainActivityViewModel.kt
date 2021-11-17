@@ -1,14 +1,8 @@
 package pt.isel.pdm.chess4android
 
 import android.app.Application
-import android.util.Log
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
-import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.chess.Chess
-import pt.isel.pdm.chess4android.views.BoardView
-import pt.isel.pdm.chess4android.views.Tile
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
