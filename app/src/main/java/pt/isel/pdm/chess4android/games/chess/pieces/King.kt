@@ -17,6 +17,10 @@ class King(player: Player, position: Position) : ChessPiece(player, position) {
         return getMoves(board, false)
     }
 
+    override fun getPieceName(): String {
+        return("King")
+    }
+
     fun isKingInCheck(board: Game): Piece? {
         var playerToCheck: Player
         var pieces: HashSet<Piece>

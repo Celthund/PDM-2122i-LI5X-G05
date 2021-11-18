@@ -3,7 +3,6 @@ package pt.isel.pdm.chess4android
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -45,8 +44,8 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText (this, "Unrecovered Puzzle", Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText (this, "Successfully Retrieved Puzzle", Toast.LENGTH_LONG).show()
-                        //TODO Recarregar novo puzzle
-                        Log.v("TAG_APP", "Puzzle is " + it.game.pgn)
+                        binding.boardView.initBoard(LoadPGN(it.game.pgn).chess, Player.Top)
+                        binding.boardView.invalidate()
                     }
                 }
                 true

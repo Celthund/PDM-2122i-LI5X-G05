@@ -14,6 +14,10 @@ class Bishop(player: Player, position: Position) : ChessPiece(player, position) 
         return getMoves(board, false)
     }
 
+    override fun getPieceName(): String {
+        return("Bishop")
+    }
+
     private fun getMoves(board: Game, addFirstPieceFound: Boolean): HashSet<Position> {
         val possibleMoves: HashSet<Position> = HashSet()
 
