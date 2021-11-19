@@ -147,6 +147,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
                         PromoteCandidate(
                             newPosition,
                             boardModel.getPiece(newPosition)?.player!!,
+                            boardModel
                         )
                     )
 
