@@ -2,6 +2,7 @@ package pt.isel.pdm.chess4android
 
 import android.app.Application
 import androidx.lifecycle.*
+import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.PromoteCandidate
 import pt.isel.pdm.chess4android.games.chess.Chess
 import retrofit2.Call
@@ -26,6 +27,7 @@ class MainActivityViewModel(
 
     private val _boardModel: MutableLiveData<Chess> = MutableLiveData()
     val boardModel: LiveData<Chess> = _boardModel
+
     val lichessPuzzle: LiveData<PuzzleInfo> = state.getLiveData(MAIN_ACTIVITY_VIEW_STATE)
 
     private val _promote: MutableLiveData<PromoteCandidate?> = MutableLiveData()
@@ -50,6 +52,11 @@ class MainActivityViewModel(
 
     fun setBoardModel(boardModel: Chess) {
         this._boardModel.value = boardModel
+    }
+
+    fun makeMove(currPos: Position, newPosition: Position) {
+        boardModel.value?.movePieceAtPosition(currPos, newPosition)
+        setBoardModel(boardModel.value!!)
     }
 
     fun PlayLichessPuzzle(puzzle: PuzzleInfo) {

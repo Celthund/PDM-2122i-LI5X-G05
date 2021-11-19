@@ -1,11 +1,13 @@
 package pt.isel.pdm.chess4android.views
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.widget.GridLayout
+import pt.isel.pdm.chess4android.MainActivity
 import pt.isel.pdm.chess4android.MainActivityViewModel
 import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.games.Piece
@@ -28,9 +30,8 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         strokeWidth = 10F
     }
 
-    lateinit var viewModel: MainActivityViewModel
-
-    private val pieceViewMapper: HashMap<Any, Array<Int>> = HashMap()
+    lateinit var makeMove : (currPos: Position, newPosition: Position) -> Unit
+    private lateinit var activity: MainActivity
 
     // Last selected Tile so it can reset the possible moves if it was clicked again
     private var lastSelectedTile: Tile? = null
@@ -40,26 +41,24 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     private lateinit var boardModel: Chess
     lateinit var boardTile: Array<Array<Tile>>
 
-    private lateinit var whitePlayer: Player
-
     init {
         rowCount = side
         columnCount = side
     }
 
     // It will draw the board and put all thee beginning valid movement of each piece
-    fun initBoard(boardModel: Chess, whitePlayer: Player) {
-        this.whitePlayer = whitePlayer
+    fun initBoard(boardModel: Chess, activity: MainActivity, function: (currPos: Position, newPosition: Position) -> Unit) {
+        makeMove = function
+        this.activity = activity
         this.boardModel = boardModel
 
-        mapViewToPiece()
         var tileArray = arrayOf<Array<Tile>>()
 
         for (row in 0 until side) {
             var columnsArray = arrayOf<Tile>()
             for (column in 0 until side) {
                 val position = Position(column, row)
-                val piece = getPieceDrawableId(position)
+                val piece = activity.getPieceDrawableId(position, boardModel)
 
                 columnsArray += Tile(
                     ctx,
@@ -84,7 +83,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
             for (column in 0 until side) {
                 val position = Position(column, row)
                 val currTile = boardTile[row][column]
-                val piece = getPieceDrawableId(position)
+                val piece = activity.getPieceDrawableId(position, boardModel)
 
                 currTile.piece = piece
 
@@ -98,21 +97,8 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         }
     }
 
-    private fun getPieceDrawableId(position: Position): Int? {
-        val piece = boardModel.getPiece(position)
-
-        if (piece != null) {
-            return if (piece.player == whitePlayer)
-                pieceViewMapper[piece::class]!![0]
-            else
-                pieceViewMapper[piece::class]!![1]
-        }
-        return null
-    }
-
     // Shows the valid position of a piece that was clicked
     private fun showValidMoves(currPos: Position, possibleMovements: HashSet<Position>) {
-        viewModel.positionToPromote()
         val currTile = boardTile[currPos.y][currPos.x]
 
         if (currTile.piece == R.drawable.ic_empty_squares_possible_move
@@ -137,20 +123,10 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
             currPossibleTile.inPreview = true
 
             if (isCurrPlayerPiece(currPos)) {
+
                 currPossibleTile.setOnClickListener {
                     resetPossiblePositions(boardModel.getPossibleMoves(currPos))
-                    boardModel.movePieceAtPosition(currPos, newPosition)
-
-                    viewModel.setBoardModel(boardModel)
-
-                    viewModel.positionToPromote(
-                        PromoteCandidate(
-                            newPosition,
-                            boardModel.getPiece(newPosition)?.player!!,
-                            boardModel
-                        )
-                    )
-
+                    makeMove(currPos, newPosition)
                 }
             }
             currPossibleTile.invalidate()
@@ -191,29 +167,16 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         return false
     }
 
-    private fun mapViewToPiece() {
-        pieceViewMapper[Rook::class] = arrayOf(R.drawable.ic_white_rook, R.drawable.ic_black_rook)
-        pieceViewMapper[Knight::class] =
-            arrayOf(R.drawable.ic_white_knight, R.drawable.ic_black_knight)
-        pieceViewMapper[Bishop::class] =
-            arrayOf(R.drawable.ic_white_bishop, R.drawable.ic_black_bishop)
-        pieceViewMapper[Queen::class] =
-            arrayOf(R.drawable.ic_white_queen, R.drawable.ic_black_queen)
-        pieceViewMapper[King::class] = arrayOf(R.drawable.ic_white_king, R.drawable.ic_black_king)
-        pieceViewMapper[Pawn::class] = arrayOf(R.drawable.ic_white_pawn, R.drawable.ic_black_pawn)
+    fun setBoard(boardModel: Chess) {
+        this.boardModel = boardModel
+        invalidateBoard()
     }
-
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
         canvas.drawLine(0f, 0f, width.toFloat(), 0f, brush)
         canvas.drawLine(0f, height.toFloat(), width.toFloat(), height.toFloat(), brush)
         canvas.drawLine(0f, 0f, 0f, height.toFloat(), brush)
         canvas.drawLine(width.toFloat(), 0f, width.toFloat(), height.toFloat(), brush)
-    }
-
-    fun setBoard(boardModel: Chess) {
-        this.boardModel = boardModel
-        invalidateBoard()
     }
 
 }
