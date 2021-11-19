@@ -1,9 +1,6 @@
 package pt.isel.pdm.chess4android.games.chess
 
-import pt.isel.pdm.chess4android.games.Game
-import pt.isel.pdm.chess4android.games.Piece
-import pt.isel.pdm.chess4android.games.Player
-import pt.isel.pdm.chess4android.games.Position
+import pt.isel.pdm.chess4android.games.*
 import pt.isel.pdm.chess4android.games.chess.pieces.*
 import java.util.*
 import kotlin.math.abs
@@ -69,7 +66,7 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
         if (board[oldPosition.x][oldPosition.y] is Pawn && (newPosition.y == 0 || newPosition.y == MAX_HEIGHT - 1)) {
             return false
         }
-
+        val lastMove: Movement? = if (moveHistory.isNotEmpty()) moveHistory.last() else null
         val playerThatPlayed = _currentPlayer
         val res = super.movePieceAtPosition(oldPosition, newPosition)
         if (res) {
@@ -77,9 +74,14 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
             when (board[newPosition.x][newPosition.y]) {
                 // En passant
                 is Pawn -> {
-                    if (abs(moveHistory.last().origin.y - moveHistory.last().destination.y) == 2 && oldPosition.x != newPosition.x) {
+                    if (lastMove != null &&
+                        abs(lastMove.origin.y - lastMove.destination.y) == 2 && oldPosition.x != newPosition.x
+                    ) {
+                        val pawn: Piece = board[newPosition.x][oldPosition.y]!!
+                        playersPieces[pawn.player]?.remove(pawn)
                         board[newPosition.x][oldPosition.y] = null
                     }
+
                 }
                 // Castling
                 is King -> {
@@ -114,10 +116,10 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
         }
     }
 
-    fun promotePawn(position: Position, promotedClass: Any) : Boolean {
+    fun promotePawn(position: Position, promotedClass: Any): Boolean {
         if (board[position.x][position.y] is Pawn && (position.y == 0 || position.y == MAX_HEIGHT - 1)) {
             val pawn = board[position.x][position.y]!!
-            val piece: Piece = when(promotedClass){
+            val piece: Piece = when (promotedClass) {
                 is Queen -> {
                     Queen(pawn.player, pawn.position)
                 }

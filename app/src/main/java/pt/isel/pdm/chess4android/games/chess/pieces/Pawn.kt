@@ -84,7 +84,7 @@ class Pawn(player: Player, position: Position) : ChessPiece(player, position) {
                     board.getPiece(
                         Position(
                             captureLeft.x,
-                            captureLeft.y - (oneMove)
+                            captureLeft.y - oneMove
                         )
                     ) as ChessPiece?
                 if (pieceAtLeft is Pawn && pieceAtLeft.player != player && captureLeft.x == lastMovement.destination.x) {
@@ -94,7 +94,7 @@ class Pawn(player: Player, position: Position) : ChessPiece(player, position) {
 
             if (board.isPositionValid(captureRight)) {
                 val pieceAtRight: ChessPiece? =
-                    board.getPiece(Position(captureRight.x, captureRight.y - 1)) as ChessPiece?
+                    board.getPiece(Position(captureRight.x, captureRight.y - oneMove)) as ChessPiece?
                 if (pieceAtRight is Pawn && pieceAtRight.player != player && captureRight.x == lastMovement.destination.x) {
                     positions.add(captureRight)
                 }
