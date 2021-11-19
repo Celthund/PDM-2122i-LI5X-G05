@@ -8,8 +8,10 @@ import android.util.AttributeSet
 import android.widget.GridLayout
 import pt.isel.pdm.chess4android.MainActivityViewModel
 import pt.isel.pdm.chess4android.R
+import pt.isel.pdm.chess4android.games.Piece
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
+import pt.isel.pdm.chess4android.games.PromoteCandidate
 import pt.isel.pdm.chess4android.games.chess.Chess
 import pt.isel.pdm.chess4android.games.chess.pieces.*
 import pt.isel.pdm.chess4android.views.Tile.Type
@@ -91,7 +93,6 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
                 } else {
                     currTile.setOnClickListener {}
                 }
-
                 currTile.invalidate()
             }
         }
@@ -111,6 +112,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
     // Shows the valid position of a piece that was clicked
     private fun showValidMoves(currPos: Position, possibleMovements: HashSet<Position>) {
+        viewModel.positionToPromote()
         val currTile = boardTile[currPos.y][currPos.x]
 
         if (currTile.piece == R.drawable.ic_empty_squares_possible_move
@@ -138,8 +140,17 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
                 currPossibleTile.setOnClickListener {
                     resetPossiblePositions(boardModel.getPossibleMoves(currPos))
                     boardModel.movePieceAtPosition(currPos, newPosition)
+
                     viewModel.setBoardModel(boardModel)
-                    invalidateBoard()
+
+                    viewModel.positionToPromote(
+                        PromoteCandidate(
+                            newPosition,
+                            boardModel.getPiece(newPosition)?.player!!,
+                            boardModel
+                        )
+                    )
+
                 }
             }
             currPossibleTile.invalidate()
