@@ -53,6 +53,11 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
             )
         )
 
+        if (board[newPosition.x][newPosition.y] != null) {
+            val pieceToRemove = board[newPosition.x][newPosition.y]
+            playersPieces[pieceToRemove?.player]?.remove(board[newPosition.x][newPosition.y])
+        }
+
         board[oldPosition.x][oldPosition.y]?.position = newPosition
         board[oldPosition.x][oldPosition.y]?.resetPossibleMoves()
         board[oldPosition.x][oldPosition.y]?.setFirstMoveMadeFlag()
