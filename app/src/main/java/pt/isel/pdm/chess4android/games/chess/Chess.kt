@@ -49,12 +49,14 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
     }
 
     override fun whichPlayerWon(): Player? {
-        if (isGameOver()){
+        if (isGameOver()) {
             Player.values().forEach { player ->
                 if (player != currentPlayer) {
                     playersPieces[player]?.forEach { piece ->
                         if (piece.getPossibleMoves(this).contains(
-                                playersKing[currentPlayer]?.position)) return player
+                                playersKing[currentPlayer]?.position
+                            )
+                        ) return player
                     }
                 }
             }
@@ -62,7 +64,7 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
         return null
     }
 
-    override fun movePieceAtPosition(oldPosition: Position, newPosition: Position) : Boolean {
+    override fun movePieceAtPosition(oldPosition: Position, newPosition: Position): Boolean {
         val playerThatPlayed = _currentPlayer
         val res = super.movePieceAtPosition(oldPosition, newPosition)
         if (res) {
@@ -78,14 +80,17 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
                 // Castling
                 is King -> {
                     if (abs(oldPosition.x - newPosition.x) > 1) {
+                        val pos: Position
                         if (newPosition.x == 2) {
-                            board[newPosition.x + 1][newPosition.y] =
-                                board[newPosition.x - 2][newPosition.y]
+                            pos = Position(newPosition.x + 1, newPosition.y)
+                            board[pos.x][pos.y] = board[newPosition.x - 2][newPosition.y]
                             board[newPosition.x - 2][newPosition.y] = null
+                            board[pos.x][pos.y]?.position = pos
                         } else if (newPosition.x == 6) {
-                            board[newPosition.x - 1][newPosition.y] =
-                                board[newPosition.x + 1][newPosition.y]
+                            pos = Position(newPosition.x - 1, newPosition.y)
+                            board[pos.x][pos.y] = board[newPosition.x + 1][newPosition.y]
                             board[newPosition.x + 1][newPosition.y] = null
+                            board[pos.x][pos.y]?.position = pos
                         }
                     }
                 }
@@ -94,7 +99,7 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
         return res
     }
 
-    override fun addPieceToBoard(piece: Piece): Boolean{
+    override fun addPieceToBoard(piece: Piece): Boolean {
         if (piece is King) {
             if (board[piece.position.x][piece.position.y] != null) throw Error("Position already has a piece.")
             board[piece.position.x][piece.position.y] = piece
