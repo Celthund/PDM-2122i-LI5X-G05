@@ -6,7 +6,7 @@ import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 
 class Knight(player: Player, position: Position) : ChessPiece(player, position) {
-    override fun internalGetPositionsInView(board: Game): HashSet<Position> {
+    override fun internalGetPositionsInCheck(board: Game): HashSet<Position> {
         return getMoves(board, true)
     }
 

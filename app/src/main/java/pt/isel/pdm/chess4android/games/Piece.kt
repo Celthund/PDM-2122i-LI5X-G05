@@ -17,15 +17,15 @@ abstract class Piece(val player: Player, var position: Position) {
         _wasFirstMovedMade = true
     }
 
-    open fun getPositionsInView(board: Game): HashSet<Position> {
-        return internalGetPositionsInView(board)
+    open fun getPositionsInCheck(board: Game): HashSet<Position> {
+        return internalGetPositionsInCheck(board)
         //if (possibleMoves == null){
         //    possibleMoves = internalGetPositionsInView(board)
         //}
         //return possibleMoves!!
     }
 
-    abstract fun internalGetPositionsInView(board: Game): HashSet<Position>
+    abstract fun internalGetPositionsInCheck(board: Game): HashSet<Position>
 
 
     open fun getPossibleMoves(board: Game): HashSet<Position> {

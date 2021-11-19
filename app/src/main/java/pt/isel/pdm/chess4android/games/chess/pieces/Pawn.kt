@@ -13,7 +13,7 @@ class Pawn(player: Player, position: Position) : ChessPiece(player, position) {
         }
     }
 
-    override fun internalGetPositionsInView(board: Game): HashSet<Position> {
+    override fun internalGetPositionsInCheck(board: Game): HashSet<Position> {
         return getMoves(board, true)
     }
 
