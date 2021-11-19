@@ -36,6 +36,4 @@ abstract class Piece(val player: Player, var position: Position) {
     }
 
     protected abstract fun internalGetPossibleMoves(board: Game): HashSet<Position>
-
-    abstract fun getPieceName(): String
 }

@@ -41,11 +41,10 @@ class MainActivity : AppCompatActivity() {
                 viewModel.GetLichessPuzzle()
                 viewModel.lichessPuzzle.observe(this) {
                     if(it==null) {
-                        Toast.makeText (this, "Unrecovered Puzzle", Toast.LENGTH_LONG).show()
+                        Toast.makeText (this, "Puzzle recover error", Toast.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText (this, "Successfully Retrieved Puzzle", Toast.LENGTH_LONG).show()
-                        binding.boardView.initBoard(LoadPGN(it.game.pgn).chess, Player.Top)
-                        binding.boardView.invalidate()
+                        viewModel.PlayLichessPuzzle(it)
+                        setContentView(binding.root)
                     }
                 }
                 true

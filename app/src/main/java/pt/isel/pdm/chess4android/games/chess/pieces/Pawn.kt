@@ -21,10 +21,6 @@ class Pawn(player: Player, position: Position) : ChessPiece(player, position) {
         return getMoves(board, false)
     }
 
-    override fun getPieceName(): String {
-        return("Pawn")
-    }
-
     private fun getMoves(board: Game, addFirstPieceFound: Boolean): HashSet<Position> {
         return when (player) {
             Player.Top -> {

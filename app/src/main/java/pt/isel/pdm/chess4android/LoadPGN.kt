@@ -1,35 +1,23 @@
 package pt.isel.pdm.chess4android
 
+import android.util.Log
 import pt.isel.pdm.chess4android.games.Piece
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.chess.Chess
+import pt.isel.pdm.chess4android.games.chess.pieces.*
+import kotlin.reflect.typeOf
 
 class LoadPGN(dailyGamePGN: String) {
-    val chess = Chess(Player.Top, 8,8)
+    val chess = Chess(Player.Bottom, 8,8)
 
     init {
         val moves = dailyGamePGN.split(" ").toTypedArray()
-
+        var count = 0
         moves.forEach { pgnMove ->
-            parsePGN(pgnMove, chess)
+            if(++count <= 31)
+                parsePGN(pgnMove, chess)
         }
-    }
-
-    fun parsePieceName(pgnMove: String) : String {
-        var pgnLen: Int = pgnMove.length
-        if(pgnMove[pgnLen-1] == '+') pgnLen = pgnLen-1
-
-        var pieceName: String = "Pawn"
-
-        if(pgnLen > 2) {
-            if (pgnMove[0] == 'B') pieceName = "Bishop"
-            if (pgnMove[0] == 'K') pieceName = "King"
-            if (pgnMove[0] == 'N') pieceName = "Knight"
-            if (pgnMove[0] == 'Q') pieceName = "Queen"
-            if (pgnMove[0] == 'R') pieceName = "Rook"
-        }
-        return pieceName
     }
 
     fun parseNewPosition(pgnMove: String) : Position {
@@ -37,7 +25,7 @@ class LoadPGN(dailyGamePGN: String) {
         if(pgnMove[pgnLen-1] == '+') pgnLen = pgnLen-1
 
         val x: Int = pgnMove[pgnLen-2].code - 'a'.code
-        val y: Int = pgnMove[pgnLen-1].digitToInt() - 1
+        val y: Int = 8 - pgnMove[pgnLen-1].digitToInt()
 
         return Position(x, y)
     }
@@ -58,21 +46,52 @@ class LoadPGN(dailyGamePGN: String) {
         }
 
         if(pgnMove[pgnLen-1].code > '0'.code && pgnMove[pgnLen-1].code < '9'.code) {
-            if(piece.position.y == pgnMove[pgnLen-1].digitToInt() - 1) return true
+            if(piece.position.y == 8 - pgnMove[pgnLen-1].digitToInt()) return true
         }
 
         return false
     }
 
+    fun samePieceType(pgnMove: String, piece: Piece) : Boolean {
+        var pgnLen: Int = pgnMove.length
+        if(pgnMove[pgnLen-1] == '+') pgnLen = pgnLen-1
+
+        if(pgnMove[0] in ("BKNQR")) {
+            if (pgnMove[0] == 'B' && piece is Bishop) return true
+            if (pgnMove[0] == 'K' && piece is King) return true
+            if (pgnMove[0] == 'N' && piece is Knight) return true
+            if (pgnMove[0] == 'Q' && piece is Queen) return true
+            if (pgnMove[0] == 'R' && piece is Rook) return true
+        } else
+            if (piece is Pawn) return true
+
+        return false
+    }
+
     fun parsePGN(pgnMove: String, chess: Chess) {
+        var newPosition: Position
+
         if(pgnMove[0] == 'O') {
-            null
+            val piece = chess.playersKing[chess.currentPlayer]!!
+
+            if(piece.getPossibleMoves(chess).size > 0) {
+                if(pgnMove.length > 3)
+                    newPosition = Position(piece.position.x - 2, piece.position.y)
+                else
+                    newPosition = Position(piece.position.x + 2, piece.position.y)
+
+                piece.getPossibleMoves(chess).forEach { position ->
+                    if (position.equals(newPosition)) {
+                        chess.movePieceAtPosition(piece.position, newPosition)
+                        return
+                    }
+                }
+            }
         } else {
-            val currPieceName: String = parsePieceName(pgnMove)
-            val newPosition = parseNewPosition(pgnMove)
+            newPosition = parseNewPosition(pgnMove)
 
             chess.playersPieces[chess.currentPlayer]?.forEach { piece ->
-                if (piece.getPieceName().equals(currPieceName) && piece.getPossibleMoves(chess).size > 0) {
+                if (samePieceType(pgnMove, piece) && piece.getPossibleMoves(chess).size > 0) {
                     piece.getPossibleMoves(chess).forEach { position ->
                         if (position.equals(newPosition) && parseCurrPosition(pgnMove, piece)) {
                             chess.movePieceAtPosition(piece.position, newPosition)

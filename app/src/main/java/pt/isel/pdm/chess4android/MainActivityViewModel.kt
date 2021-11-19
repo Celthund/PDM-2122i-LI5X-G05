@@ -46,4 +46,7 @@ class MainActivityViewModel(
         this._boardModel.value = boardModel
     }
 
+    fun PlayLichessPuzzle(puzzle: PuzzleInfo) {
+        this._boardModel.value = LoadPGN(puzzle.game.pgn).chess
+    }
 }
