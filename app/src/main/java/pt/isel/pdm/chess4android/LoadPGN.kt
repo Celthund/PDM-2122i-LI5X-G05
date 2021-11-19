@@ -13,9 +13,8 @@ class LoadPGN(dailyGamePGN: String) {
 
     init {
         val moves = dailyGamePGN.split(" ").toTypedArray()
-        var count = 0
+
         moves.forEach { pgnMove ->
-            if(++count <= 31)
                 parsePGN(pgnMove, chess)
         }
     }
