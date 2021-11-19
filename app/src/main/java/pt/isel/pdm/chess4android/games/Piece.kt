@@ -5,13 +5,6 @@ abstract class Piece(val player: Player, var position: Position) {
 
     protected var _wasFirstMovedMade = false
     val wasFirstMovedMade get() = _wasFirstMovedMade
-    protected var possibleMoves: HashSet<Position>? = null
-    protected var positionsInView: HashSet<Position>? = null
-
-    fun resetPossibleMoves() {
-        possibleMoves = null
-        positionsInView = null
-    }
 
     fun setFirstMoveMadeFlag(){
         _wasFirstMovedMade = true
@@ -19,10 +12,6 @@ abstract class Piece(val player: Player, var position: Position) {
 
     open fun getPositionsInCheck(board: Game): HashSet<Position> {
         return internalGetPositionsInCheck(board)
-        //if (possibleMoves == null){
-        //    possibleMoves = internalGetPositionsInView(board)
-        //}
-        //return possibleMoves!!
     }
 
     abstract fun internalGetPositionsInCheck(board: Game): HashSet<Position>
@@ -30,10 +19,6 @@ abstract class Piece(val player: Player, var position: Position) {
 
     open fun getPossibleMoves(board: Game): HashSet<Position> {
         return internalGetPossibleMoves(board)
-        //if (possibleMoves == null){
-        //    possibleMoves = internalGetPossibleMoves(board)
-        //}
-        //return possibleMoves!!
     }
 
     protected abstract fun internalGetPossibleMoves(board: Game): HashSet<Position>

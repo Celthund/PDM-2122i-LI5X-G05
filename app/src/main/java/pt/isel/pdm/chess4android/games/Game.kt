@@ -59,16 +59,12 @@ abstract class Game(firstPlayer: Player, val MAX_HEIGHT: Int, val MAX_WIDTH: Int
         }
 
         board[oldPosition.x][oldPosition.y]?.position = newPosition
-        board[oldPosition.x][oldPosition.y]?.resetPossibleMoves()
         board[oldPosition.x][oldPosition.y]?.setFirstMoveMadeFlag()
 
         board[newPosition.x][newPosition.y] = board[oldPosition.x][oldPosition.y]
         board[oldPosition.x][oldPosition.y] = null
 
         _currentPlayer = if (_currentPlayer == Player.Top) Player.Bottom else Player.Top
-        playersPieces[_currentPlayer]?.forEach {
-            it.resetPossibleMoves()
-        }
         return true
     }
 

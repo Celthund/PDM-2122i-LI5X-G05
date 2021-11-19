@@ -67,10 +67,8 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
             return false
         }
         val lastMove: Movement? = if (moveHistory.isNotEmpty()) moveHistory.last() else null
-        val playerThatPlayed = _currentPlayer
         val res = super.movePieceAtPosition(oldPosition, newPosition)
         if (res) {
-            playersKing[playerThatPlayed]?.resetPossibleMoves()
             when (board[newPosition.x][newPosition.y]) {
                 // En passant
                 is Pawn -> {
