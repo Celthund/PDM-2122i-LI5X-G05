@@ -18,13 +18,69 @@ import pt.isel.pdm.chess4android.games.chess.pieces.Queen
 import pt.isel.pdm.chess4android.games.chess.pieces.Rook
 
 class MainActivity : AppCompatActivity() {
-
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    private val viewModel : MainActivityViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding.boardView.viewModel = viewModel
+        var whitePlayer = Player.Bottom
+        val boardModel = Chess(whitePlayer, 8,8)
+
+
+        binding.boardView.initBoard(boardModel, whitePlayer)
+
+        viewModel.boardModel.observe(this) {
+            binding.boardView.setBoard(it)
+        }
+
+        viewModel.promote.observe(this) {
+            if(it != null) {
+                showPromoteOptions(it)
+            } else {
+                hidePromoteOptions()
+            }
+        }
+
+        setContentView(binding.root)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_activity_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.menuGetPuzzle -> {
+                viewModel.GetLichessPuzzle()
+                viewModel.lichessPuzzle.observe(this) {
+                    if(it==null) {
+                        Toast.makeText (this, "Puzzle recover error", Toast.LENGTH_LONG).show()
+                    } else {
+                        viewModel.PlayLichessPuzzle(it)
+                        setContentView(binding.root)
+                    }
+                }
+                true
+            }
+            R.id.menuSolvePuzzle -> {
+                startActivity(Intent(this, SolveActivity::class.java))
+                true
+            }
+            R.id.menuAbout -> {
+                startActivity(Intent(this, AboutActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun showPromoteOptions(candidate: PromoteCandidate) {
-        val boardModel = candidate.boardModel!!
+        val boardModel = candidate.boardModel
 
         binding.bishopBtn.visibility = View.VISIBLE
         binding.bishopBtn.setOnClickListener {
@@ -76,60 +132,5 @@ class MainActivity : AppCompatActivity() {
         binding.rookBtn.visibility = View.INVISIBLE
         binding.rookBtn.setOnClickListener {}
         binding.rookBtn.invalidate()
-    }
-
-    private val viewModel : MainActivityViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding.boardView.viewModel = viewModel
-        val whitePlayer = Player.Bottom
-
-        binding.boardView.initBoard(Chess(whitePlayer, 8,8), whitePlayer)
-
-        viewModel.boardModel.observe(this) {
-            binding.boardView.setBoard(it)
-        }
-
-        viewModel.promote.observe(this) {
-            if(it != null) {
-                showPromoteOptions(it)
-            } else {
-                hidePromoteOptions()
-            }
-        }
-
-        setContentView(binding.root)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_activity_main, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
-            R.id.menuGetPuzzle -> {
-                viewModel.GetLichessPuzzle()
-                viewModel.lichessPuzzle.observe(this) {
-                    if(it==null) {
-                        Toast.makeText (this, "Puzzle recover error", Toast.LENGTH_LONG).show()
-                    } else {
-                        viewModel.PlayLichessPuzzle(it)
-                        setContentView(binding.root)
-                    }
-                }
-                true
-            }
-            R.id.menuSolvePuzzle -> {
-                startActivity(Intent(this, SolveActivity::class.java))
-                true
-            }
-            R.id.menuAbout -> {
-                startActivity(Intent(this, AboutActivity::class.java))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 }
