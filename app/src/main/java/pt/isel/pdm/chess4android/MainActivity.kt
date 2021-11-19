@@ -19,12 +19,14 @@ import pt.isel.pdm.chess4android.games.chess.pieces.Rook
 
 class MainActivity : AppCompatActivity() {
 
+    private var whitePlayer = Player.Bottom
+    private val boardModel = Chess(whitePlayer, 8,8)
+
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
     private fun showPromoteOptions(candidate: PromoteCandidate) {
-        val boardModel = candidate.boardModel!!
 
         binding.bishopBtn.visibility = View.VISIBLE
         binding.bishopBtn.setOnClickListener {
@@ -83,9 +85,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.boardView.viewModel = viewModel
-        val whitePlayer = Player.Bottom
 
-        binding.boardView.initBoard(Chess(whitePlayer, 8,8), whitePlayer)
+
+        binding.boardView.initBoard(boardModel, whitePlayer)
 
         viewModel.boardModel.observe(this) {
             binding.boardView.setBoard(it)
