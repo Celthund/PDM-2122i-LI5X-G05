@@ -10,7 +10,6 @@ import android.widget.GridLayout
 import pt.isel.pdm.chess4android.MainActivity
 import pt.isel.pdm.chess4android.MainActivityViewModel
 import pt.isel.pdm.chess4android.R
-import pt.isel.pdm.chess4android.games.Piece
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.PromoteCandidate
