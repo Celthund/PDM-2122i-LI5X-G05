@@ -11,6 +11,7 @@ const val URL = "https://lichess.org/api/"
 @Parcelize
 data class PuzzleInfo(val game: @RawValue DailyGame, val puzzle: @RawValue DailyPuzzle) : Parcelable
 
+@Parcelize
 data class DailyGame(
     val id: String,
     val perf: Perf,
@@ -18,7 +19,7 @@ data class DailyGame(
     val players: Array<Player>,
     val pgn: String,
     val clock: String
-) {
+) : Parcelable {
     /**
      * Method equals and hashcode were overridden because of Array of Players.
      * Both of the methods were create with the help of IntelliJ.
@@ -49,7 +50,7 @@ data class DailyGame(
         return result
     }
 }
-
+@Parcelize
 data class DailyPuzzle(
     val id: String,
     val rating: Int,
@@ -57,7 +58,7 @@ data class DailyPuzzle(
     val initialPly: Int,
     val solution: Array<String>,
     val themes: Array<String>
-) {
+) : Parcelable {
     /**
      * Method equals and hashcode were overridden because of Array of solution and themes.
      * Both of the methods were create with the help of IntelliJ.
@@ -89,9 +90,11 @@ data class DailyPuzzle(
     }
 }
 
+@Parcelize
+data class Perf(val icon: String, val name: String) : Parcelable
 
-data class Perf(val icon: String, val name: String)
-data class Player(val userId: String, val name: String, val color: String)
+@Parcelize
+data class Player(val userId: String, val name: String, val color: String) : Parcelable
 
 
 interface DailyPuzzleService {
