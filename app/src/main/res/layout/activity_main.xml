@@ -23,8 +23,6 @@
         android:id="@+id/knight_btn"
         android:layout_width="60dp"
         android:layout_height="52dp"
-        android:layout_marginStart="284dp"
-        android:layout_marginTop="8dp"
         android:insetLeft="0dp"
         android:insetTop="0dp"
         android:insetRight="0dp"
@@ -32,15 +30,13 @@
         android:textSize="12sp"
         android:visibility="invisible"
         app:icon="@drawable/ic_black_knight"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boardView" />
+        tools:layout_editor_absoluteX="655dp"
+        tools:layout_editor_absoluteY="120dp" />
 
     <Button
         android:id="@+id/queen_btn"
         android:layout_width="60dp"
         android:layout_height="52dp"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="8dp"
         android:insetLeft="0dp"
         android:insetTop="0dp"
         android:insetRight="0dp"
@@ -48,15 +44,13 @@
         android:textSize="12sp"
         android:visibility="invisible"
         app:icon="@drawable/ic_black_queen"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boardView" />
+        app:layout_constraintTop_toBottomOf="@+id/bishop_btn"
+        tools:layout_editor_absoluteX="655dp" />
 
     <Button
         android:id="@+id/bishop_btn"
         android:layout_width="60dp"
         android:layout_height="52dp"
-        android:layout_marginStart="212dp"
-        android:layout_marginTop="8dp"
         android:insetLeft="0dp"
         android:insetTop="0dp"
         android:insetRight="0dp"
@@ -64,15 +58,13 @@
         android:textSize="12sp"
         android:visibility="invisible"
         app:icon="@drawable/ic_black_bishop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boardView" />
+        app:layout_constraintTop_toBottomOf="@+id/knight_btn"
+        tools:layout_editor_absoluteX="655dp" />
 
     <Button
         android:id="@+id/rook_btn"
         android:layout_width="60dp"
         android:layout_height="52dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="8dp"
         android:insetLeft="0dp"
         android:insetTop="0dp"
         android:insetRight="0dp"
@@ -80,7 +72,7 @@
         android:textSize="12sp"
         android:visibility="invisible"
         app:icon="@drawable/ic_black_rook"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boardView" />
+        app:layout_constraintTop_toBottomOf="@+id/queen_btn"
+        tools:layout_editor_absoluteX="655dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
