@@ -79,6 +79,6 @@ class MainActivityViewModel(
         } else {
             Player.Bottom
         }
-        this._boardModel.value = PuzzleInfoParser(dailyGame).parsePuzzleInfo()
+        this._boardModel.value = PuzzleInfoParser(dailyGame).parsePuzzlePNG()
     }
 }

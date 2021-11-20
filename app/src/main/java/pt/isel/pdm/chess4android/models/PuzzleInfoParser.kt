@@ -12,7 +12,7 @@ import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 class PuzzleInfoParser(val dailyGame: PuzzleInfo) {
     private var initialPlayer: Player = if (dailyGame.puzzle.initialPly % 2 == 0) Player.Top else Player.Bottom
 
-    fun parsePuzzleInfo() : Chess {
+    fun parsePuzzlePNG() : Chess {
         val chess = Puzzle(initialPlayer, 8, 8)
         val moves = dailyGame.game.pgn.split(" ").toTypedArray()
         //val moves = "e3 e6 Qf3 f6 Qxb7 Na6 Qe4 c6 b4 d6 b5 f5 b6 c5 b7 c4 b8=B c3 dxc3".split(" ").toTypedArray()
