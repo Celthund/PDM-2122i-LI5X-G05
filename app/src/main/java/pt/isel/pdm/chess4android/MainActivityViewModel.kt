@@ -2,6 +2,7 @@ package pt.isel.pdm.chess4android
 
 import android.app.Application
 import androidx.lifecycle.*
+import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.PromoteCandidate
 import pt.isel.pdm.chess4android.games.chess.Chess
@@ -25,10 +26,13 @@ class MainActivityViewModel(
 ) : AndroidViewModel(application) {
 
     private val _boardModel: MutableLiveData<Chess> = MutableLiveData()
-    val boardModel: LiveData<Chess> = _boardModel
+    val boardModel: LiveData<Chess> get() = _boardModel
 
     private val _isInPromote: MutableLiveData<PromoteCandidate> = MutableLiveData()
-    val isInPromote: LiveData<PromoteCandidate> = _isInPromote
+    val isInPromote: LiveData<PromoteCandidate> get() = _isInPromote
+
+    private var _whitePlayer = Player.Bottom
+    val whitePlayer get() = _whitePlayer
 
     val lichessPuzzle: LiveData<PuzzleInfo> = state.getLiveData(MAIN_ACTIVITY_VIEW_STATE)
 
@@ -67,6 +71,11 @@ class MainActivityViewModel(
      */
 
     fun PlayLichessPuzzle(puzzle: PuzzleInfo) {
+        _whitePlayer = if (puzzle.puzzle.initialPly % 2 == 0){
+            Player.Top
+        } else {
+            Player.Bottom
+        }
         this._boardModel.value = LoadPGN(puzzle.game.pgn).chess
     }
 }

@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private var whitePlayer = Player.Bottom
     private val viewModel : MainActivityViewModel by viewModels()
     var isInPromote: Boolean = false
 
@@ -30,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mapViewToPiece()
 
-        val boardModel = Chess(whitePlayer, 8,8)
+        val boardModel = Chess(viewModel.whitePlayer, 8,8)
         binding.boardView.initBoard(boardModel, this, this::makeMove)
 
         if(viewModel.boardModel.value == null) {
@@ -165,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         val piece = boardModel.getPiece(position)
 
         if (piece != null) {
-            return if (piece.player == whitePlayer)
+            return if (piece.player == viewModel.whitePlayer)
                 pieceViewMapper[piece::class]!![0]
             else
                 pieceViewMapper[piece::class]!![1]
