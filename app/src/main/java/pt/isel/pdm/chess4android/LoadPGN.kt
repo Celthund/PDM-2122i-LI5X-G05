@@ -1,6 +1,5 @@
 package pt.isel.pdm.chess4android
 
-import android.util.Log
 import pt.isel.pdm.chess4android.games.Movement
 import pt.isel.pdm.chess4android.games.Piece
 import pt.isel.pdm.chess4android.games.Player
@@ -21,13 +20,7 @@ class LoadPGN(dailyGame: PuzzleInfo) {
         //val moves = "e3 e6 Qf3 f6 Qxb7 Na6 Qe4 c6 b4 d6 b5 f5 b6 c5 b7 c4 b8=B c3 dxc3".split(" ").toTypedArray()
 
         moves.forEach { pgnMove ->
-            val currPlayer = chess.currentPlayer
             parsePGN(pgnMove, chess)
-
-            chess.playersPieces[currPlayer]?.forEach { piece ->
-                Log.v("XXX", ""+piece.toString()+" : "+piece.position.x+piece.position.y)
-            }
-            Log.v("XXX", "**END** Player: $currPlayer")
         }
 
         val solution: ArrayList<Movement> = arrayListOf()
@@ -41,11 +34,8 @@ class LoadPGN(dailyGame: PuzzleInfo) {
         var x: Int = (x?.code ?: 'a'.code) - 'a'.code
         var y: Int = (y?.digitToInt() ?: '1'.digitToInt()) - 1
 
-        if(initialPlayer == Player.Bottom) {
-            y = 7 - y
-        } else {
-            x = 7 - x
-        }
+        if(initialPlayer == Player.Bottom) y = 7 - y
+        else x = 7 - x
 
         return Position(x, y)
     }
