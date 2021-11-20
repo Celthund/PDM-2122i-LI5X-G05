@@ -1,5 +1,6 @@
 package pt.isel.pdm.chess4android.games.chess
 
+import android.util.Log
 import pt.isel.pdm.chess4android.games.*
 import pt.isel.pdm.chess4android.games.chess.pieces.*
 import java.util.*
@@ -62,24 +63,23 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
     }
 
     override fun movePieceAtPosition(oldPosition: Position, newPosition: Position): Boolean {
-        // Check promote
-
-        val lastMove: Movement? = if (moveHistory.isNotEmpty()) moveHistory.last() else null
+        val lastOpponentMove: Movement? = if (moveHistory.isNotEmpty()) moveHistory.last() else null
         val res = super.movePieceAtPosition(oldPosition, newPosition)
+        val currentMove = moveHistory.last()
+
         if (res) {
             when (board[newPosition.x][newPosition.y]) {
                 // En passant
                 is Pawn -> {
-                    if (lastMove != null &&
-                        abs(lastMove.origin.y - lastMove.destination.y) == 2 && oldPosition.x != newPosition.x
-                    ) {
-                        val pawn: Piece = board[newPosition.x][newPosition.y]!!
-                        if (pawn is Pawn) {
+                    if (lastOpponentMove != null && lastOpponentMove.pieceAtOrigin is Pawn) {
+                        // Check if there was a 2 move with the pawn
+                        if (abs(lastOpponentMove.origin.y - lastOpponentMove.destination.y) == 2
+                            && currentMove.origin.y == lastOpponentMove.destination.y) {
+                            val pawn: Piece = lastOpponentMove.pieceAtOrigin
                             playersPieces[pawn.player]?.remove(pawn)
-                            board[oldPosition.x][oldPosition.y] = null
+                            board[pawn.position.x][pawn.position.y] = null
                         }
                     }
-
                 }
                 // Castling
                 is King -> {
@@ -100,6 +100,28 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
                 }
             }
         }
+        var str = "array"
+
+        var piece: Piece?
+        for (j in 0 until board[0].size) {
+            str += "\n"
+            for (i in 0 until board.size) {
+                piece = board[i][j]
+                str += "|"
+                str += when (piece) {
+                    is Bishop -> "B"
+                    is Queen -> "Q"
+                    is King -> "K"
+                    is Knight -> "N"
+                    is Rook -> "R"
+                    is Pawn -> "P"
+                    else -> " "
+                }
+            }
+            str += "|"
+        }
+
+        Log.d("this is my deep array", str)
         return res
     }
 
@@ -137,7 +159,7 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
             }
             else -> null
         }
-        if(piece != null) {
+        if (piece != null) {
             playersPieces[pawn.player]?.remove(pawn)
             playersPieces[piece.player]?.add(piece)
             board[position.x][position.y] = piece
