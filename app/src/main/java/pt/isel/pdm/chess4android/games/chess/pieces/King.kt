@@ -83,8 +83,9 @@ class King(player: Player, position: Position) : ChessPiece(player, position) {
                     }
                     pos.x -= 1
                 }
-                if (checkLeft) {
-                    possibleMoves.add(Position(2, position.y))
+                val towerLeft = board.getPiece(Position(0, position.y))
+                if (towerLeft != null && !towerLeft.wasFirstMovedMade && checkLeft) {
+                    possibleMoves.add(Position(position.x - 2, position.y))
                 }
 
                 pos.x = position.x + 1
@@ -97,8 +98,10 @@ class King(player: Player, position: Position) : ChessPiece(player, position) {
                     }
                     pos.x += 1
                 }
-                if (checkRight) {
-                    possibleMoves.add(Position(6, position.y))
+
+                val towerRight = board.getPiece(Position(board.MAX_WIDTH - 1, position.y))
+                if (towerRight != null && !towerRight.wasFirstMovedMade && checkRight) {
+                    possibleMoves.add(Position(position.x + 2, position.y))
                 }
             }
         }
