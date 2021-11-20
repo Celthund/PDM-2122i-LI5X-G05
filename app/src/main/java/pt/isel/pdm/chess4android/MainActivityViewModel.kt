@@ -70,12 +70,12 @@ class MainActivityViewModel(
 
      */
 
-    fun PlayLichessPuzzle(puzzle: PuzzleInfo) {
-        _whitePlayer = if (puzzle.puzzle.initialPly % 2 == 0){
+    fun PlayLichessPuzzle(dailyGame: PuzzleInfo) {
+        _whitePlayer = if (dailyGame.puzzle.initialPly % 2 == 0) {
             Player.Top
         } else {
             Player.Bottom
         }
-        this._boardModel.value = LoadPGN(puzzle.game.pgn).chess
+        this._boardModel.value = LoadPGN(dailyGame).chess
     }
 }

@@ -1,20 +1,50 @@
 package pt.isel.pdm.chess4android
 
+import android.util.Log
 import pt.isel.pdm.chess4android.games.Piece
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.chess.Chess
 import pt.isel.pdm.chess4android.games.chess.pieces.*
 
-class LoadPGN(dailyGamePGN: String) {
-    val chess = Chess(Player.Bottom, 8,8)
+class LoadPGN(dailyGame: PuzzleInfo) {
+    private var initialPlayer: Player
+    var chess : Chess
 
     init {
-        val moves = dailyGamePGN.split(" ").toTypedArray()
+        initialPlayer = if (dailyGame.puzzle.initialPly % 2 == 0) Player.Top else Player.Bottom
+        chess = Chess(initialPlayer, 8,8)
+        val moves = dailyGame.game.pgn.split(" ").toTypedArray()
+        //val moves = "e3 e6 Qf3 f6 Qxb7 Na6 Qe4 c6 b4 d6 b5 f5 b6 c5 b7 c4 b8=B c3 dxc3".split(" ").toTypedArray()
 
+        var count = 0
         moves.forEach { pgnMove ->
-            parsePGN(pgnMove, chess)
+            val currPlayer = chess.currentPlayer
+            count = count + 1
+            if(count < 13)
+                parsePGN(pgnMove, chess)
+            if(count == 999)
+                parsePGN(pgnMove, chess)
+
+            Log.v("XXX", "**START** Player: $currPlayer - Count: $count")
+            chess.playersPieces[currPlayer]?.forEach { piece ->
+                Log.v("XXX", ""+piece.toString()+" : "+piece.position.x+piece.position.y)
+            }
+            Log.v("XXX", "**END** Player: $currPlayer")
         }
+    }
+
+    fun convertPGNPosition(x: Char?, y: Char?) : Position {
+        var x: Int = (x?.code ?: 'a'.code) - 'a'.code
+        var y: Int = (y?.digitToInt() ?: '1'.digitToInt()) - 1
+
+        if(initialPlayer == Player.Bottom) {
+            y = 7 - y
+        } else {
+            x = 7 - x
+        }
+
+        return Position(x, y)
     }
 
     fun parseNewPosition(pgnMove: String) : Position {
@@ -22,10 +52,7 @@ class LoadPGN(dailyGamePGN: String) {
         if(pgnMove[pgnLen-1] == '+') pgnLen = pgnLen-1
         if(pgnMove[pgnLen-1] in "BNQR" && pgnMove[pgnLen-2] == '=') pgnLen = pgnLen-2
 
-        val x: Int = pgnMove[pgnLen-2].code - 'a'.code
-        val y: Int = 8 - pgnMove[pgnLen-1].digitToInt()
-
-        return Position(x, y)
+        return convertPGNPosition(pgnMove[pgnLen-2], pgnMove[pgnLen-1])
     }
 
     fun parseCurrPosition(pgnMove: String, piece: Piece) : Boolean {
@@ -41,11 +68,11 @@ class LoadPGN(dailyGamePGN: String) {
         if(pgnMove[pgnLen-1].code > 'A'.code && pgnMove[pgnLen-1].code < 'Z'.code) return true
 
         if(pgnMove[pgnLen-1].code > 'a'.code && pgnMove[pgnLen-1].code < 'z'.code) {
-            if (piece.position.x == (pgnMove[pgnLen - 1].code - 'a'.code)) return true
+            if (piece.position.x == convertPGNPosition(pgnMove[pgnLen-1], null).x) return true
         }
 
         if(pgnMove[pgnLen-1].code > '0'.code && pgnMove[pgnLen-1].code < '9'.code) {
-            if(piece.position.y == 8 - pgnMove[pgnLen-1].digitToInt()) return true
+            if(piece.position.y == convertPGNPosition(null, pgnMove[pgnLen-1]).y) return true
         }
 
         return false
@@ -61,6 +88,18 @@ class LoadPGN(dailyGamePGN: String) {
             if (piece is Pawn) return true
 
         return false
+    }
+
+    fun verifyPromote(pgnMove: String) : Any? {
+        var pgnLen: Int = pgnMove.length
+        if(pgnMove[pgnLen-1] !in "BNQR" || pgnMove[pgnLen-2] != '=') return null
+
+        if (pgnMove[pgnLen-1] == 'B') return Bishop::class
+        if (pgnMove[pgnLen-1] == 'N') return Knight::class
+        if (pgnMove[pgnLen-1] == 'Q') return Queen::class
+        if (pgnMove[pgnLen-1] == 'R') return Rook::class
+
+        return null
     }
 
     fun parsePGN(pgnMove: String, chess: Chess) {
@@ -94,6 +133,9 @@ class LoadPGN(dailyGamePGN: String) {
                     piece.getPossibleMoves(chess).forEach { position ->
                         if (position.equals(newPosition) && parseCurrPosition(pgnMove, piece)) {
                             chess.movePieceAtPosition(piece.position, newPosition)
+                            val promotedClass = verifyPromote(pgnMove)
+                            if(promotedClass != null)
+                                chess.promotePawn(newPosition, promotedClass)
                             return
                         }
                     }
