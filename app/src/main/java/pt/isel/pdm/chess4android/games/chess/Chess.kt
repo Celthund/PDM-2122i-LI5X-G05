@@ -74,8 +74,10 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
                         abs(lastMove.origin.y - lastMove.destination.y) == 2 && oldPosition.x != newPosition.x
                     ) {
                         val pawn: Piece = board[newPosition.x][newPosition.y]!!
-                        playersPieces[pawn.player]?.remove(pawn)
-                        board[oldPosition.x][oldPosition.y] = null
+                        if (pawn is Pawn) {
+                            playersPieces[pawn.player]?.remove(pawn)
+                            board[oldPosition.x][oldPosition.y] = null
+                        }
                     }
 
                 }
