@@ -11,8 +11,88 @@ const val URL = "https://lichess.org/api/"
 @Parcelize
 data class PuzzleInfo(val game: @RawValue DailyGame, val puzzle: @RawValue DailyPuzzle) : Parcelable
 
-data class DailyGame(val id: String, val pgn: String)
-data class DailyPuzzle(val id: String)
+data class DailyGame(
+    val id: String,
+    val perf: Perf,
+    val rated: Boolean,
+    val players: Array<Player>,
+    val pgn: String,
+    val clock: String
+) {
+    /**
+     * Method equals and hashcode were overridden because of Array of Players.
+     * Both of the methods were create with the help of IntelliJ.
+     * */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DailyGame
+
+        if (id != other.id) return false
+        if (perf != other.perf) return false
+        if (rated != other.rated) return false
+        if (!players.contentEquals(other.players)) return false
+        if (pgn != other.pgn) return false
+        if (clock != other.clock) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + perf.hashCode()
+        result = 31 * result + rated.hashCode()
+        result = 31 * result + players.contentHashCode()
+        result = 31 * result + pgn.hashCode()
+        result = 31 * result + clock.hashCode()
+        return result
+    }
+}
+
+data class DailyPuzzle(
+    val id: String,
+    val rating: Int,
+    val plays: Int,
+    val initialPly: Int,
+    val solution: Array<String>,
+    val themes: Array<String>
+) {
+    /**
+     * Method equals and hashcode were overridden because of Array of solution and themes.
+     * Both of the methods were create with the help of IntelliJ.
+     * */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DailyPuzzle
+
+        if (id != other.id) return false
+        if (rating != other.rating) return false
+        if (plays != other.plays) return false
+        if (initialPly != other.initialPly) return false
+        if (!solution.contentEquals(other.solution)) return false
+        if (!themes.contentEquals(other.themes)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + rating
+        result = 31 * result + plays
+        result = 31 * result + initialPly
+        result = 31 * result + solution.contentHashCode()
+        result = 31 * result + themes.contentHashCode()
+        return result
+    }
+}
+
+
+data class Perf(val icon: String, val name: String)
+data class Player(val userId: String, val name: String, val color: String)
+
 
 interface DailyPuzzleService {
     @GET("puzzle/daily")
