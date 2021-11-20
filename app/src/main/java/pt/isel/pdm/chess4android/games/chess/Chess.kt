@@ -7,7 +7,7 @@ import java.util.*
 import kotlin.math.abs
 
 
-class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
+open class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
     Game(firstPlayer, MAX_HEIGHT, MAX_WIDTH) {
 
     val playersKing: EnumMap<Player, King> = EnumMap(Player::class.java)
@@ -104,7 +104,7 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
         return res
     }
 
-    override fun addPieceToBoard(piece: Piece): Boolean {
+    final override fun addPieceToBoard(piece: Piece): Boolean {
         if (piece is King) {
             if (board[piece.position.x][piece.position.y] != null) throw Error("Position already has a piece.")
             board[piece.position.x][piece.position.y] = piece
