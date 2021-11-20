@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.Toast
 import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
 import androidx.activity.viewModels
-import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.PromoteCandidate
 import pt.isel.pdm.chess4android.games.chess.Chess
@@ -28,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mapViewToPiece()
-
         val boardModel = Chess(viewModel.whitePlayer, 8,8)
         binding.boardView.initBoard(boardModel, this, this::makeMove)
 

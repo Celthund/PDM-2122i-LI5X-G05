@@ -1,10 +1,12 @@
 package pt.isel.pdm.chess4android
 
 import android.util.Log
+import pt.isel.pdm.chess4android.games.Movement
 import pt.isel.pdm.chess4android.games.Piece
 import pt.isel.pdm.chess4android.games.Player
 import pt.isel.pdm.chess4android.games.Position
 import pt.isel.pdm.chess4android.games.chess.Chess
+import pt.isel.pdm.chess4android.games.chess.Puzzle
 import pt.isel.pdm.chess4android.games.chess.pieces.*
 
 class LoadPGN(dailyGame: PuzzleInfo) {
@@ -13,25 +15,26 @@ class LoadPGN(dailyGame: PuzzleInfo) {
 
     init {
         initialPlayer = if (dailyGame.puzzle.initialPly % 2 == 0) Player.Top else Player.Bottom
-        chess = Chess(initialPlayer, 8,8)
+
+        chess = Puzzle(initialPlayer, 8,8)
         val moves = dailyGame.game.pgn.split(" ").toTypedArray()
         //val moves = "e3 e6 Qf3 f6 Qxb7 Na6 Qe4 c6 b4 d6 b5 f5 b6 c5 b7 c4 b8=B c3 dxc3".split(" ").toTypedArray()
 
-        var count = 0
         moves.forEach { pgnMove ->
             val currPlayer = chess.currentPlayer
-            count = count + 1
-            if(count < 13)
-                parsePGN(pgnMove, chess)
-            if(count == 999)
-                parsePGN(pgnMove, chess)
+            parsePGN(pgnMove, chess)
 
-            Log.v("XXX", "**START** Player: $currPlayer - Count: $count")
             chess.playersPieces[currPlayer]?.forEach { piece ->
                 Log.v("XXX", ""+piece.toString()+" : "+piece.position.x+piece.position.y)
             }
             Log.v("XXX", "**END** Player: $currPlayer")
         }
+
+        val solution: ArrayList<Movement> = arrayListOf()
+        dailyGame.puzzle.solution.forEach {
+            solution.add(Movement(convertPGNPosition(it[0], it[1]), convertPGNPosition(it[2], it[3]), null, null))
+        }
+        (chess as Puzzle).solutionMoves = solution
     }
 
     fun convertPGNPosition(x: Char?, y: Char?) : Position {
