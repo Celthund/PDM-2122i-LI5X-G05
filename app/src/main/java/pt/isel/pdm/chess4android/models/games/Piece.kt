@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android.games
+package pt.isel.pdm.chess4android.models.games
 
 
 abstract class Piece(val player: Player, var position: Position) {

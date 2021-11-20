@@ -1,9 +1,9 @@
-package pt.isel.pdm.chess4android
+package pt.isel.pdm.chess4android.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import pt.isel.pdm.chess4android.BuildConfig
 import pt.isel.pdm.chess4android.databinding.ActivityAboutBinding
-import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
 
 class AboutActivity : AppCompatActivity() {
     private val binding by lazy {

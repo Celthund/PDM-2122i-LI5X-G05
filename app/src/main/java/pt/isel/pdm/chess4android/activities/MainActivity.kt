@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android
+package pt.isel.pdm.chess4android.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +9,11 @@ import android.view.View
 import android.widget.Toast
 import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
 import androidx.activity.viewModels
-import pt.isel.pdm.chess4android.games.Position
-import pt.isel.pdm.chess4android.games.PromoteCandidate
-import pt.isel.pdm.chess4android.games.chess.Chess
-import pt.isel.pdm.chess4android.games.chess.pieces.*
+import pt.isel.pdm.chess4android.R
+import pt.isel.pdm.chess4android.models.games.Position
+import pt.isel.pdm.chess4android.models.games.PromoteCandidate
+import pt.isel.pdm.chess4android.models.games.chess.Chess
+import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 
 class MainActivity : AppCompatActivity() {
     private val pieceViewMapper: HashMap<Any, Array<Int>> = HashMap()

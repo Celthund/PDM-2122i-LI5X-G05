@@ -1,20 +1,15 @@
 package pt.isel.pdm.chess4android.views
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.widget.GridLayout
-import pt.isel.pdm.chess4android.MainActivity
-import pt.isel.pdm.chess4android.MainActivityViewModel
+import pt.isel.pdm.chess4android.activities.MainActivity
 import pt.isel.pdm.chess4android.R
-import pt.isel.pdm.chess4android.games.Player
-import pt.isel.pdm.chess4android.games.Position
-import pt.isel.pdm.chess4android.games.PromoteCandidate
-import pt.isel.pdm.chess4android.games.chess.Chess
-import pt.isel.pdm.chess4android.games.chess.pieces.*
+import pt.isel.pdm.chess4android.models.games.Position
+import pt.isel.pdm.chess4android.models.games.chess.Chess
 import pt.isel.pdm.chess4android.views.Tile.Type
 
 /**

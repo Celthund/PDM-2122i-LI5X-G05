@@ -1,7 +1,7 @@
-package pt.isel.pdm.chess4android.games.chess.pieces
+package pt.isel.pdm.chess4android.models.games.chess.pieces
 
-import pt.isel.pdm.chess4android.games.*
-import pt.isel.pdm.chess4android.games.chess.ChessPiece
+import pt.isel.pdm.chess4android.models.games.*
+import pt.isel.pdm.chess4android.models.games.chess.ChessPiece
 import kotlin.math.abs
 
 class Pawn(player: Player, position: Position) : ChessPiece(player, position) {

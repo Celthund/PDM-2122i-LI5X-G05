@@ -1,9 +1,9 @@
-package pt.isel.pdm.chess4android.games.chess.pieces
+package pt.isel.pdm.chess4android.models.games.chess.pieces
 
-import pt.isel.pdm.chess4android.games.Game
-import pt.isel.pdm.chess4android.games.chess.ChessPiece
-import pt.isel.pdm.chess4android.games.Player
-import pt.isel.pdm.chess4android.games.Position
+import pt.isel.pdm.chess4android.models.games.Game
+import pt.isel.pdm.chess4android.models.games.chess.ChessPiece
+import pt.isel.pdm.chess4android.models.games.Player
+import pt.isel.pdm.chess4android.models.games.Position
 
 class Knight(player: Player, position: Position) : ChessPiece(player, position) {
     override fun internalGetPositionsInCheck(board: Game): HashSet<Position> {

@@ -1,11 +1,14 @@
-package pt.isel.pdm.chess4android
+package pt.isel.pdm.chess4android.activities
 
 import android.app.Application
 import androidx.lifecycle.*
-import pt.isel.pdm.chess4android.games.Player
-import pt.isel.pdm.chess4android.games.Position
-import pt.isel.pdm.chess4android.games.PromoteCandidate
-import pt.isel.pdm.chess4android.games.chess.Chess
+import pt.isel.pdm.chess4android.DailyPuzzleService
+import pt.isel.pdm.chess4android.models.PuzzleInfoParser
+import pt.isel.pdm.chess4android.PuzzleInfo
+import pt.isel.pdm.chess4android.URL
+import pt.isel.pdm.chess4android.models.games.Player
+import pt.isel.pdm.chess4android.models.games.PromoteCandidate
+import pt.isel.pdm.chess4android.models.games.chess.Chess
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -76,6 +79,6 @@ class MainActivityViewModel(
         } else {
             Player.Bottom
         }
-        this._boardModel.value = LoadPGN(dailyGame).chess
+        this._boardModel.value = PuzzleInfoParser(dailyGame).parsePuzzleInfo()
     }
 }

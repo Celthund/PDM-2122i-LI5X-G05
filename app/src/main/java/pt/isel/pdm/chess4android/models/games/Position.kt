@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android.games
+package pt.isel.pdm.chess4android.models.games
 
 import kotlin.math.abs
 

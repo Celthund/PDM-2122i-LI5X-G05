@@ -1,7 +1,7 @@
-package pt.isel.pdm.chess4android.games.chess
+package pt.isel.pdm.chess4android.models.games.chess
 
 
-import pt.isel.pdm.chess4android.games.*
+import pt.isel.pdm.chess4android.models.games.*
 
 class Puzzle(whitePlayerPosition: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
     Chess(whitePlayerPosition, MAX_HEIGHT, MAX_WIDTH) {

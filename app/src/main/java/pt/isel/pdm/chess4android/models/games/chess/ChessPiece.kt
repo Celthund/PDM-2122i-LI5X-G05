@@ -1,13 +1,13 @@
-package pt.isel.pdm.chess4android.games.chess
+package pt.isel.pdm.chess4android.models.games.chess
 
-import pt.isel.pdm.chess4android.games.Game
-import pt.isel.pdm.chess4android.games.Piece
-import pt.isel.pdm.chess4android.games.Player
-import pt.isel.pdm.chess4android.games.Position
-import pt.isel.pdm.chess4android.games.chess.pieces.Bishop
-import pt.isel.pdm.chess4android.games.chess.pieces.King
-import pt.isel.pdm.chess4android.games.chess.pieces.Queen
-import pt.isel.pdm.chess4android.games.chess.pieces.Rook
+import pt.isel.pdm.chess4android.models.games.Game
+import pt.isel.pdm.chess4android.models.games.Piece
+import pt.isel.pdm.chess4android.models.games.Player
+import pt.isel.pdm.chess4android.models.games.Position
+import pt.isel.pdm.chess4android.models.games.chess.pieces.Bishop
+import pt.isel.pdm.chess4android.models.games.chess.pieces.King
+import pt.isel.pdm.chess4android.models.games.chess.pieces.Queen
+import pt.isel.pdm.chess4android.models.games.chess.pieces.Rook
 import kotlin.math.abs
 
 abstract class ChessPiece(player: Player, position: Position) : Piece(player, position) {

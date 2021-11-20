@@ -1,8 +1,8 @@
-package pt.isel.pdm.chess4android.games.chess
+package pt.isel.pdm.chess4android.models.games.chess
 
 import android.util.Log
-import pt.isel.pdm.chess4android.games.*
-import pt.isel.pdm.chess4android.games.chess.pieces.*
+import pt.isel.pdm.chess4android.models.games.*
+import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 import java.util.*
 import kotlin.math.abs
 

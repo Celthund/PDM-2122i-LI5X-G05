@@ -1,22 +1,19 @@
-package pt.isel.pdm.chess4android
+package pt.isel.pdm.chess4android.models
 
-import android.util.Log
-import pt.isel.pdm.chess4android.games.Movement
-import pt.isel.pdm.chess4android.games.Piece
-import pt.isel.pdm.chess4android.games.Player
-import pt.isel.pdm.chess4android.games.Position
-import pt.isel.pdm.chess4android.games.chess.Chess
-import pt.isel.pdm.chess4android.games.chess.Puzzle
-import pt.isel.pdm.chess4android.games.chess.pieces.*
+import pt.isel.pdm.chess4android.PuzzleInfo
+import pt.isel.pdm.chess4android.models.games.Movement
+import pt.isel.pdm.chess4android.models.games.Piece
+import pt.isel.pdm.chess4android.models.games.Player
+import pt.isel.pdm.chess4android.models.games.Position
+import pt.isel.pdm.chess4android.models.games.chess.Chess
+import pt.isel.pdm.chess4android.models.games.chess.Puzzle
+import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 
-class LoadPGN(dailyGame: PuzzleInfo) {
-    private var initialPlayer: Player
-    var chess: Chess
+class PuzzleInfoParser(val dailyGame: PuzzleInfo) {
+    private var initialPlayer: Player = if (dailyGame.puzzle.initialPly % 2 == 0) Player.Top else Player.Bottom
 
-    init {
-        initialPlayer = if (dailyGame.puzzle.initialPly % 2 == 0) Player.Top else Player.Bottom
-
-        chess = Puzzle(initialPlayer, 8, 8)
+    fun parsePuzzleInfo() : Chess {
+        val chess = Puzzle(initialPlayer, 8, 8)
         val moves = dailyGame.game.pgn.split(" ").toTypedArray()
         //val moves = "e3 e6 Qf3 f6 Qxb7 Na6 Qe4 c6 b4 d6 b5 f5 b6 c5 b7 c4 b8=B c3 dxc3".split(" ").toTypedArray()
 
@@ -35,10 +32,11 @@ class LoadPGN(dailyGame: PuzzleInfo) {
                 )
             )
         }
-        (chess as Puzzle).solutionMoves = solution
+        chess.solutionMoves = solution
+        return chess
     }
 
-    fun convertPGNPosition(x: Char?, y: Char?): Position {
+    private fun convertPGNPosition(x: Char?, y: Char?): Position {
         var x: Int = (x?.code ?: 'a'.code) - 'a'.code
         var y: Int = (y?.digitToInt() ?: '1'.digitToInt()) - 1
 
@@ -48,7 +46,7 @@ class LoadPGN(dailyGame: PuzzleInfo) {
         return Position(x, y)
     }
 
-    fun parseNewPosition(pgnMove: String): Position {
+    private fun parseNewPosition(pgnMove: String): Position {
         var pgnLen: Int = pgnMove.length
         if (pgnMove[pgnLen - 1] == '+') pgnLen = pgnLen - 1
         if (pgnMove[pgnLen - 1] in "BNQR" && pgnMove[pgnLen - 2] == '=') pgnLen = pgnLen - 2
@@ -56,7 +54,7 @@ class LoadPGN(dailyGame: PuzzleInfo) {
         return convertPGNPosition(pgnMove[pgnLen - 2], pgnMove[pgnLen - 1])
     }
 
-    fun parseCurrPosition(pgnMove: String, piece: Piece): Boolean {
+    private fun parseCurrPosition(pgnMove: String, piece: Piece): Boolean {
         var pgnLen: Int = pgnMove.length
         if (pgnMove[pgnLen - 1] == '+') pgnLen = pgnLen - 1
         if (pgnMove[pgnLen - 1] in "BNQR" && pgnMove[pgnLen - 2] == '=') pgnLen = pgnLen - 2
@@ -79,7 +77,7 @@ class LoadPGN(dailyGame: PuzzleInfo) {
         return false
     }
 
-    fun samePieceType(pgnMove: String, piece: Piece): Boolean {
+    private fun samePieceType(pgnMove: String, piece: Piece): Boolean {
         if (pgnMove[0] in ("BNQR")) {
             if (pgnMove[0] == 'B' && piece is Bishop) return true
             if (pgnMove[0] == 'N' && piece is Knight) return true
@@ -91,7 +89,7 @@ class LoadPGN(dailyGame: PuzzleInfo) {
         return false
     }
 
-    fun verifyPromote(pgnMove: String): Any? {
+    private fun verifyPromote(pgnMove: String): Any? {
         var pgnLen: Int = pgnMove.length
         if (pgnMove[pgnLen - 1] !in "BNQR" || pgnMove[pgnLen - 2] != '=') return null
 
@@ -103,7 +101,7 @@ class LoadPGN(dailyGame: PuzzleInfo) {
         return null
     }
 
-    fun parsePGN(pgnMove: String, chess: Chess) {
+    private fun parsePGN(pgnMove: String, chess: Chess) {
         var newPosition: Position
 
         if (pgnMove[0] in "KO") {
