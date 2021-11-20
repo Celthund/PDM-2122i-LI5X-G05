@@ -22,27 +22,23 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    var whitePlayer = Player.Bottom
+    private var whitePlayer = Player.Bottom
     private val viewModel : MainActivityViewModel by viewModels()
+    var isInPromote: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mapViewToPiece()
+
         val boardModel = Chess(whitePlayer, 8,8)
-
-
         binding.boardView.initBoard(boardModel, this, this::makeMove)
-        viewModel.setBoardModel(boardModel)
-        viewModel.boardModel.observe(this) {
-            binding.boardView.setBoard(it)
+
+        if(viewModel.boardModel.value == null) {
+            viewModel.setBoardModel(boardModel)
         }
 
-        viewModel.promote.observe(this) {
-            if(it != null) {
-                showPromoteOptions(it)
-            } else {
-                hidePromoteOptions()
-            }
+        viewModel.boardModel.observe(this) {
+            binding.boardView.setBoard(it)
         }
 
         setContentView(binding.root)
@@ -79,44 +75,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showPromoteOptions(candidate: PromoteCandidate) {
-        val boardModel = candidate.boardModel
-
+    private fun showPromoteOptions(boardModel: Chess, position: Position) {
         binding.bishopBtn.visibility = View.VISIBLE
         binding.bishopBtn.setOnClickListener {
-            boardModel.putPieceAtPosition(Bishop(candidate.player, candidate.position))
-            hidePromoteOptions()
-            binding.boardView.setBoard(boardModel)
+            promotePiece(Bishop::class, boardModel, position)
         }
         binding.bishopBtn.invalidate()
 
         binding.knightBtn.visibility = View.VISIBLE
         binding.knightBtn.setOnClickListener {
-            boardModel.putPieceAtPosition(Knight(candidate.player, candidate.position))
-            hidePromoteOptions()
-            binding.boardView.setBoard(boardModel)
+            promotePiece(Knight::class, boardModel, position)
         }
         binding.knightBtn.invalidate()
 
         binding.queenBtn.visibility = View.VISIBLE
 
         binding.queenBtn.setOnClickListener {
-            boardModel.putPieceAtPosition(Queen(candidate.player, candidate.position))
-            hidePromoteOptions()
-            binding.boardView.setBoard(boardModel)
+            promotePiece(Queen::class, boardModel, position)
         }
         binding.queenBtn.invalidate()
 
         binding.rookBtn.visibility = View.VISIBLE
         binding.rookBtn.setOnClickListener {
-            boardModel.putPieceAtPosition(Rook(candidate.player, candidate.position))
-            hidePromoteOptions()
-            binding.boardView.setBoard(boardModel)
+            promotePiece(Rook::class, boardModel, position)
+
         }
         binding.rookBtn.invalidate()
     }
 
     private fun hidePromoteOptions() {
+        isInPromote = false
         binding.bishopBtn.visibility = View.INVISIBLE
         binding.bishopBtn.setOnClickListener {}
         binding.bishopBtn.invalidate()
@@ -134,6 +122,12 @@ class MainActivity : AppCompatActivity() {
         binding.rookBtn.invalidate()
     }
 
+    private fun promotePiece(piece: Any, boardModel: Chess, position: Position){
+        boardModel.promotePawn(position, piece)
+        hidePromoteOptions()
+        binding.boardView.setBoard(boardModel)
+    }
+
     private fun mapViewToPiece() {
         pieceViewMapper[Rook::class] = arrayOf(R.drawable.ic_white_rook, R.drawable.ic_black_rook)
         pieceViewMapper[Knight::class] =
@@ -146,6 +140,18 @@ class MainActivity : AppCompatActivity() {
         pieceViewMapper[Pawn::class] = arrayOf(R.drawable.ic_white_pawn, R.drawable.ic_black_pawn)
     }
 
+    private fun makeMove(currPosition: Position, newPosition: Position, boardModel: Chess) {
+        boardModel.movePieceAtPosition(currPosition, newPosition)
+        val piece = boardModel.getPiece(newPosition)
+
+        if(piece != null && boardModel.isReadyForPromotion(newPosition)) {
+            isInPromote = true
+            showPromoteOptions(boardModel, newPosition)
+        }
+
+        viewModel.setBoardModel(boardModel)
+    }
+
      fun getPieceDrawableId(position: Position, boardModel: Chess): Int? {
         val piece = boardModel.getPiece(position)
 
@@ -156,10 +162,5 @@ class MainActivity : AppCompatActivity() {
                 pieceViewMapper[piece::class]!![1]
         }
         return null
-    }
-
-    fun makeMove(currPosition: Position, newPosition: Position) {
-        viewModel.makeMove(currPosition, newPosition)
-        //TODO if(isPossibleToPromote()) { call promote }
     }
 }

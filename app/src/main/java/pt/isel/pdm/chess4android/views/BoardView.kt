@@ -29,7 +29,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         strokeWidth = 10F
     }
 
-    lateinit var makeMove : (currPos: Position, newPosition: Position) -> Unit
+    private lateinit var makeMove : (currPos: Position, newPosition: Position, boardModel: Chess) -> Unit
     private lateinit var activity: MainActivity
 
     // Last selected Tile so it can reset the possible moves if it was clicked again
@@ -46,7 +46,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     // It will draw the board and put all thee beginning valid movement of each piece
-    fun initBoard(boardModel: Chess, activity: MainActivity, function: (currPos: Position, newPosition: Position) -> Unit) {
+    fun initBoard(boardModel: Chess, activity: MainActivity, function: (currPos: Position, newPosition: Position, boardModel: Chess) -> Unit) {
         makeMove = function
         this.activity = activity
         this.boardModel = boardModel
@@ -86,7 +86,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
                 currTile.piece = piece
 
-                if (currTile.piece != null) {
+                if (!activity.isInPromote && currTile.piece != null) {
                     setTileClickListener(currTile, position)
                 } else {
                     currTile.setOnClickListener {}
@@ -98,6 +98,9 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
     // Shows the valid position of a piece that was clicked
     private fun showValidMoves(currPos: Position, possibleMovements: HashSet<Position>) {
+        if(activity.isInPromote) {
+            return
+        }
         val currTile = boardTile[currPos.y][currPos.x]
 
         if (currTile.piece == R.drawable.ic_empty_squares_possible_move
@@ -105,6 +108,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         ) {
             return
         }
+
 
         if (lastSelectedTile != null) {
             resetPossiblePositions(lastClickedPosition)
@@ -125,7 +129,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
                 currPossibleTile.setOnClickListener {
                     resetPossiblePositions(boardModel.getPossibleMoves(currPos))
-                    makeMove(currPos, newPosition)
+                    makeMove(currPos, newPosition, boardModel)
                 }
             }
             currPossibleTile.invalidate()
@@ -170,6 +174,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         this.boardModel = boardModel
         invalidateBoard()
     }
+
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
         canvas.drawLine(0f, 0f, width.toFloat(), 0f, brush)
@@ -177,5 +182,6 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         canvas.drawLine(0f, 0f, 0f, height.toFloat(), brush)
         canvas.drawLine(width.toFloat(), 0f, width.toFloat(), height.toFloat(), brush)
     }
+
 
 }

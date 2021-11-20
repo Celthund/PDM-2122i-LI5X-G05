@@ -63,9 +63,7 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
 
     override fun movePieceAtPosition(oldPosition: Position, newPosition: Position): Boolean {
         // Check promote
-        if (board[oldPosition.x][oldPosition.y] is Pawn && (newPosition.y == 0 || newPosition.y == MAX_HEIGHT - 1)) {
-            return false
-        }
+
         val lastMove: Movement? = if (moveHistory.isNotEmpty()) moveHistory.last() else null
         val res = super.movePieceAtPosition(oldPosition, newPosition)
         if (res) {
@@ -75,9 +73,9 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
                     if (lastMove != null &&
                         abs(lastMove.origin.y - lastMove.destination.y) == 2 && oldPosition.x != newPosition.x
                     ) {
-                        val pawn: Piece = board[newPosition.x][oldPosition.y]!!
+                        val pawn: Piece = board[newPosition.x][newPosition.y]!!
                         playersPieces[pawn.player]?.remove(pawn)
-                        board[newPosition.x][oldPosition.y] = null
+                        board[oldPosition.x][oldPosition.y] = null
                     }
 
                 }
@@ -114,30 +112,34 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
         }
     }
 
-    fun promotePawn(position: Position, promotedClass: Any): Boolean {
-        if (board[position.x][position.y] is Pawn && (position.y == 0 || position.y == MAX_HEIGHT - 1)) {
-            val pawn = board[position.x][position.y]!!
-            val piece: Piece = when (promotedClass) {
-                is Queen -> {
-                    Queen(pawn.player, pawn.position)
-                }
-                is Bishop -> {
-                    Bishop(pawn.player, pawn.position)
-                }
-                is Rook -> {
-                    Rook(pawn.player, pawn.position)
-                }
-                is Knight -> {
-                    Knight(pawn.player, pawn.position)
-                }
-                else -> null
-            } ?: return false
+    fun isReadyForPromotion(position: Position): Boolean {
+        return board[position.x][position.y] is Pawn && (position.y == 0 || position.y == MAX_HEIGHT - 1)
+    }
 
+    fun promotePawn(position: Position, promotedClass: Any) {
+
+        val pawn = board[position.x][position.y]!!
+
+        val piece: Piece? = when (promotedClass) {
+            Queen::class -> {
+                Queen(pawn.player, pawn.position)
+            }
+            Bishop::class -> {
+                Bishop(pawn.player, pawn.position)
+            }
+            Rook::class -> {
+                Rook(pawn.player, pawn.position)
+            }
+            Knight::class -> {
+                Knight(pawn.player, pawn.position)
+            }
+            else -> null
+        }
+        if(piece != null) {
             playersPieces[pawn.player]?.remove(pawn)
             playersPieces[piece.player]?.add(piece)
             board[position.x][position.y] = piece
         }
-        return false
     }
 
 }
