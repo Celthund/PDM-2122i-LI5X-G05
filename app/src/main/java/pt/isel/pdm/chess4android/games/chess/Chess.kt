@@ -100,28 +100,7 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
                 }
             }
         }
-        var str = "array"
-
-        var piece: Piece?
-        for (j in 0 until board[0].size) {
-            str += "\n"
-            for (i in 0 until board.size) {
-                piece = board[i][j]
-                str += "|"
-                str += when (piece) {
-                    is Bishop -> "B"
-                    is Queen -> "Q"
-                    is King -> "K"
-                    is Knight -> "N"
-                    is Rook -> "R"
-                    is Pawn -> "P"
-                    else -> " "
-                }
-            }
-            str += "|"
-        }
-
-        Log.d("this is my deep array", str)
+        Log.d("this is my deep array", "board: \n" + toString())
         return res
     }
 
@@ -164,6 +143,38 @@ class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
             playersPieces[piece.player]?.add(piece)
             board[position.x][position.y] = piece
         }
+    }
+
+    override fun toString(): String {
+        var str = ""
+
+        var piece: Piece?
+        var player: String
+        for (j in 0 until board[0].size) {
+            str += "\n"
+            for (i in 0 until board.size) {
+                piece = board[i][j]
+                str += "|"
+
+                player = when(piece?.player) {
+                    Player.Top -> "(T)"
+                    Player.Bottom -> "(B)"
+                    else -> ""
+                }
+                str += when (piece) {
+                    is Bishop -> "B$player"
+                    is Queen -> "Q$player"
+                    is King -> "K$player"
+                    is Knight -> "N$player"
+                    is Rook -> "R$player"
+                    is Pawn -> "P$player"
+                    else -> "    "
+                }
+            }
+            str += "|"
+        }
+
+        return str
     }
 
 }
