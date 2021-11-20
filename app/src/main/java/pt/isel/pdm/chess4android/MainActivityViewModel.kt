@@ -23,8 +23,12 @@ class MainActivityViewModel(
     application: Application,
     private val state: SavedStateHandle
 ) : AndroidViewModel(application) {
+
     private val _boardModel: MutableLiveData<Chess> = MutableLiveData()
     val boardModel: LiveData<Chess> = _boardModel
+
+    private val _isInPromote: MutableLiveData<PromoteCandidate> = MutableLiveData()
+    val isInPromote: LiveData<PromoteCandidate> = _isInPromote
 
     val lichessPuzzle: LiveData<PuzzleInfo> = state.getLiveData(MAIN_ACTIVITY_VIEW_STATE)
 
@@ -48,6 +52,11 @@ class MainActivityViewModel(
     fun setBoardModel(boardModel: Chess) {
         this._boardModel.value = boardModel
     }
+
+    fun savePromoteStatus(isInPromote: PromoteCandidate) {
+        this._isInPromote.value = isInPromote
+    }
+
 
     /*
     fun makeMove(currPos: Position, newPosition: Position) {

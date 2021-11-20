@@ -37,9 +37,18 @@ class MainActivity : AppCompatActivity() {
             viewModel.setBoardModel(boardModel)
         }
 
+        viewModel.isInPromote.observe(this) {
+            isInPromote = it.isInPromote
+            if(isInPromote) {
+                showPromoteOptions(it.boardModel!!, it.position!!)
+            }
+        }
+        
         viewModel.boardModel.observe(this) {
             binding.boardView.setBoard(it)
         }
+
+
 
         setContentView(binding.root)
     }
@@ -104,7 +113,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun hidePromoteOptions() {
-        isInPromote = false
         binding.bishopBtn.visibility = View.INVISIBLE
         binding.bishopBtn.setOnClickListener {}
         binding.bishopBtn.invalidate()
@@ -120,6 +128,7 @@ class MainActivity : AppCompatActivity() {
         binding.rookBtn.visibility = View.INVISIBLE
         binding.rookBtn.setOnClickListener {}
         binding.rookBtn.invalidate()
+        viewModel.savePromoteStatus(PromoteCandidate(isInPromote = false))
     }
 
     private fun promotePiece(piece: Any, boardModel: Chess, position: Position){
@@ -145,7 +154,7 @@ class MainActivity : AppCompatActivity() {
         val piece = boardModel.getPiece(newPosition)
 
         if(piece != null && boardModel.isReadyForPromotion(newPosition)) {
-            isInPromote = true
+            viewModel.savePromoteStatus(PromoteCandidate(newPosition, true, boardModel))
             showPromoteOptions(boardModel, newPosition)
         }
 
