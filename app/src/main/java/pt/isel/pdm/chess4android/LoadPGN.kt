@@ -105,10 +105,11 @@ class LoadPGN(dailyGame: PuzzleInfo) {
                 if(pgnMove[0] == 'K')
                     newPosition = parseNewPosition(pgnMove)
                 else {
-                    if (pgnMove.length > 3)
-                        newPosition = Position(piece.position.x - 2, piece.position.y)
+                    if( (initialPlayer == Player.Bottom && pgnMove.length > 3) ||
+                        (initialPlayer == Player.Top && pgnMove.length <= 3))
+                            newPosition = Position(piece.position.x - 2, piece.position.y)
                     else
-                        newPosition = Position(piece.position.x + 2, piece.position.y)
+                            newPosition = Position(piece.position.x + 2, piece.position.y)
                 }
 
                 piece.getPossibleMoves(chess).forEach { position ->
