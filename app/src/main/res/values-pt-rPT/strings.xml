@@ -8,4 +8,5 @@
     <string name="titleCredits">Créditos</string>
     <string name="titleDevelopers">Programadores</string>
     <string name="titleBuildVersion">Versão</string>
+    <string name="GetPuzzleErr">Erro ao Transferir Puzzle</string>
 </resources>

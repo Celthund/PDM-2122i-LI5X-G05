@@ -15,7 +15,6 @@ class PuzzleInfoParser(val dailyGame: PuzzleInfo) {
     fun parsePuzzlePNG() : Chess {
         val chess = Puzzle(initialPlayer, 8, 8)
         val moves = dailyGame.game.pgn.split(" ").toTypedArray()
-        //val moves = "e3 e6 Qf3 f6 Qxb7 Na6 Qe4 c6 b4 d6 b5 f5 b6 c5 b7 c4 b8=B c3 dxc3".split(" ").toTypedArray()
 
         moves.forEach { pgnMove ->
             parsePGN(pgnMove, chess)
@@ -64,13 +63,13 @@ class PuzzleInfoParser(val dailyGame: PuzzleInfo) {
         if (pgnMove[pgnLen - 3] == 'x') pgnLen = pgnLen - 3
         else pgnLen = pgnLen - 2
 
-        if (pgnMove[pgnLen - 1].code > 'A'.code && pgnMove[pgnLen - 1].code < 'Z'.code) return true
+        if (pgnMove[pgnLen - 1].code >= 'A'.code && pgnMove[pgnLen - 1].code <= 'Z'.code) return true
 
-        if (pgnMove[pgnLen - 1].code > 'a'.code && pgnMove[pgnLen - 1].code < 'z'.code) {
+        if (pgnMove[pgnLen - 1].code >= 'a'.code && pgnMove[pgnLen - 1].code <= 'z'.code) {
             if (piece.position.x == convertPGNPosition(pgnMove[pgnLen - 1], null).x) return true
         }
 
-        if (pgnMove[pgnLen - 1].code > '0'.code && pgnMove[pgnLen - 1].code < '9'.code) {
+        if (pgnMove[pgnLen - 1].code >= '0'.code && pgnMove[pgnLen - 1].code <= '9'.code) {
             if (piece.position.y == convertPGNPosition(null, pgnMove[pgnLen - 1]).y) return true
         }
 
@@ -124,13 +123,15 @@ class PuzzleInfoParser(val dailyGame: PuzzleInfo) {
         } else {
             newPosition = parseNewPosition(pgnMove)
             chess.playersPieces[chess.currentPlayer]?.forEach { piece ->
-                if (samePieceType(pgnMove, piece) && piece.getPossibleMoves(chess)
-                        .contains(newPosition) && parseCurrPosition(pgnMove, piece)
+                if (samePieceType(pgnMove, piece) &&
+                    piece.getPossibleMoves(chess).contains(newPosition) &&
+                    parseCurrPosition(pgnMove, piece)
                 ) {
                     chess.movePieceAtPosition(piece.position, newPosition)
                     val promotedClass = verifyPromote(pgnMove)
                     if (promotedClass != null)
                         chess.promotePawn(newPosition, promotedClass)
+                    return
                 }
             }
         }

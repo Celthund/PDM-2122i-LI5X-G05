@@ -7,4 +7,5 @@
     <string name="titleDevelopers">Developers</string>
     <string name="titleCredits">Credits</string>
     <string name="Credits">Lichess.org for providing daily puzzles</string>
+    <string name="GetPuzzleErr">Puzzle Recover Error</string>
 </resources>

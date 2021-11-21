@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel.GetLichessPuzzle()
                 viewModel.lichessPuzzle.observe(this) {
                     if(it==null) {
-                        Toast.makeText (this, "Puzzle recover error", Toast.LENGTH_LONG).show()
+                        Toast.makeText (this, R.string.GetPuzzleErr, Toast.LENGTH_LONG).show()
                     } else {
                         viewModel.PlayLichessPuzzle(it)
                         setContentView(binding.root)
