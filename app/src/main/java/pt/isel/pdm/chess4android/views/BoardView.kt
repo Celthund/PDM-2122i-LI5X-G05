@@ -108,10 +108,12 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
             val newPosition = Position(possibleMoveCol, possibleMoveRow)
             val currPossibleTile = boardTile[possibleMoveRow][possibleMoveCol]
+            val isCurrPlayer = isCurrPlayerPiece(currPos)
 
             currPossibleTile.inPreview = true
+            currPossibleTile.isCurrPlayer = isCurrPlayer
 
-            if (isCurrPlayerPiece(currPos)) {
+            if (isCurrPlayer) {
 
                 currPossibleTile.setOnClickListener {
                     resetPossiblePositions(isInPromote, boardModel.getPossibleMoves(currPos))

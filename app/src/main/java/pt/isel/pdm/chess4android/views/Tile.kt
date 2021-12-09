@@ -31,6 +31,7 @@ class Tile(
     var piece: Int?
 ) : View(ctx) {
     var inPreview: Boolean = false
+    var isCurrPlayer = false
 
 
     enum class Type { WHITE, BLACK }
@@ -81,7 +82,11 @@ class Tile(
         if (inPreview) {
             val spacePiece =
                 if (drawPiece == null && piece == null) {
-                    R.drawable.ic_empty_squares_possible_move
+                    if(isCurrPlayer) {
+                        R.drawable.ic_empty_squares_possible_move
+                    } else {
+                        R.drawable.ic_empty_squares_possible_move_other_player
+                    }
                 } else {
                     R.drawable.ic_can_attack_piece
                 }

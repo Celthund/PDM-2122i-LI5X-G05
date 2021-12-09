@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText (this, R.string.GetPuzzleErr, Toast.LENGTH_LONG).show()
                     } else {
                         viewModel.PlayLichessPuzzle(it)
-                        setContentView(binding.root)
+                        //setContentView(binding.root)
                     }
                 }
                 true
