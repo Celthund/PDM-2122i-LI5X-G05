@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.widget.GridLayout
-import pt.isel.pdm.chess4android.activities.MainActivity
 import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.models.games.Position
 import pt.isel.pdm.chess4android.models.games.chess.Chess
@@ -17,7 +16,6 @@ import pt.isel.pdm.chess4android.views.Tile.Type
  */
 @SuppressLint("ClickableViewAccessibility")
 class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx, attrs) {
-    private val side = 8
     private val brush = Paint().apply {
         ctx.resources.getColor(R.color.chess_board_black, null)
         style = Paint.Style.STROKE
@@ -25,64 +23,50 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     private lateinit var makeMove : (currPos: Position, newPosition: Position, boardModel: Chess) -> Unit
-    private lateinit var activity: MainActivity
+    private lateinit var boardModel: Chess
+    private lateinit var boardTile: Array<Array<Tile>>
 
     // Last selected Tile so it can reset the possible moves if it was clicked again
     private var lastSelectedTile: Tile? = null
     private var lastClickedPosition: HashSet<Position> = HashSet()
 
     // The states of the View Board at the present
-    private lateinit var boardModel: Chess
-    lateinit var boardTile: Array<Array<Tile>>
-
-    init {
-        rowCount = side
-        columnCount = side
-    }
 
     // It will draw the board and put all thee beginning valid movement of each piece
-    fun initBoard(boardModel: Chess, activity: MainActivity, function: (currPos: Position, newPosition: Position, boardModel: Chess) -> Unit) {
-        makeMove = function
-        this.activity = activity
-        this.boardModel = boardModel
+    fun initBoard(tileSide:Int, columnCount: Int, rowCount: Int, makeMoveFunction: (currPos: Position, newPosition: Position, boardModel: Chess) -> Unit) {
+        makeMove = makeMoveFunction
 
         var tileArray = arrayOf<Array<Tile>>()
 
-        for (row in 0 until side) {
+        for (row in 0 until rowCount) {
             var columnsArray = arrayOf<Tile>()
-            for (column in 0 until side) {
-                val position = Position(column, row)
-                val piece = activity.getPieceDrawableId(position, boardModel)
-
+            for (column in 0 until columnCount) {
                 columnsArray += Tile(
                     ctx,
                     if ((row + column) % 2 == 0) Type.WHITE else Type.BLACK,
-                    side,
-                    piece
+                    tileSide,
+                    null
                 )
-                val currTile = columnsArray[column]
-                if (currTile.piece != null) {
-                    setTileClickListener(currTile, position)
-                }
-                addView(currTile)
+
+                addView(columnsArray[column])
             }
             tileArray += columnsArray
         }
         boardTile = tileArray
     }
 
-    private fun invalidateBoard() {
+    private fun invalidateBoard(isInPromote: Boolean, getPieceDrawableId: (position: Position, boardModel: Chess) -> Int?) {
 
-        for (row in 0 until side) {
-            for (column in 0 until side) {
+        for (row in boardTile.indices) {
+            for (column in boardTile[row].indices) {
                 val position = Position(column, row)
                 val currTile = boardTile[row][column]
-                val piece = activity.getPieceDrawableId(position, boardModel)
+                val piece = getPieceDrawableId(position, boardModel)
 
                 currTile.piece = piece
 
-                if (!activity.isInPromote && currTile.piece != null) {
-                    setTileClickListener(currTile, position)
+                if (!isInPromote && currTile.piece != null) {
+                    setTileClickListener(isInPromote, currTile, position)
                 } else {
                     currTile.setOnClickListener {}
                 }
@@ -92,21 +76,21 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     // Shows the valid position of a piece that was clicked
-    private fun showValidMoves(currPos: Position, possibleMovements: HashSet<Position>) {
-        if(activity.isInPromote) {
+    private fun showValidMoves(isInPromote: Boolean, currPos: Position, possibleMovements: HashSet<Position>) {
+        if(isInPromote) {
             return
         }
         val currTile = boardTile[currPos.y][currPos.x]
 
         if (currTile.piece == R.drawable.ic_empty_squares_possible_move
-            || clickedOnSamePiece(currTile, possibleMovements)
+            || clickedOnSamePiece(isInPromote, currTile, possibleMovements)
         ) {
             return
         }
 
 
         if (lastSelectedTile != null) {
-            resetPossiblePositions(lastClickedPosition)
+            resetPossiblePositions(isInPromote, lastClickedPosition)
         }
 
         lastClickedPosition = possibleMovements
@@ -123,7 +107,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
             if (isCurrPlayerPiece(currPos)) {
 
                 currPossibleTile.setOnClickListener {
-                    resetPossiblePositions(boardModel.getPossibleMoves(currPos))
+                    resetPossiblePositions(isInPromote, boardModel.getPossibleMoves(currPos))
                     makeMove(currPos, newPosition, boardModel)
                 }
             }
@@ -131,7 +115,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         }
     }
 
-    private fun resetPossiblePositions(possibleMovements: HashSet<Position>) {
+    private fun resetPossiblePositions(isInPromote:Boolean, possibleMovements: HashSet<Position>) {
         for (possibleMovement in possibleMovements) {
             lastSelectedTile = null
             val currTile = boardTile[possibleMovement.y][possibleMovement.x]
@@ -141,15 +125,15 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
             if (currTile.piece == null) {
                 currTile.setOnClickListener {}
             } else {
-                setTileClickListener(currTile, possibleMovement)
+                setTileClickListener(isInPromote, currTile, possibleMovement)
             }
             currTile.invalidate()
         }
     }
 
-    private fun setTileClickListener(tile: Tile, position: Position) {
+    private fun setTileClickListener(isInPromote: Boolean, tile: Tile, position: Position) {
         tile.setOnClickListener {
-            showValidMoves(position, boardModel.getPossibleMoves(position))
+            showValidMoves(isInPromote, position, boardModel.getPossibleMoves(position))
         }
     }
 
@@ -157,17 +141,17 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
         return boardModel.currentPlayer == boardModel.getPiece(position)?.player
     }
 
-    private fun clickedOnSamePiece(tile: Tile, possibleMovements: HashSet<Position>): Boolean {
+    private fun clickedOnSamePiece(isInPromote: Boolean, tile: Tile, possibleMovements: HashSet<Position>): Boolean {
         if (lastSelectedTile == tile) {
-            resetPossiblePositions(possibleMovements)
+            resetPossiblePositions(isInPromote, possibleMovements)
             return true
         }
         return false
     }
 
-    fun setBoard(boardModel: Chess) {
+    fun setBoard(boardModel: Chess, isInPromote: Boolean, getPieceDrawableId: (position: Position, boardModel: Chess) -> Int?) {
         this.boardModel = boardModel
-        invalidateBoard()
+        invalidateBoard(isInPromote, getPieceDrawableId)
     }
 
     override fun dispatchDraw(canvas: Canvas) {

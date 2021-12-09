@@ -28,11 +28,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mapViewToPiece()
-        val boardModel = Chess(viewModel.whitePlayer, 8,8)
-        binding.boardView.initBoard(boardModel, this, this::makeMove)
+        binding.boardView.initBoard(8,8,8, this::makeMove)
 
         if(viewModel.boardModel.value == null) {
-            viewModel.setBoardModel(boardModel)
+            viewModel.setBoardModel(Chess(viewModel.whitePlayer,8,8 ))
         }
 
         viewModel.isInPromote.observe(this) {
@@ -43,10 +42,8 @@ class MainActivity : AppCompatActivity() {
         }
         
         viewModel.boardModel.observe(this) {
-            binding.boardView.setBoard(it)
+            binding.boardView.setBoard(it, isInPromote, this::getPieceDrawableId)
         }
-
-
 
         setContentView(binding.root)
     }
@@ -132,7 +129,7 @@ class MainActivity : AppCompatActivity() {
     private fun promotePiece(piece: Any, boardModel: Chess, position: Position){
         boardModel.promotePawn(position, piece)
         hidePromoteOptions()
-        binding.boardView.setBoard(boardModel)
+        binding.boardView.setBoard(boardModel, isInPromote, this::getPieceDrawableId)
     }
 
     private fun mapViewToPiece() {
@@ -159,7 +156,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.setBoardModel(boardModel)
     }
 
-     fun getPieceDrawableId(position: Position, boardModel: Chess): Int? {
+     private fun getPieceDrawableId(position: Position, boardModel: Chess): Int? {
         val piece = boardModel.getPiece(position)
 
         if (piece != null) {
