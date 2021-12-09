@@ -16,6 +16,7 @@ import pt.isel.pdm.chess4android.views.Tile.Type
  */
 @SuppressLint("ClickableViewAccessibility")
 class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx, attrs) {
+    private val side = 8
     private val brush = Paint().apply {
         ctx.resources.getColor(R.color.chess_board_black, null)
         style = Paint.Style.STROKE
@@ -32,8 +33,14 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
     // The states of the View Board at the present
 
+
+    init {
+        rowCount = side
+        columnCount = side
+    }
+
     // It will draw the board and put all thee beginning valid movement of each piece
-    fun initBoard(tileSide:Int, columnCount: Int, rowCount: Int, makeMoveFunction: (currPos: Position, newPosition: Position, boardModel: Chess) -> Unit) {
+    fun initBoard(columnCount: Int, rowCount: Int, makeMoveFunction: (currPos: Position, newPosition: Position, boardModel: Chess) -> Unit) {
         makeMove = makeMoveFunction
 
         var tileArray = arrayOf<Array<Tile>>()
@@ -44,7 +51,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
                 columnsArray += Tile(
                     ctx,
                     if ((row + column) % 2 == 0) Type.WHITE else Type.BLACK,
-                    tileSide,
+                    side,
                     null
                 )
 

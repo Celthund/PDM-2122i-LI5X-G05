@@ -64,15 +64,6 @@ class MainActivityViewModel(
         this._isInPromote.value = isInPromote
     }
 
-
-    /*
-    fun makeMove(currPos: Position, newPosition: Position) {
-        boardModel.value?.movePieceAtPosition(currPos, newPosition)
-        setBoardModel(boardModel.value!!)
-    }
-
-     */
-
     fun PlayLichessPuzzle(dailyGame: PuzzleInfo) {
         _whitePlayer = if (dailyGame.puzzle.initialPly % 2 == 0) {
             Player.Top

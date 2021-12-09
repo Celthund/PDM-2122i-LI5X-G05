@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mapViewToPiece()
-        binding.boardView.initBoard(8,8,8, this::makeMove)
+        binding.boardView.initBoard(8,8, this::makeMove)
 
         if(viewModel.boardModel.value == null) {
             viewModel.setBoardModel(Chess(viewModel.whitePlayer,8,8 ))
