@@ -9,4 +9,5 @@
     <string name="titleDevelopers">Programadores</string>
     <string name="titleBuildVersion">Versão</string>
     <string name="GetPuzzleErr">Erro ao Transferir Puzzle</string>
+    <string name="puzzle_menu">Historia dos Puzzles</string>
 </resources>

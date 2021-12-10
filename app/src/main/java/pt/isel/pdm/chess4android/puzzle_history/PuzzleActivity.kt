@@ -1,38 +1,58 @@
-package pt.isel.pdm.chess4android.activities
+package pt.isel.pdm.chess4android.puzzle_history
+
+import android.app.Activity
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.chess4android.R
+import pt.isel.pdm.chess4android.activities.*
 import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
+import pt.isel.pdm.chess4android.models.PuzzleInfo
 import pt.isel.pdm.chess4android.models.games.Position
 import pt.isel.pdm.chess4android.models.games.PromoteCandidate
 import pt.isel.pdm.chess4android.models.games.chess.Chess
 import pt.isel.pdm.chess4android.models.games.chess.pieces.*
-import pt.isel.pdm.chess4android.puzzle_history.HistoryActivity
-import pt.isel.pdm.chess4android.puzzle_history.PuzzleActivity
 
-class MainActivity : AppCompatActivity() {
-    private val pieceViewMapper: HashMap<Any, Array<Int>> = HashMap()
+class PuzzleActivity : AppCompatActivity() {
+    companion object {
+
+        fun buildIntent(origin: Activity, puzzle: PuzzleInfo) : Intent {
+            val intent = Intent(origin, PuzzleActivity::class.java)
+            intent.putExtra(MAIN_ACTIVITY_VIEW_STATE, puzzle)
+            return intent
+        }
+
+    }
 
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
     private val viewModel : MainActivityViewModel by viewModels()
-    var isInPromote: Boolean = false
+    private val pieceViewMapper: HashMap<Any, Array<Int>> = HashMap()
+    private var isInPromote: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mapViewToPiece()
         binding.boardView.initBoard(8,8, this::makeMove)
 
-        if(viewModel.boardModel.value == null) {
-            viewModel.setBoardModel(Chess(viewModel.whitePlayer,8,8 ))
+        val boardModel = viewModel.boardModel.value
+        val puzzleInfo = viewModel.lichessPuzzle.value
+
+        if(puzzleInfo == null) {
+            viewModel.getLichessPuzzle()
         }
+
+
+        viewModel.lichessPuzzle.observe(this) {
+            if(boardModel == null)
+                viewModel.playLichessPuzzle(it)
+        }
+
+
 
         viewModel.isInPromote.observe(this) {
             isInPromote = it.isInPromote
@@ -40,39 +60,12 @@ class MainActivity : AppCompatActivity() {
                 showPromoteOptions(it.boardModel!!, it.position!!)
             }
         }
-        
+
         viewModel.boardModel.observe(this) {
             binding.boardView.setBoard(it, isInPromote, this::getPieceDrawableId)
         }
 
         setContentView(binding.root)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_activity_main, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
-            R.id.menuGetPuzzle -> {
-                startActivity(Intent(this, PuzzleActivity::class.java))
-                true
-            }
-            R.id.menuSolvePuzzle -> {
-                startActivity(Intent(this, SolveActivity::class.java))
-                true
-            }
-            R.id.menuAbout -> {
-                startActivity(Intent(this, AboutActivity::class.java))
-                true
-            }
-            R.id.history -> {
-                startActivity(Intent(this, HistoryActivity::class.java))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun showPromoteOptions(boardModel: Chess, position: Position) {
@@ -152,7 +145,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.setBoardModel(boardModel)
     }
 
-     private fun getPieceDrawableId(position: Position, boardModel: Chess): Int? {
+    private fun getPieceDrawableId(position: Position, boardModel: Chess): Int? {
         val piece = boardModel.getPiece(position)
 
         if (piece != null) {

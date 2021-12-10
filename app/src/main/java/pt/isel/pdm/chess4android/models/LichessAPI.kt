@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android
+package pt.isel.pdm.chess4android.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -95,7 +95,6 @@ data class Perf(val icon: String, val name: String) : Parcelable
 
 @Parcelize
 data class Player(val userId: String, val name: String, val color: String) : Parcelable
-
 
 interface DailyPuzzleService {
     @GET("puzzle/daily")

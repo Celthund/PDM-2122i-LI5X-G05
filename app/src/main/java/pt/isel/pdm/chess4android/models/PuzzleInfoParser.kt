@@ -1,6 +1,5 @@
 package pt.isel.pdm.chess4android.models
 
-import pt.isel.pdm.chess4android.PuzzleInfo
 import pt.isel.pdm.chess4android.models.games.Movement
 import pt.isel.pdm.chess4android.models.games.Piece
 import pt.isel.pdm.chess4android.models.games.Player
@@ -9,7 +8,7 @@ import pt.isel.pdm.chess4android.models.games.chess.Chess
 import pt.isel.pdm.chess4android.models.games.chess.Puzzle
 import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 
-class PuzzleInfoParser(val dailyGame: PuzzleInfo) {
+class PuzzleInfoParser(private val dailyGame: PuzzleInfo) {
     private var initialPlayer: Player = if (dailyGame.puzzle.initialPly % 2 == 0) Player.Top else Player.Bottom
 
     fun parsePuzzlePNG() : Chess {
@@ -35,9 +34,9 @@ class PuzzleInfoParser(val dailyGame: PuzzleInfo) {
         return chess
     }
 
-    private fun convertPGNPosition(x: Char?, y: Char?): Position {
-        var x: Int = (x?.code ?: 'a'.code) - 'a'.code
-        var y: Int = (y?.digitToInt() ?: '1'.digitToInt()) - 1
+    private fun convertPGNPosition(xChar: Char?, yChar: Char?): Position {
+        var x: Int = (xChar?.code ?: 'a'.code) - 'a'.code
+        var y: Int = (yChar?.digitToInt() ?: '1'.digitToInt()) - 1
 
         if(initialPlayer == Player.Bottom) y = 7 - y
         else x = 7 - x
@@ -47,21 +46,21 @@ class PuzzleInfoParser(val dailyGame: PuzzleInfo) {
 
     private fun parseNewPosition(pgnMove: String): Position {
         var pgnLen: Int = pgnMove.length
-        if (pgnMove[pgnLen - 1] == '+') pgnLen = pgnLen - 1
-        if (pgnMove[pgnLen - 1] in "BNQR" && pgnMove[pgnLen - 2] == '=') pgnLen = pgnLen - 2
+        if (pgnMove[pgnLen - 1] == '+') pgnLen -= 1
+        if (pgnMove[pgnLen - 1] in "BNQR" && pgnMove[pgnLen - 2] == '=') pgnLen -= 2
 
         return convertPGNPosition(pgnMove[pgnLen - 2], pgnMove[pgnLen - 1])
     }
 
     private fun parseCurrPosition(pgnMove: String, piece: Piece): Boolean {
         var pgnLen: Int = pgnMove.length
-        if (pgnMove[pgnLen - 1] == '+') pgnLen = pgnLen - 1
-        if (pgnMove[pgnLen - 1] in "BNQR" && pgnMove[pgnLen - 2] == '=') pgnLen = pgnLen - 2
+        if (pgnMove[pgnLen - 1] == '+') pgnLen -= 1
+        if (pgnMove[pgnLen - 1] in "BNQR" && pgnMove[pgnLen - 2] == '=') pgnLen -= 2
 
         if (pgnLen <= 3) return true
 
-        if (pgnMove[pgnLen - 3] == 'x') pgnLen = pgnLen - 3
-        else pgnLen = pgnLen - 2
+        if (pgnMove[pgnLen - 3] == 'x') pgnLen -= 3
+        else pgnLen -= 2
 
         if (pgnMove[pgnLen - 1].code >= 'A'.code && pgnMove[pgnLen - 1].code <= 'Z'.code) return true
 
@@ -89,7 +88,7 @@ class PuzzleInfoParser(val dailyGame: PuzzleInfo) {
     }
 
     private fun verifyPromote(pgnMove: String): Any? {
-        var pgnLen: Int = pgnMove.length
+        val pgnLen: Int = pgnMove.length
         if (pgnMove[pgnLen - 1] !in "BNQR" || pgnMove[pgnLen - 2] != '=') return null
 
         if (pgnMove[pgnLen - 1] == 'B') return Bishop::class
@@ -101,20 +100,20 @@ class PuzzleInfoParser(val dailyGame: PuzzleInfo) {
     }
 
     private fun parsePGN(pgnMove: String, chess: Chess) {
-        var newPosition: Position
+        val newPosition: Position
 
         if (pgnMove[0] in "KO") {
             val piece = chess.playersKing[chess.currentPlayer]!!
 
             if (piece.getPossibleMoves(chess).size > 0) {
-                if (pgnMove[0] == 'K')
-                    newPosition = parseNewPosition(pgnMove)
+                newPosition = if (pgnMove[0] == 'K')
+                    parseNewPosition(pgnMove)
                 else {
                     if( (initialPlayer == Player.Bottom && pgnMove.length > 3) ||
                         (initialPlayer == Player.Top && pgnMove.length <= 3))
-                            newPosition = Position(piece.position.x - 2, piece.position.y)
+                        Position(piece.position.x - 2, piece.position.y)
                     else
-                            newPosition = Position(piece.position.x + 2, piece.position.y)
+                        Position(piece.position.x + 2, piece.position.y)
                 }
 
                 if (piece.getPossibleMoves(chess).contains(newPosition))

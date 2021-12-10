@@ -2,13 +2,8 @@ package pt.isel.pdm.chess4android.views
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Color.RED
 import android.graphics.Paint
-import android.graphics.drawable.VectorDrawable
-import android.view.MotionEvent
 import android.view.View
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import pt.isel.pdm.chess4android.R

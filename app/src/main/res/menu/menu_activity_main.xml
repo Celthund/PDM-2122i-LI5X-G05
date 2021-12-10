@@ -13,4 +13,9 @@
         android:id="@+id/menuAbout"
         android:title="@string/about_menu"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/history"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="@string/puzzle_menu"
+        app:showAsAction="ifRoom" />
 </menu>
