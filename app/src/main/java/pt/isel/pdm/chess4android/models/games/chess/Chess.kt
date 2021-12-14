@@ -78,6 +78,15 @@ open class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
         return null
     }
 
+    private fun checkEnPassant(lastOpponentMove: Movement?, currentMove: Movement): Boolean {
+        return lastOpponentMove != null
+                && lastOpponentMove.pieceAtOrigin is Pawn
+                && abs(lastOpponentMove.origin.y - lastOpponentMove.destination.y) == 2
+                && currentMove.destination.x == lastOpponentMove.destination.x
+                && (lastOpponentMove.destination.x == currentMove.origin.x + 1
+                || lastOpponentMove.destination.x == currentMove.origin.x - 1)
+    }
+
     override fun movePieceAtPosition(oldPosition: Position, newPosition: Position): Boolean {
         val lastOpponentMove: Movement? = if (moveHistory.isNotEmpty()) moveHistory.last() else null
         val res = super.movePieceAtPosition(oldPosition, newPosition)
@@ -88,14 +97,10 @@ open class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
             when (piece) {
                 // En passant
                 is Pawn -> {
-                    if (lastOpponentMove != null && lastOpponentMove.pieceAtOrigin is Pawn) {
-                        // Check if there was a 2 move with the pawn
-                        if (abs(lastOpponentMove.origin.y - lastOpponentMove.destination.y) == 2
-                            && currentMove.origin.y == lastOpponentMove.destination.y) {
-                            val pawn: Piece = lastOpponentMove.pieceAtOrigin
-                            playersPieces[pawn.player]?.remove(pawn)
-                            board[pawn.position.x][pawn.position.y] = null
-                        }
+                    if (checkEnPassant(lastOpponentMove, currentMove)) {
+                        val pawn: Piece = lastOpponentMove?.pieceAtOrigin!!
+                        playersPieces[pawn.player]?.remove(pawn)
+                        board[pawn.position.x][pawn.position.y] = null
                     }
                 }
                 // Castling
@@ -172,7 +177,7 @@ open class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
                 piece = board[i][j]
                 str += "|"
 
-                player = when(piece?.player) {
+                player = when (piece?.player) {
                     Player.Top -> "(T)"
                     Player.Bottom -> "(B)"
                     else -> ""
