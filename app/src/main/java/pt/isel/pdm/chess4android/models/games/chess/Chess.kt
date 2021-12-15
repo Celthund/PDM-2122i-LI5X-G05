@@ -78,11 +78,11 @@ open class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
         return null
     }
 
-    private fun checkEnPassant(lastOpponentMove: Movement?, currentMove: Movement): Boolean {
-        return lastOpponentMove != null
-                && lastOpponentMove.pieceAtOrigin is Pawn
+    private fun checkEnPassant(lastOpponentMove: Movement, currentMove: Movement): Boolean {
+        return lastOpponentMove.pieceAtOrigin is Pawn
                 && abs(lastOpponentMove.origin.y - lastOpponentMove.destination.y) == 2
                 && currentMove.destination.x == lastOpponentMove.destination.x
+                && currentMove.origin.y == lastOpponentMove.destination.y
                 && (lastOpponentMove.destination.x == currentMove.origin.x + 1
                 || lastOpponentMove.destination.x == currentMove.origin.x - 1)
     }
@@ -97,7 +97,7 @@ open class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
             when (piece) {
                 // En passant
                 is Pawn -> {
-                    if (checkEnPassant(lastOpponentMove, currentMove)) {
+                    if (lastOpponentMove?.let { checkEnPassant(it, currentMove) } == true) {
                         val pawn: Piece = lastOpponentMove?.pieceAtOrigin!!
                         playersPieces[pawn.player]?.remove(pawn)
                         board[pawn.position.x][pawn.position.y] = null
