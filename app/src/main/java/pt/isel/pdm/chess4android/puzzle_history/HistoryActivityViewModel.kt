@@ -23,7 +23,7 @@ class HistoryActivityViewModel(application: Application) : AndroidViewModel(appl
         callbackAfterAsync(
             asyncAction = {
                 puzzleDao.getAllPuzzles().map {
-                    PuzzleInfo(it.puzzleInfo.game, it.puzzleInfo.puzzle, it.timestamp)
+                    it.puzzleInfo
                 }
             },
             callback = { result ->
