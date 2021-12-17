@@ -32,7 +32,7 @@ interface HistoryPuzzleDao {
     fun getPuzzle(puzzleId: String): List<PuzzleEntity>
 }
 
-@Database(entities = [PuzzleEntity::class], version = 1)
+@Database(entities = [PuzzleEntity::class], version = 1, exportSchema = false)
 @TypeConverters(DBConverter::class)
 abstract class HistoryDataBase : RoomDatabase() {
     abstract fun getHistoryPuzzleDao(): HistoryPuzzleDao
