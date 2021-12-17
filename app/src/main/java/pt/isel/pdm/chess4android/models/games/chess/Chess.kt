@@ -98,7 +98,7 @@ open class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
                 // En passant
                 is Pawn -> {
                     if (lastOpponentMove?.let { checkEnPassant(it, currentMove) } == true) {
-                        val pawn: Piece = lastOpponentMove?.pieceAtOrigin!!
+                        val pawn: Piece = lastOpponentMove.pieceAtOrigin!!
                         playersPieces[pawn.player]?.remove(pawn)
                         board[pawn.position.x][pawn.position.y] = null
                     }
