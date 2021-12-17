@@ -1,15 +1,34 @@
 package pt.isel.pdm.chess4android.models
 
+import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
+import kotlinx.parcelize.TypeParceler
 import retrofit2.Call
 import retrofit2.http.GET
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.util.*
 
 const val URL = "https://lichess.org/api/"
 
+object DateClassParceler : Parceler<Date> {
+    override fun create(parcel: Parcel) = Date(parcel.readLong())
+
+    override fun Date.write(parcel: Parcel, flags: Int) {
+        parcel.writeLong(time)
+    }
+}
+
 @Parcelize
-data class PuzzleInfo(val game: @RawValue DailyGame, val puzzle: @RawValue DailyPuzzle) : Parcelable
+@TypeParceler<Date, DateClassParceler>()
+data class PuzzleInfo(
+    val game: @RawValue DailyGame,
+    val puzzle: @RawValue DailyPuzzle,
+    val timestamp: Date = Date.from(Instant.now().truncatedTo(ChronoUnit.DAYS))
+) : Parcelable
 
 @Parcelize
 data class DailyGame(

@@ -1,14 +1,20 @@
 package pt.isel.pdm.chess4android.puzzle_history
 import androidx.room.*
 import pt.isel.pdm.chess4android.models.PuzzleInfo
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.util.*
 
 
 @Entity(tableName = "history_puzzle")
 data class PuzzleEntity(
     @PrimaryKey val puzzleId: String,
     val gameId: String,
-    val puzzleInfo: PuzzleInfo
-)
+    val puzzleInfo: PuzzleInfo,
+) {
+    fun isTodayQuote(): Boolean =
+        puzzleInfo.timestamp.toInstant().compareTo(Instant.now().truncatedTo(ChronoUnit.DAYS)) == 0
+}
 
 @Dao
 interface HistoryPuzzleDao {

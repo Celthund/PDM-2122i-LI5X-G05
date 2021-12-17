@@ -9,17 +9,20 @@ import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.models.DailyGame
 import pt.isel.pdm.chess4android.models.DailyPuzzle
 import pt.isel.pdm.chess4android.models.PuzzleInfo
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HistoryItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val puzzleId: TextView = itemView.findViewById(R.id.puzzleId)
-    private val gameId: TextView = itemView.findViewById(R.id.gameId)
+    private val puzzleDate: TextView = itemView.findViewById(R.id.puzzleDate)
     private lateinit var game: DailyGame
     private lateinit var puzzle: DailyPuzzle
 
     fun bindTo(chessPuzzle: PuzzleInfo, onItemClick: () -> Unit) {
         puzzleId.text = chessPuzzle.puzzle.id
-        gameId.text = chessPuzzle.game.id
+        puzzleDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            .format(chessPuzzle.timestamp)
         game = chessPuzzle.game
         puzzle = chessPuzzle.puzzle
 
@@ -30,10 +33,12 @@ class HistoryItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
 }
 
-class HistoryAdapter(private val dataSource: List<PuzzleInfo>, private val onItemClick: (PuzzleInfo) -> Unit) : RecyclerView.Adapter<HistoryItemViewHolder>() {
+class HistoryAdapter(private val dataSource: List<PuzzleInfo>, private val onItemClick: (PuzzleInfo) -> Unit)
+    : RecyclerView.Adapter<HistoryItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryItemViewHolder {
-        return HistoryItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_history_puzzle_view, parent, false))
+        return HistoryItemViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_history_puzzle_view, parent, false))
     }
 
     override fun onBindViewHolder(holder: HistoryItemViewHolder, position: Int) {
