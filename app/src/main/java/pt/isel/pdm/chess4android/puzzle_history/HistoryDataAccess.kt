@@ -3,13 +3,11 @@ import androidx.room.*
 import pt.isel.pdm.chess4android.models.PuzzleInfo
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.*
 
 
 @Entity(tableName = "history_puzzle")
 data class PuzzleEntity(
     @PrimaryKey val puzzleId: String,
-    val gameId: String,
     val puzzleInfo: PuzzleInfo,
 ) {
     fun isTodayQuote(): Boolean =
@@ -30,8 +28,8 @@ interface HistoryPuzzleDao {
     @Query("SELECT * FROM history_puzzle ORDER BY puzzleId DESC LIMIT :count")
     fun getLastPuzzles(count: Int): List<PuzzleEntity>
 
-    @Query("SELECT * FROM history_puzzle WHERE puzzleId = :puzzleId AND gameId = :gameId")
-    fun getPuzzle(puzzleId: String, gameId: String): List<PuzzleEntity>
+    @Query("SELECT * FROM history_puzzle WHERE puzzleId = :puzzleId")
+    fun getPuzzle(puzzleId: String): List<PuzzleEntity>
 }
 
 @Database(entities = [PuzzleEntity::class], version = 1)
