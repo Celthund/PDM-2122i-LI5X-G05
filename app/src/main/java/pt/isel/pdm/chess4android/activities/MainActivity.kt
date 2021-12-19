@@ -3,16 +3,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.common.ChessController
 import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
-import pt.isel.pdm.chess4android.models.games.Position
-import pt.isel.pdm.chess4android.models.games.PromoteCandidate
 import pt.isel.pdm.chess4android.models.games.chess.Chess
-import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 import pt.isel.pdm.chess4android.puzzle_history.HistoryActivity
 import pt.isel.pdm.chess4android.puzzle_history.PuzzleActivity
 
