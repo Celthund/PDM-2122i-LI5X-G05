@@ -6,10 +6,6 @@
         android:title="@string/get_menu"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/menuSolvePuzzle"
-        android:title="@string/solve_menu"
-        app:showAsAction="never"/>
-    <item
         android:id="@+id/menuAbout"
         android:title="@string/about_menu"
         app:showAsAction="never"/>

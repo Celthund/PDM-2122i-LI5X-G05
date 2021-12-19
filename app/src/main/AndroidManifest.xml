@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chess4Android">
         <activity
-            android:name="pt.isel.pdm.chess4android.controllers.chess_activity.PuzzleActivity"
+            android:name="pt.isel.pdm.chess4android.controllers.puzzle_activity.PuzzleActivity"
             android:exported="false" />
         <activity
             android:name="pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryActivity"

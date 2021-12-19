@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import pt.isel.pdm.chess4android.controllers.chess_activity.PuzzleActivity
+import pt.isel.pdm.chess4android.controllers.puzzle_activity.PuzzleActivity
 import pt.isel.pdm.chess4android.databinding.ActivityHistoryBinding
 
 class HistoryActivity : AppCompatActivity() {

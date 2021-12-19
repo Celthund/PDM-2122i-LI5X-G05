@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android.controllers.chess_activity
+package pt.isel.pdm.chess4android.controllers.puzzle_activity
 
 import android.app.Activity
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import pt.isel.pdm.chess4android.controllers.main_activity.MAIN_ACTIVITY_VIEW_STATE
 import pt.isel.pdm.chess4android.controllers.main_activity.MainActivityViewModel
+import pt.isel.pdm.chess4android.controllers.utils.ChessViewModel
 import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
 import pt.isel.pdm.chess4android.models.PuzzleInfo
 

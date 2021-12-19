@@ -7,8 +7,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.controllers.about_activity.AboutActivity
-import pt.isel.pdm.chess4android.controllers.chess_activity.ChessViewModel
-import pt.isel.pdm.chess4android.controllers.chess_activity.PuzzleActivity
+import pt.isel.pdm.chess4android.controllers.utils.ChessViewModel
+import pt.isel.pdm.chess4android.controllers.puzzle_activity.PuzzleActivity
 import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
 import pt.isel.pdm.chess4android.models.games.chess.Chess
 import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryActivity
@@ -56,10 +56,6 @@ class MainActivity : AppCompatActivity() {
         return when(item.itemId) {
             R.id.menuGetPuzzle -> {
                 startActivity(Intent(this, PuzzleActivity::class.java))
-                true
-            }
-            R.id.menuSolvePuzzle -> {
-                startActivity(Intent(this, SolveActivity::class.java))
                 true
             }
             R.id.menuAbout -> {

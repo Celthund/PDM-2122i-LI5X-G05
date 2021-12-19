@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android.controllers.chess_activity
+package pt.isel.pdm.chess4android.controllers.utils
 
 import android.view.View
 import pt.isel.pdm.chess4android.R
