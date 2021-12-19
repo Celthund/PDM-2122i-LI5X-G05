@@ -3,6 +3,7 @@ package pt.isel.pdm.chess4android.controllers.main_activity
 import android.app.Application
 import androidx.lifecycle.*
 import pt.isel.pdm.chess4android.controllers.application.PuzzleApplication
+import pt.isel.pdm.chess4android.controllers.utils.PuzzleRepository
 import pt.isel.pdm.chess4android.models.PuzzleInfoParser
 import pt.isel.pdm.chess4android.models.PuzzleInfo
 import pt.isel.pdm.chess4android.models.games.Player
@@ -25,6 +26,13 @@ class MainActivityViewModel(
     private val _isInPromote: MutableLiveData<PromoteCandidate> = MutableLiveData()
     val isInPromote: LiveData<PromoteCandidate> get() = _isInPromote
 
+    private val puzzleRepository by lazy {
+        PuzzleRepository(
+            PuzzleApplication.dailyPuzzleService,
+            getApplication<PuzzleApplication>().historyDB.getHistoryPuzzleDao()
+        )
+    }
+
     fun setBoardModel(boardModel: Chess) {
         this._boardModel.value = boardModel
     }
@@ -33,27 +41,21 @@ class MainActivityViewModel(
         this._isInPromote.value = isInPromote
     }
 
-
     private var _whitePlayer = Player.Bottom
     val whitePlayer get() = _whitePlayer
 
     val lichessPuzzle: LiveData<PuzzleInfo> = state.getLiveData(MAIN_ACTIVITY_VIEW_STATE)
 
     fun getLichessPuzzle() {
-        val call = PuzzleApplication.dailyPuzzleService.getPuzzle()
-        call.enqueue(object : Callback<PuzzleInfo> {
-            override fun onResponse(call: Call<PuzzleInfo>, response: Response<PuzzleInfo>) {
-                val resp = response.body()
-                if (resp != null && response.isSuccessful)
-                    state.set(MAIN_ACTIVITY_VIEW_STATE, resp)
-                state.remove<PuzzleInfo>(MAIN_ACTIVITY_VIEW_STATE)
-            }
-
-            override fun onFailure(call: Call<PuzzleInfo>, t: Throwable) {
-                state.set(MAIN_ACTIVITY_VIEW_STATE, null)
-                state.remove<PuzzleInfo>(MAIN_ACTIVITY_VIEW_STATE)
-            }
-        })
+        puzzleRepository.fetchPuzzleOfDay(true) { result ->
+            result
+                .onSuccess { puzzleInfo ->
+                    state.set(MAIN_ACTIVITY_VIEW_STATE, puzzleInfo)
+                }
+                .onFailure {
+                    state.set(MAIN_ACTIVITY_VIEW_STATE, null)
+                }
+        }
     }
 
     fun playLichessPuzzle(dailyGame: PuzzleInfo) {

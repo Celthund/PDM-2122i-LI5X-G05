@@ -2,24 +2,18 @@ package pt.isel.pdm.chess4android.controllers.application
 
 import android.app.Application
 import androidx.room.Room
-import com.google.gson.Gson
 import pt.isel.pdm.chess4android.models.DailyPuzzleService
-import pt.isel.pdm.chess4android.models.PuzzleInfo
 import pt.isel.pdm.chess4android.models.URL
 import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryDataBase
 import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.PuzzleEntity
+import pt.isel.pdm.chess4android.controllers.utils.Common
 import pt.isel.pdm.chess4android.controllers.utils.callbackAfterAsync
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import pt.isel.pdm.chess4android.models.PuzzleInfo
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
-private fun createPuzzleFromJSON(json: String) : PuzzleInfo {
-    // GSON doesn't fill timestamp with default value.
-    val puzzleInfo = Gson().fromJson(json, PuzzleInfo::class.java)
-    return PuzzleInfo(puzzleInfo.game, puzzleInfo.puzzle)
-}
+const val APP_TAG = "ChessRoyale"
 
 class PuzzleApplication : Application() {
     companion object {
@@ -47,36 +41,19 @@ class PuzzleApplication : Application() {
             "{\"game\":{\"id\":\"0AzN6JCP\",\"perf\":{\"icon\":\"\",\"name\":\"Rapid\"},\"rated\":true,\"players\":[{\"userId\":\"mferrer\",\"name\":\"mferrer (1867)\",\"color\":\"white\"},{\"userId\":\"theitch\",\"name\":\"TheItch (1909)\",\"color\":\"black\"}],\"pgn\":\"d4 Nf6 e3 g6 f4 Bg7 Bd3 O-O f5 d5 fxg6 fxg6 Nf3 Ne4 Nbd2 Bf5 O-O c5 c3 Nd7 Bxe4 dxe4 Nh4 cxd4 Nxf5 gxf5 exd4 Nb6 Qh5 Qd5 Nb3 Rf7 Bh6 Raf8 Rf4 e5 dxe5 Qxe5 Nd4 Bxh6 Qxh6 Rf6 Qh4 e3 Re1 Nd5 Rf3 f4 Rh3 h6 Nf3 Qe4 Qg4+ Rg6 Qh5 Qc2 Qxd5+ Rf7 Ne5\",\"clock\":\"20+4\"},\"puzzle\":{\"id\":\"mFVkT\",\"rating\":1686,\"plays\":10973,\"initialPly\":58,\"solution\":[\"c2f2\",\"g1h1\",\"f2e1\"],\"themes\":[\"mateIn2\",\"middlegame\",\"short\",\"fork\"]}} "
         )
 
-        array.forEach { json ->
-            val puzzle = createPuzzleFromJSON(json)
+        array.forEachIndexed { index, json ->
+            val p = Common.createPuzzleFromJSON(json)
+            val puzzle = PuzzleInfo(
+                p.game,
+                p.puzzle,
+                Date(p.timestamp.time - (index + 1) * (24 * 60 * 60 * 1000))
+            )
             callbackAfterAsync({}) {
                 historyDB.getHistoryPuzzleDao()
-                    .insert(PuzzleEntity(puzzle.game.id, puzzle)
+                    .insert(PuzzleEntity(puzzle.game.id, puzzle, puzzle.timestamp)
                 )
             }
         }
-
-        val call = dailyPuzzleService.getPuzzle()
-        call.enqueue(object : Callback<PuzzleInfo> {
-            override fun onResponse(call: Call<PuzzleInfo>, response: Response<PuzzleInfo>) {
-                val resp = response.body()
-                if (resp != null && response.isSuccessful) {
-                    callbackAfterAsync({}) {
-                        val puzzleInfo = PuzzleInfo(resp.game, resp.puzzle)
-                        historyDB.getHistoryPuzzleDao().insert(
-                            PuzzleEntity(
-                                puzzleInfo.game.id,
-                                puzzleInfo
-                            )
-                        )
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<PuzzleInfo>, t: Throwable) {
-                // TODO
-            }
-        })
 
     }
 }

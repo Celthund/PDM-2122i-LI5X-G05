@@ -119,3 +119,5 @@ interface DailyPuzzleService {
     @GET("puzzle/daily")
     fun getPuzzle(): Call<PuzzleInfo>
 }
+
+class ServiceUnavailable(message: String = "", cause: Throwable? = null) : Exception(message, cause)
