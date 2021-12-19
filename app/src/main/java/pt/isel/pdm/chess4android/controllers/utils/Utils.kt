@@ -3,7 +3,7 @@ package pt.isel.pdm.chess4android.controllers.utils
 import com.google.gson.Gson
 import pt.isel.pdm.chess4android.models.PuzzleInfo
 
-class Common {
+class Utils {
     companion object {
         fun createPuzzleFromJSON(json: String) : PuzzleInfo {
             // GSON doesn't fill timestamp with default value.

@@ -121,7 +121,7 @@ open class Chess(firstPlayer: Player, MAX_HEIGHT: Int, MAX_WIDTH: Int) :
                 }
             }
         }
-        Log.d("this is my deep array", "board: \n" + toString())
+        //Log.d("this is my deep array", "board: \n" + toString())
         return res
     }
 

@@ -27,6 +27,7 @@ object DateClassParceler : Parceler<Date> {
 data class PuzzleInfo(
     val game: @RawValue DailyGame,
     val puzzle: @RawValue DailyPuzzle,
+    var solved: Boolean = false,
     val timestamp: Date = Date.from(Instant.now().truncatedTo(ChronoUnit.DAYS))
 ) : Parcelable
 

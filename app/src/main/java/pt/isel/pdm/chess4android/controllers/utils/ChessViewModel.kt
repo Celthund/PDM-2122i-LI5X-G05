@@ -94,6 +94,13 @@ class ChessViewModel(private val binding: ActivityMainBinding, private val viewM
         }
 
         viewModel.setBoardModel(boardModel)
+        if (boardModel.isGameOver()) {
+            viewModel.endGame()
+        }
+    }
+
+    fun getPossibleMoves(pos: Position, boardModel: Chess): HashSet<Position> {
+        return boardModel.getPossibleMoves(pos)
     }
 
     fun getPieceDrawableId(position: Position, boardModel: Chess): Int? {

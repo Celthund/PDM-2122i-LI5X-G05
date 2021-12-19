@@ -24,6 +24,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     private lateinit var makeMove : (currPos: Position, newPosition: Position, boardModel: Chess) -> Unit
+    private lateinit var getPossibleMoves: (pos: Position, boardModel: Chess) -> HashSet<Position>
     private lateinit var boardModel: Chess
     private lateinit var boardTile: Array<Array<Tile>>
 
@@ -40,8 +41,12 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     // It will draw the board and put all thee beginning valid movement of each piece
-    fun initBoard(columnCount: Int, rowCount: Int, makeMoveFunction: (currPos: Position, newPosition: Position, boardModel: Chess) -> Unit) {
-        makeMove = makeMoveFunction
+    fun initBoard(columnCount: Int, rowCount: Int,
+                  makeMove: (currPos: Position, newPosition: Position, boardModel: Chess) -> Unit,
+                  getPossibleMoves: (pos: Position, boardModel: Chess) -> HashSet<Position>,
+    ) {
+        this.makeMove = makeMove
+        this.getPossibleMoves = getPossibleMoves
 
         var tileArray = arrayOf<Array<Tile>>()
 
@@ -142,7 +147,7 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
 
     private fun setTileClickListener(isInPromote: Boolean, tile: Tile, position: Position) {
         tile.setOnClickListener {
-            showValidMoves(isInPromote, position, boardModel.getPossibleMoves(position))
+            showValidMoves(isInPromote, position, getPossibleMoves(position, boardModel))
         }
     }
 

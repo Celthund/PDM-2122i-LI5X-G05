@@ -30,7 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.boardView.initBoard(8,8, chessController::makeMove)
+        binding.boardView.initBoard(8,8,
+            chessController::makeMove, chessController::getPossibleMoves)
 
         if(viewModel.boardModel.value == null) {
             viewModel.setBoardModel(Chess(viewModel.whitePlayer,8,8 ))

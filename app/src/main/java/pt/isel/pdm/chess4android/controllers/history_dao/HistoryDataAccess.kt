@@ -22,6 +22,9 @@ interface HistoryPuzzleDao {
     @Insert
     fun insert(puzzle: PuzzleEntity)
 
+    @Update
+    fun update(puzzle: PuzzleEntity)
+
     @Delete
     fun delete(puzzle: PuzzleEntity)
 

@@ -9,4 +9,6 @@
     <string name="Credits">Lichess.org for providing daily puzzles</string>
     <string name="GetPuzzleErr">Puzzle Recover Error</string>
     <string name="puzzle_menu">Puzzle History</string>
+    <string name="solved_puzzle_message">Puzzle solved</string>
+    <string name="unsolved_puzzle_message">Puzzle unsolved</string>
 </resources>
