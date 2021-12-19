@@ -335,9 +335,7 @@ abstract class ChessPiece(player: Player, position: Position) : Piece(player, po
                 if (piece != null) {
                     if (piece.player == player) {
                         return false
-                    } else if (piece is Bishop || piece is Queen) {
-                        return true
-                    }
+                    } else return piece is Bishop || piece is Queen
                 }
                 pos.x += xIncrement
                 pos.y += yIncrement
@@ -379,9 +377,7 @@ abstract class ChessPiece(player: Player, position: Position) : Piece(player, po
                 if (piece != null) {
                     if (piece.player == player) {
                         return false
-                    } else if (piece is Rook || piece is Queen) {
-                        return true
-                    }
+                    } else return piece is Rook || piece is Queen
                 }
                 pos.x += xIncrement
                 pos.y += yIncrement
