@@ -6,4 +6,4 @@ data class Movement(
     val destination: Position,
     val pieceAtOrigin: Piece?,
     val pieceAtDestination: Piece?
-    )
+)

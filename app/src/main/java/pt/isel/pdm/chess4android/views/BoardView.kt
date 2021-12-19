@@ -68,7 +68,9 @@ class BoardView(private val ctx: Context, attrs: AttributeSet?) : GridLayout(ctx
     }
 
     private fun invalidateBoard(isInPromote: Boolean, getPieceDrawableId: (position: Position, boardModel: Chess) -> Int?) {
-
+        if (lastSelectedTile != null) {
+            resetPossiblePositions(isInPromote, lastClickedPosition)
+        }
         for (row in boardTile.indices) {
             for (column in boardTile[row].indices) {
                 val position = Position(column, row)

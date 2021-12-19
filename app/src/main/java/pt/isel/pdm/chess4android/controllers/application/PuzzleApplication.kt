@@ -7,13 +7,8 @@ import pt.isel.pdm.chess4android.controllers.main_activity.DownloadDailyPuzzleWo
 import pt.isel.pdm.chess4android.models.DailyPuzzleService
 import pt.isel.pdm.chess4android.models.URL
 import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryDataBase
-import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.PuzzleEntity
-import pt.isel.pdm.chess4android.controllers.utils.Common
-import pt.isel.pdm.chess4android.controllers.utils.callbackAfterAsync
-import pt.isel.pdm.chess4android.models.PuzzleInfo
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 const val APP_TAG = "Chess4Android"
@@ -33,6 +28,7 @@ class PuzzleApplication : Application() {
     val historyDB: HistoryDataBase by lazy {
         Room
             .databaseBuilder(this, HistoryDataBase::class.java, "puzzle_db")
+//            .inMemoryDatabaseBuilder(this, HistoryDataBase::class.java)
             .build()
     }
 

@@ -18,7 +18,7 @@ class ChessViewModel(private val binding: ActivityMainBinding, private val viewM
         mapViewToPiece()
     }
 
-    private fun showPromoteOptions(boardModel: Chess, position: Position) {
+    fun showPromoteOptions(boardModel: Chess, position: Position) {
         binding.bishopBtn.visibility = View.VISIBLE
         binding.bishopBtn.setOnClickListener {
             promotePiece(Bishop::class, boardModel, position)
@@ -46,7 +46,7 @@ class ChessViewModel(private val binding: ActivityMainBinding, private val viewM
         binding.rookBtn.invalidate()
     }
 
-    private fun hidePromoteOptions() {
+    fun hidePromoteOptions() {
         binding.bishopBtn.visibility = View.INVISIBLE
         binding.bishopBtn.setOnClickListener {}
         binding.bishopBtn.invalidate()
@@ -65,13 +65,13 @@ class ChessViewModel(private val binding: ActivityMainBinding, private val viewM
         viewModel.savePromoteStatus(PromoteCandidate(isInPromote = false))
     }
 
-    private fun promotePiece(piece: Any, boardModel: Chess, position: Position){
+    fun promotePiece(piece: Any, boardModel: Chess, position: Position){
         boardModel.promotePawn(position, piece)
         hidePromoteOptions()
         binding.boardView.setBoard(boardModel, isInPromote, this::getPieceDrawableId)
     }
 
-    private fun mapViewToPiece() {
+    fun mapViewToPiece() {
         pieceViewMapper = HashMap()
         pieceViewMapper[Rook::class] = arrayOf(R.drawable.ic_white_rook, R.drawable.ic_black_rook)
         pieceViewMapper[Knight::class] =

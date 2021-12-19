@@ -9,28 +9,27 @@ import pt.isel.pdm.chess4android.models.games.chess.Puzzle
 import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 
 class PuzzleInfoParser(private val dailyGame: PuzzleInfo) {
-    private var initialPlayer: Player = if (dailyGame.puzzle.initialPly % 2 == 0) Player.Top else Player.Bottom
+    private var initialPlayer: Player =
+        if (dailyGame.puzzle.initialPly % 2 == 0) Player.Top else Player.Bottom
 
-    fun parsePuzzlePNG() : Chess {
-        val chess = Puzzle(initialPlayer, 8, 8)
+    fun parsePuzzlePNG(): Chess {
+        val solution: Array<Movement> = dailyGame.puzzle.solution.map {
+            Movement(
+                convertPGNPosition(it[0], it[1]),
+                convertPGNPosition(it[2], it[3]),
+                null,
+                null
+            )
+        }.toTypedArray()
+
+        val chess = Puzzle(solution, initialPlayer, 8, 8)
         val moves = dailyGame.game.pgn.split(" ").toTypedArray()
 
         moves.forEach { pgnMove ->
             parsePGN(pgnMove, chess)
         }
+        chess.endSetup()
 
-        val solution: ArrayList<Movement> = arrayListOf()
-        dailyGame.puzzle.solution.forEach {
-            solution.add(
-                Movement(
-                    convertPGNPosition(it[0], it[1]),
-                    convertPGNPosition(it[2], it[3]),
-                    null,
-                    null
-                )
-            )
-        }
-        chess.solutionMoves = solution
         return chess
     }
 
@@ -38,7 +37,7 @@ class PuzzleInfoParser(private val dailyGame: PuzzleInfo) {
         var x: Int = (xChar?.code ?: 'a'.code) - 'a'.code
         var y: Int = (yChar?.digitToInt() ?: '1'.digitToInt()) - 1
 
-        if(initialPlayer == Player.Bottom) y = 7 - y
+        if (initialPlayer == Player.Bottom) y = 7 - y
         else x = 7 - x
 
         return Position(x, y)
@@ -109,8 +108,9 @@ class PuzzleInfoParser(private val dailyGame: PuzzleInfo) {
                 newPosition = if (pgnMove[0] == 'K')
                     parseNewPosition(pgnMove)
                 else {
-                    if( (initialPlayer == Player.Bottom && pgnMove.length > 3) ||
-                        (initialPlayer == Player.Top && pgnMove.length <= 3))
+                    if ((initialPlayer == Player.Bottom && pgnMove.length > 3) ||
+                        (initialPlayer == Player.Top && pgnMove.length <= 3)
+                    )
                         Position(piece.position.x - 2, piece.position.y)
                     else
                         Position(piece.position.x + 2, piece.position.y)

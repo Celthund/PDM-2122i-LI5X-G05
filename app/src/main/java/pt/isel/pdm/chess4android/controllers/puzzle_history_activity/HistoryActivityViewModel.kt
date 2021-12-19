@@ -4,9 +4,12 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import pt.isel.pdm.chess4android.controllers.application.PuzzleApplication
 import pt.isel.pdm.chess4android.models.PuzzleInfo
-import pt.isel.pdm.chess4android.controllers.utils.callbackAfterAsync
 
 class HistoryActivityViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -17,21 +20,22 @@ class HistoryActivityViewModel(application: Application) : AndroidViewModel(appl
         getApplication<PuzzleApplication>().historyDB.getHistoryPuzzleDao()
     }
 
+    suspend fun loadPuzzleHistoryAsync(): List<PuzzleInfo> = withContext(Dispatchers.IO) {
+        try {
+            puzzleDao.getAllPuzzles().map {
+                it.puzzleInfo
+            }
+        } catch (err: Exception) {
+            emptyList()
+        }
+    }
+
     fun loadPuzzleHistory(): LiveData<List<PuzzleInfo>> {
         val publish = MutableLiveData<List<PuzzleInfo>>()
         history = publish
-        callbackAfterAsync(
-            asyncAction = {
-                puzzleDao.getAllPuzzles().map {
-                    it.puzzleInfo
-                }
-            },
-            callback = { result ->
-                result.onSuccess { publish.value = it }
-                result.onFailure { publish.value = emptyList() }
-            }
-        )
-
+        viewModelScope.launch(Dispatchers.Main) {
+            publish.value = loadPuzzleHistoryAsync()!!
+        }
         return publish
     }
 }

@@ -31,7 +31,8 @@
         android:visibility="invisible"
         app:icon="@drawable/ic_black_knight"
         tools:layout_editor_absoluteX="655dp"
-        tools:layout_editor_absoluteY="120dp" />
+        tools:layout_editor_absoluteY="120dp"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/queen_btn"
@@ -45,7 +46,8 @@
         android:visibility="invisible"
         app:icon="@drawable/ic_black_queen"
         app:layout_constraintTop_toBottomOf="@+id/bishop_btn"
-        tools:layout_editor_absoluteX="655dp" />
+        tools:layout_editor_absoluteX="655dp"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/bishop_btn"
@@ -59,7 +61,8 @@
         android:visibility="invisible"
         app:icon="@drawable/ic_black_bishop"
         app:layout_constraintTop_toBottomOf="@+id/knight_btn"
-        tools:layout_editor_absoluteX="655dp" />
+        tools:layout_editor_absoluteX="655dp"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/rook_btn"
@@ -73,6 +76,7 @@
         android:visibility="invisible"
         app:icon="@drawable/ic_black_rook"
         app:layout_constraintTop_toBottomOf="@+id/queen_btn"
-        tools:layout_editor_absoluteX="655dp" />
+        tools:layout_editor_absoluteX="655dp"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

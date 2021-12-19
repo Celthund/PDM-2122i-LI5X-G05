@@ -29,7 +29,7 @@ open class MainActivityViewModel(
     private val _isInPromote: MutableLiveData<PromoteCandidate> = MutableLiveData()
     val isInPromote: LiveData<PromoteCandidate> get() = _isInPromote
 
-    private val _isGameOver: MutableLiveData<Boolean> = MutableLiveData()
+    protected val _isGameOver: MutableLiveData<Boolean> = MutableLiveData(false)
     val isGameOver: LiveData<Boolean> get() = _isGameOver
 
     fun setBoardModel(boardModel: Chess) {
