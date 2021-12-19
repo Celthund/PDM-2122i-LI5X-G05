@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android.application
+package pt.isel.pdm.chess4android.controllers.application
 
 import android.app.Application
 import androidx.room.Room
@@ -6,16 +6,16 @@ import com.google.gson.Gson
 import pt.isel.pdm.chess4android.models.DailyPuzzleService
 import pt.isel.pdm.chess4android.models.PuzzleInfo
 import pt.isel.pdm.chess4android.models.URL
-import pt.isel.pdm.chess4android.puzzle_history.HistoryDataBase
-import pt.isel.pdm.chess4android.puzzle_history.PuzzleEntity
-import pt.isel.pdm.chess4android.utils.callbackAfterAsync
+import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryDataBase
+import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.PuzzleEntity
+import pt.isel.pdm.chess4android.controllers.utils.callbackAfterAsync
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-fun createPuzzleFromJSON(json: String) : PuzzleInfo {
+private fun createPuzzleFromJSON(json: String) : PuzzleInfo {
     // GSON doesn't fill timestamp with default value.
     val puzzleInfo = Gson().fromJson(json, PuzzleInfo::class.java)
     return PuzzleInfo(puzzleInfo.game, puzzleInfo.puzzle)

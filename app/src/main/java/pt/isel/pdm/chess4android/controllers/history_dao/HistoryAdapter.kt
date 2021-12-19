@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android.puzzle_history
+package pt.isel.pdm.chess4android.controllers.puzzle_history_activity
 
 import android.view.LayoutInflater
 import android.view.View

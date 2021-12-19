@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".application.PuzzleApplication"
+        android:name="pt.isel.pdm.chess4android.controllers.application.PuzzleApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,13 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chess4Android">
         <activity
-            android:name=".puzzle_history.PuzzleActivity"
+            android:name="pt.isel.pdm.chess4android.controllers.chess_activity.PuzzleActivity"
             android:exported="false" />
         <activity
-            android:name=".puzzle_history.HistoryActivity"
+            android:name="pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name="pt.isel.pdm.chess4android.controllers.main_activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,13 +29,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SolveActivity"
+            android:name="pt.isel.pdm.chess4android.controllers.solve_activity.SolveActivity"
             android:label="@string/solve_menu"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName="pt.isel.pdm.chess4android.controllers.main_activity.MainActivity" />
         <activity
-            android:name=".activities.AboutActivity"
+            android:name="pt.isel.pdm.chess4android.controllers.about_activity.AboutActivity"
             android:label="@string/about_menu"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName="pt.isel.pdm.chess4android.controllers.main_activity.MainActivity" />
     </application>
 
 </manifest>

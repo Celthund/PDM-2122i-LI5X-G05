@@ -1,12 +1,12 @@
-package pt.isel.pdm.chess4android.puzzle_history
+package pt.isel.pdm.chess4android.controllers.puzzle_history_activity
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import pt.isel.pdm.chess4android.application.PuzzleApplication
+import pt.isel.pdm.chess4android.controllers.application.PuzzleApplication
 import pt.isel.pdm.chess4android.models.PuzzleInfo
-import pt.isel.pdm.chess4android.utils.callbackAfterAsync
+import pt.isel.pdm.chess4android.controllers.utils.callbackAfterAsync
 
 class HistoryActivityViewModel(application: Application) : AndroidViewModel(application) {
 

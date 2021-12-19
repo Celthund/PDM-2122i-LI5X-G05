@@ -1,9 +1,7 @@
-package pt.isel.pdm.chess4android.utils
+package pt.isel.pdm.chess4android.controllers.utils
 
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import java.lang.Exception
 import java.util.concurrent.Executors
 

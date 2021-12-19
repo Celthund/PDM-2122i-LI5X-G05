@@ -1,5 +1,6 @@
-package pt.isel.pdm.chess4android.puzzle_history
+package pt.isel.pdm.chess4android.controllers.puzzle_history_activity
 import androidx.room.*
+import pt.isel.pdm.chess4android.controllers.history_dao.DBConverter
 import pt.isel.pdm.chess4android.models.PuzzleInfo
 import java.time.Instant
 import java.time.temporal.ChronoUnit

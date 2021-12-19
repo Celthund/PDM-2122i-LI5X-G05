@@ -1,15 +1,15 @@
-package pt.isel.pdm.chess4android.common
+package pt.isel.pdm.chess4android.controllers.chess_activity
 
 import android.view.View
 import pt.isel.pdm.chess4android.R
-import pt.isel.pdm.chess4android.activities.MainActivityViewModel
+import pt.isel.pdm.chess4android.controllers.main_activity.MainActivityViewModel
 import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
 import pt.isel.pdm.chess4android.models.games.Position
 import pt.isel.pdm.chess4android.models.games.PromoteCandidate
 import pt.isel.pdm.chess4android.models.games.chess.Chess
 import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 
-class ChessController(private val binding: ActivityMainBinding, private val viewModel: MainActivityViewModel) {
+class ChessViewModel(private val binding: ActivityMainBinding, private val viewModel: MainActivityViewModel) {
 
     private lateinit var pieceViewMapper: HashMap<Any, Array<Int>>
     var isInPromote: Boolean = false

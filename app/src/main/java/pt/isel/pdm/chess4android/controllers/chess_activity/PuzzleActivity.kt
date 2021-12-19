@@ -1,20 +1,14 @@
-package pt.isel.pdm.chess4android.puzzle_history
+package pt.isel.pdm.chess4android.controllers.chess_activity
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
-import pt.isel.pdm.chess4android.R
-import pt.isel.pdm.chess4android.activities.*
-import pt.isel.pdm.chess4android.common.ChessController
+import pt.isel.pdm.chess4android.controllers.main_activity.MAIN_ACTIVITY_VIEW_STATE
+import pt.isel.pdm.chess4android.controllers.main_activity.MainActivityViewModel
 import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
 import pt.isel.pdm.chess4android.models.PuzzleInfo
-import pt.isel.pdm.chess4android.models.games.Position
-import pt.isel.pdm.chess4android.models.games.PromoteCandidate
-import pt.isel.pdm.chess4android.models.games.chess.Chess
-import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 
 class PuzzleActivity : AppCompatActivity() {
     companion object {
@@ -33,7 +27,7 @@ class PuzzleActivity : AppCompatActivity() {
     private val viewModel : MainActivityViewModel by viewModels()
 
     private val chessController by lazy {
-        ChessController(binding, viewModel)
+        ChessViewModel(binding, viewModel)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android.puzzle_history
+package pt.isel.pdm.chess4android.controllers.history_dao
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

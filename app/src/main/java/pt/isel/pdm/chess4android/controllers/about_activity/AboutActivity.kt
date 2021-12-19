@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android.activities
+package pt.isel.pdm.chess4android.controllers.about_activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

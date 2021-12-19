@@ -1,4 +1,4 @@
-package pt.isel.pdm.chess4android.activities
+package pt.isel.pdm.chess4android.controllers.main_activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -6,11 +6,13 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.chess4android.R
-import pt.isel.pdm.chess4android.common.ChessController
+import pt.isel.pdm.chess4android.controllers.about_activity.AboutActivity
+import pt.isel.pdm.chess4android.controllers.chess_activity.ChessViewModel
+import pt.isel.pdm.chess4android.controllers.chess_activity.PuzzleActivity
 import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
 import pt.isel.pdm.chess4android.models.games.chess.Chess
-import pt.isel.pdm.chess4android.puzzle_history.HistoryActivity
-import pt.isel.pdm.chess4android.puzzle_history.PuzzleActivity
+import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryActivity
+import pt.isel.pdm.chess4android.controllers.solve_activity.SolveActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel : MainActivityViewModel by viewModels()
 
     private val chessController by lazy {
-        ChessController(binding, viewModel)
+        ChessViewModel(binding, viewModel)
     }
 
     var isInPromote: Boolean = false

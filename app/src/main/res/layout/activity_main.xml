@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    tools:context=".controllers.main_activity.MainActivity">
 
     <pt.isel.pdm.chess4android.views.BoardView
         android:id="@+id/boardView"

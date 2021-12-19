@@ -1,8 +1,8 @@
-package pt.isel.pdm.chess4android.activities
+package pt.isel.pdm.chess4android.controllers.main_activity
 
 import android.app.Application
 import androidx.lifecycle.*
-import pt.isel.pdm.chess4android.application.PuzzleApplication
+import pt.isel.pdm.chess4android.controllers.application.PuzzleApplication
 import pt.isel.pdm.chess4android.models.PuzzleInfoParser
 import pt.isel.pdm.chess4android.models.PuzzleInfo
 import pt.isel.pdm.chess4android.models.games.Player
