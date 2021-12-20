@@ -77,7 +77,7 @@ open class PuzzleActivity : AppCompatActivity() {
         viewModel.isGameOver.observe(this) {
             if (viewModel.isGameOver.value == true) {
                 viewModel.updatePuzzleSolved()
-                Toast.makeText(this, "JOGO TERMINOU", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getText(R.string.end_game), Toast.LENGTH_LONG).show()
             }
         }
 

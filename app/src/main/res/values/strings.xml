@@ -13,4 +13,5 @@
     <string name="unsolved_puzzle_message">Puzzle unsolved</string>
     <string name="local_menu">Local</string>
     <string name="online_menu">Multiplayer</string>
+    <string name="end_game">Game Ended</string>
 </resources>
