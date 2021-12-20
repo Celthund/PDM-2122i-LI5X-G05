@@ -1,6 +1,9 @@
 package pt.isel.pdm.chess4android.models.games.chess.pieces
 
-import pt.isel.pdm.chess4android.models.games.*
+import pt.isel.pdm.chess4android.models.games.Game
+import pt.isel.pdm.chess4android.models.games.Movement
+import pt.isel.pdm.chess4android.models.games.Player
+import pt.isel.pdm.chess4android.models.games.Position
 import pt.isel.pdm.chess4android.models.games.chess.ChessPiece
 import kotlin.math.abs
 

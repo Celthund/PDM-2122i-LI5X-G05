@@ -13,12 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Chess4Android">
-        <activity
-            android:name="pt.isel.pdm.chess4android.controllers.puzzle_activity.PuzzleActivity"
-            android:exported="false" />
-        <activity
-            android:name="pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryActivity"
-            android:exported="false" />
+
         <activity
             android:name="pt.isel.pdm.chess4android.controllers.main_activity.MainActivity"
             android:exported="true">
@@ -28,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="pt.isel.pdm.chess4android.controllers.chess_activity.ChessActivity"
+            android:label="@string/local_menu"
+            android:parentActivityName="pt.isel.pdm.chess4android.controllers.main_activity.MainActivity" />
         <activity
             android:name="pt.isel.pdm.chess4android.controllers.solve_activity.SolveActivity"
             android:label="@string/solve_menu"
@@ -36,6 +36,15 @@
             android:name="pt.isel.pdm.chess4android.controllers.about_activity.AboutActivity"
             android:label="@string/about_menu"
             android:parentActivityName="pt.isel.pdm.chess4android.controllers.main_activity.MainActivity" />
+        <activity
+            android:name="pt.isel.pdm.chess4android.controllers.puzzle_activity.PuzzleActivity"
+            android:exported="false" />
+        <activity
+            android:name="pt.isel.pdm.chess4android.controllers.puzzle_activity.PuzzleActivityWithMenu"
+            android:exported="false" />
+        <activity
+            android:name="pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

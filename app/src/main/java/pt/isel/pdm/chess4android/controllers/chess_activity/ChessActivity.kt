@@ -1,21 +1,48 @@
-package pt.isel.pdm.chess4android.controllers.utils
-
+package pt.isel.pdm.chess4android.controllers.chess_activity
+import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.chess4android.R
-import pt.isel.pdm.chess4android.controllers.main_activity.MainActivityViewModel
-import pt.isel.pdm.chess4android.databinding.ActivityMainBinding
+import pt.isel.pdm.chess4android.databinding.ActivityChessBinding
 import pt.isel.pdm.chess4android.models.games.Position
 import pt.isel.pdm.chess4android.models.games.PromoteCandidate
 import pt.isel.pdm.chess4android.models.games.chess.Chess
 import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 
-class ChessViewModel(private val binding: ActivityMainBinding, private val viewModel: MainActivityViewModel) {
+class ChessActivity : AppCompatActivity() {
+
+    private val binding by lazy {
+        ActivityChessBinding.inflate(layoutInflater)
+    }
+
+    private val viewModel : ChessActivityViewModel by viewModels()
 
     private lateinit var pieceViewMapper: HashMap<Any, Array<Int>>
-    var isInPromote: Boolean = false
+    private var isInPromote: Boolean = false
 
     init {
         mapViewToPiece()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding.boardView.initBoard(8,8,
+            this::makeMove, this::getPossibleMoves)
+
+        if(viewModel.boardModel.value == null) {
+            viewModel.setBoardModel(Chess(viewModel.whitePlayer,8,8 ))
+        }
+
+        viewModel.isInPromote.observe(this) {
+            promoteIfPossible(it)
+        }
+        
+        viewModel.boardModel.observe(this) {
+            binding.boardView.setBoard(it, isInPromote, this::getPieceDrawableId)
+        }
+
+        setContentView(binding.root)
     }
 
     fun showPromoteOptions(boardModel: Chess, position: Position) {
@@ -121,5 +148,4 @@ class ChessViewModel(private val binding: ActivityMainBinding, private val viewM
             showPromoteOptions(promoteCandidate.boardModel!!, promoteCandidate.position!!)
         }
     }
-
 }

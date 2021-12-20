@@ -1,32 +1,27 @@
 package pt.isel.pdm.chess4android.controllers.puzzle_activity
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pt.isel.pdm.chess4android.controllers.application.PuzzleApplication
-import pt.isel.pdm.chess4android.controllers.main_activity.MainActivityViewModel
-import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryPuzzleDao
+import pt.isel.pdm.chess4android.controllers.chess_activity.ChessActivityViewModel
 import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.PuzzleEntity
 import pt.isel.pdm.chess4android.controllers.utils.PuzzleRepository
-import pt.isel.pdm.chess4android.models.PuzzleInfoParser
 import pt.isel.pdm.chess4android.models.PuzzleInfo
+import pt.isel.pdm.chess4android.models.PuzzleInfoParser
 import pt.isel.pdm.chess4android.models.games.Player
-import pt.isel.pdm.chess4android.models.games.Position
-import pt.isel.pdm.chess4android.models.games.PromoteCandidate
-import pt.isel.pdm.chess4android.models.games.chess.Chess
 import pt.isel.pdm.chess4android.models.games.chess.Puzzle
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 const val PUZZLE_ACTIVITY_VIEW_STATE = "PuzzleActivity.ViewState"
 
 class PuzzleViewModel(
     application: Application,
     private val state: SavedStateHandle
-) : MainActivityViewModel(application, state) {
+) : ChessActivityViewModel(application, state) {
 
     private val puzzleRepository by lazy {
         PuzzleRepository(

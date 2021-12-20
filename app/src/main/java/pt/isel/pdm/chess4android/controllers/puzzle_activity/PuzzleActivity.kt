@@ -2,11 +2,11 @@ package pt.isel.pdm.chess4android.controllers.puzzle_activity
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.chess4android.R
 import pt.isel.pdm.chess4android.databinding.ActivityPuzzleBinding
 import pt.isel.pdm.chess4android.models.PuzzleInfo
@@ -15,7 +15,7 @@ import pt.isel.pdm.chess4android.models.games.PromoteCandidate
 import pt.isel.pdm.chess4android.models.games.chess.Chess
 import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 
-class PuzzleActivity : AppCompatActivity() {
+open class PuzzleActivity : AppCompatActivity() {
     companion object {
         fun buildIntent(origin: Activity, puzzle: PuzzleInfo): Intent {
             val intent = Intent(origin, PuzzleActivity::class.java)

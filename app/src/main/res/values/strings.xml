@@ -11,4 +11,6 @@
     <string name="puzzle_menu">Puzzle History</string>
     <string name="solved_puzzle_message">Puzzle solved</string>
     <string name="unsolved_puzzle_message">Puzzle unsolved</string>
+    <string name="local_menu">Local</string>
+    <string name="online_menu">Multiplayer</string>
 </resources>

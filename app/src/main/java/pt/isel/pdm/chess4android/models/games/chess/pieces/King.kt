@@ -2,10 +2,10 @@ package pt.isel.pdm.chess4android.models.games.chess.pieces
 
 import pt.isel.pdm.chess4android.models.games.Game
 import pt.isel.pdm.chess4android.models.games.Piece
-import pt.isel.pdm.chess4android.models.games.chess.ChessPiece
 import pt.isel.pdm.chess4android.models.games.Player
 import pt.isel.pdm.chess4android.models.games.Position
 import pt.isel.pdm.chess4android.models.games.chess.Chess
+import pt.isel.pdm.chess4android.models.games.chess.ChessPiece
 
 class King(player: Player, position: Position) : ChessPiece(player, position) {
 

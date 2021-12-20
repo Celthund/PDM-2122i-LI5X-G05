@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import pt.isel.pdm.chess4android.controllers.application.PuzzleApplication
 import pt.isel.pdm.chess4android.controllers.utils.PuzzleRepository
-import java.lang.Exception
 
 class DownloadDailyPuzzleWorker(appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {

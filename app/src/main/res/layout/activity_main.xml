@@ -6,77 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".controllers.main_activity.MainActivity">
 
-    <pt.isel.pdm.chess4android.views.BoardView
-        android:id="@+id/boardView"
-        android:layout_width="0dp"
+
+    <Button
+        android:id="@+id/playLocalBtn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:text="@string/local_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </pt.isel.pdm.chess4android.views.BoardView>
-
-    <Button
-        android:id="@+id/knight_btn"
-        android:layout_width="60dp"
-        android:layout_height="52dp"
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:icon="@drawable/ic_black_knight"
-        tools:layout_editor_absoluteX="655dp"
-        tools:layout_editor_absoluteY="120dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.364" />
 
     <Button
-        android:id="@+id/queen_btn"
-        android:layout_width="60dp"
-        android:layout_height="52dp"
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:icon="@drawable/ic_black_queen"
-        app:layout_constraintTop_toBottomOf="@+id/bishop_btn"
-        tools:layout_editor_absoluteX="655dp"
-        tools:ignore="MissingConstraints" />
+        android:id="@+id/playOnlineBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/online_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playLocalBtn" />
 
     <Button
-        android:id="@+id/bishop_btn"
-        android:layout_width="60dp"
-        android:layout_height="52dp"
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:icon="@drawable/ic_black_bishop"
-        app:layout_constraintTop_toBottomOf="@+id/knight_btn"
-        tools:layout_editor_absoluteX="655dp"
-        tools:ignore="MissingConstraints" />
+        android:id="@+id/aboutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/about_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playPuzzleBtn" />
 
     <Button
-        android:id="@+id/rook_btn"
-        android:layout_width="60dp"
-        android:layout_height="52dp"
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:icon="@drawable/ic_black_rook"
-        app:layout_constraintTop_toBottomOf="@+id/queen_btn"
-        tools:layout_editor_absoluteX="655dp"
-        tools:ignore="MissingConstraints" />
+        android:id="@+id/playPuzzleBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/get_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playOnlineBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

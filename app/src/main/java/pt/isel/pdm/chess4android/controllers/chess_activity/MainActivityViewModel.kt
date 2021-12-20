@@ -1,21 +1,17 @@
-package pt.isel.pdm.chess4android.controllers.main_activity
+package pt.isel.pdm.chess4android.controllers.chess_activity
 
 import android.app.Application
-import androidx.lifecycle.*
-import pt.isel.pdm.chess4android.controllers.application.PuzzleApplication
-import pt.isel.pdm.chess4android.controllers.utils.PuzzleRepository
-import pt.isel.pdm.chess4android.models.PuzzleInfoParser
-import pt.isel.pdm.chess4android.models.PuzzleInfo
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import pt.isel.pdm.chess4android.models.games.Player
 import pt.isel.pdm.chess4android.models.games.PromoteCandidate
 import pt.isel.pdm.chess4android.models.games.chess.Chess
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-const val MAIN_ACTIVITY_VIEW_STATE = "MainActivity.ViewState"
+const val CHESS_ACTIVITY_VIEW_STATE = "ChessActivity.ViewState"
 
-open class MainActivityViewModel(
+open class ChessActivityViewModel(
     application: Application,
     private val state: SavedStateHandle
 ) : AndroidViewModel(application) {

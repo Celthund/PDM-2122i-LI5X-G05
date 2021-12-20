@@ -1,6 +1,5 @@
 package pt.isel.pdm.chess4android.models.games.chess
 
-import android.util.Log
 import pt.isel.pdm.chess4android.models.games.*
 import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 import java.util.*

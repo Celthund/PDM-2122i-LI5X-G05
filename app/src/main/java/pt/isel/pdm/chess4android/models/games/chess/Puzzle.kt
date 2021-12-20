@@ -1,7 +1,9 @@
 package pt.isel.pdm.chess4android.models.games.chess
 
 
-import pt.isel.pdm.chess4android.models.games.*
+import pt.isel.pdm.chess4android.models.games.Movement
+import pt.isel.pdm.chess4android.models.games.Player
+import pt.isel.pdm.chess4android.models.games.Position
 
 class Puzzle(
     private val solutionMoves: Array<Movement>,

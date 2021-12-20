@@ -6,7 +6,7 @@ import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.HistoryPuzz
 import pt.isel.pdm.chess4android.controllers.puzzle_history_activity.PuzzleEntity
 import pt.isel.pdm.chess4android.models.DailyPuzzleService
 import pt.isel.pdm.chess4android.models.PuzzleInfo
-import retrofit2.*
+import retrofit2.await
 
 class PuzzleRepository(
     private val dailyPuzzleService: DailyPuzzleService,
