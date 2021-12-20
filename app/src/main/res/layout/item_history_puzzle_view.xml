@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
+    android:background="#F8201D1D"
     android:orientation="vertical"
     android:paddingHorizontal="16dp"
     android:paddingVertical="16dp">
@@ -14,6 +15,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@android:color/white"
         android:textSize="24sp"
         tools:text="@tools:sample/us_zipcodes" />
 
@@ -22,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         tools:text="@tools:sample/full_names" />
 
