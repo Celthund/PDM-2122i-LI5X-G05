@@ -112,17 +112,20 @@ class ChessActivity : AppCompatActivity() {
     }
 
     fun makeMove(currPosition: Position, newPosition: Position, boardModel: Chess) {
-        boardModel.movePieceAtPosition(currPosition, newPosition)
-        val piece = boardModel.getPiece(newPosition)
+        val moveWasMade = boardModel.movePieceAtPosition(currPosition, newPosition)
+        if (moveWasMade) {
+            val piece = boardModel.getPiece(newPosition)
 
-        if(piece != null && boardModel.isReadyForPromotion(newPosition)) {
-            viewModel.savePromoteStatus(PromoteCandidate(newPosition, true, boardModel))
-            showPromoteOptions(boardModel, newPosition)
-        }
+            if (piece != null && boardModel.isReadyForPromotion(newPosition)) {
+                viewModel.savePromoteStatus(
+                    PromoteCandidate(newPosition, true, boardModel))
+                showPromoteOptions(boardModel, newPosition)
+            }
 
-        viewModel.setBoardModel(boardModel)
-        if (boardModel.isGameOver()) {
-            viewModel.endGame()
+            viewModel.setBoardModel(boardModel)
+            if (boardModel.isGameOver()) {
+                viewModel.endGame()
+            }
         }
     }
 
