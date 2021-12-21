@@ -62,5 +62,7 @@ class Puzzle(
         }
         return false
     }
+
+    fun isPuzzleOver(): Boolean = index == solutionMoves.size
 }
 

@@ -13,6 +13,7 @@ import pt.isel.pdm.chess4android.models.PuzzleInfo
 import pt.isel.pdm.chess4android.models.games.Position
 import pt.isel.pdm.chess4android.models.games.PromoteCandidate
 import pt.isel.pdm.chess4android.models.games.chess.Chess
+import pt.isel.pdm.chess4android.models.games.chess.Puzzle
 import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 
 open class PuzzleActivity : AppCompatActivity() {
@@ -96,7 +97,7 @@ open class PuzzleActivity : AppCompatActivity() {
             }
 
             viewModel.setBoardModel(boardModel)
-            if (boardModel.isGameOver()) {
+            if ((boardModel as Puzzle).isPuzzleOver()) {
                 viewModel.endGame()
             }
             viewModel.makeNextMoveWithDelay()
