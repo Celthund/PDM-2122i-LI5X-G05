@@ -4,10 +4,7 @@ import pt.isel.pdm.chess4android.models.games.Game
 import pt.isel.pdm.chess4android.models.games.Piece
 import pt.isel.pdm.chess4android.models.games.Player
 import pt.isel.pdm.chess4android.models.games.Position
-import pt.isel.pdm.chess4android.models.games.chess.pieces.Bishop
-import pt.isel.pdm.chess4android.models.games.chess.pieces.King
-import pt.isel.pdm.chess4android.models.games.chess.pieces.Queen
-import pt.isel.pdm.chess4android.models.games.chess.pieces.Rook
+import pt.isel.pdm.chess4android.models.games.chess.pieces.*
 import kotlin.math.abs
 
 abstract class ChessPiece(player: Player, position: Position) : Piece(player, position) {
@@ -42,6 +39,17 @@ abstract class ChessPiece(player: Player, position: Position) : Piece(player, po
             // Can the current piece eat the piece that is checking
             if (filteredMoves.contains(pieceCheckingKing.position))
                 possibleMovesWhileChecked.add(pieceCheckingKing.position)
+
+            // check if en passant can eat
+            if (pieceCheckingKing is Pawn){
+                val upPosition = Position(pieceCheckingKing.position.x, position.y - 1)
+                if (filteredMoves.contains(upPosition))
+                    possibleMovesWhileChecked.add(upPosition)
+                val downPosition = Position(pieceCheckingKing.position.x, position.y + 1)
+                if (filteredMoves.contains(downPosition))
+                    possibleMovesWhileChecked.add(downPosition)
+            }
+
             // Can the current piece block horizontal movements
             filteredMoves.forEach {
                 if (it.isPositionInBetween(pieceCheckingKing.position, king.position))
