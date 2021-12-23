@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +51,12 @@ open class PuzzleActivity : AppCompatActivity() {
 
         if (viewModel.lichessPuzzle.value == null) {
             viewModel.getLichessPuzzle()
+        } else {
+            val puzzle = viewModel.lichessPuzzle.value
+            if (puzzle?.solved == true) {
+                binding.nextBtn.visibility = VISIBLE
+                binding.undoBtn.visibility = VISIBLE
+            }
         }
 
         viewModel.lichessPuzzle.observe(this) {
